@@ -1,0 +1,416 @@
+﻿<Window
+    x:Class="DeltaQuestionEditor_WPF.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:DeltaQuestionEditor_WPF"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    mc:Ignorable="d"
+    Title="Delta Question Editor"
+    Height="800"
+    Width="1000"
+    WindowState="Maximized"
+    Name="mainWindow"
+    SourceInitialized="mainWindow_SourceInitialized"
+    Closing="mainWindow_Closing">
+    <Grid
+        Name="root">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <Menu
+            Background="{DynamicResource MaterialDesignCardBackground}"
+            Foreground="{DynamicResource MaterialDesignBody}"
+            IsMainMenu="True">
+            <MenuItem
+                Header="_File">
+                <MenuItem
+                    Header="Open">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon
+                            Kind="FolderOpen" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Header="Save"
+                    InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon
+                            Kind="ContentSave" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Header="Save as..">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon
+                            Kind="ContentSaveAll" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem
+                    Header="Exit">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon
+                            Kind="ExitToApp" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="*" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Expander
+                ExpandDirection="Left">
+                <Expander.Header>
+                    <TextBlock
+                        Text="Question List"
+                        RenderTransformOrigin=".5,.5">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform
+                                Angle="90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <Grid
+                    MinWidth="200"
+                    Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <materialDesign:Card
+                        Margin="5"
+                        Padding="8">
+                        <StackPanel
+                            Orientation="Vertical">
+                            <Grid
+                                Margin="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                                    Question Set Topic
+                                </TextBlock>
+                                <Button
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                                    Margin="5"
+                                    ToolTip="Topic that the questions in this set belong to">
+                                    <materialDesign:PackIcon
+                                        Kind="InfoCircle" />
+                                </Button>
+                            </Grid>
+                            <StackPanel
+                                Margin="8 -8 8 8"
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="5"
+                                    VerticalAlignment="Bottom"
+                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                    Topic
+                                </TextBlock>
+                                <TextBox
+                                    VerticalAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="Form"
+                                    materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                                    materialDesign:HintAssist.FloatingScale="0.50"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    FontSize="20" />
+                                <TextBlock
+                                    Margin="5"
+                                    VerticalAlignment="Bottom"
+                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                    .
+                                </TextBlock>
+                                <TextBox
+                                    VerticalAlignment="Bottom"
+                                    materialDesign:HintAssist.Hint="Chapter"
+                                    materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                                    materialDesign:HintAssist.FloatingScale="0.50"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    FontSize="20" />
+                            </StackPanel>
+                            <TextBlock
+                                Margin="14 8 8 8"
+                                Width="Auto"
+                                TextWrapping="Wrap">
+                                Topic name
+                            </TextBlock>
+                        </StackPanel>
+                    </materialDesign:Card>
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                        Question List
+                    </TextBlock>
+                    <Button
+                        Grid.Row="3"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Add a new question">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                VerticalAlignment="Center"
+                                Kind="Plus" />
+                            <TextBlock
+                                VerticalAlignment="Center">
+                                NEW QUESTION
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Expander>
+            <Border
+                Grid.Column="1"
+                Background="{DynamicResource MaterialDesignDivider}"
+                Width="1"
+                VerticalAlignment="Stretch"
+                SnapsToDevicePixels="True" />
+            <Grid
+                Margin="16 5 16 16"
+                Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Margin="0 5 0 5">
+                    <TextBlock
+                        VerticalAlignment="Center">
+                        Edit Question
+                    </TextBlock>
+                    <Border
+                        Background="{DynamicResource MaterialDesignDivider}"
+                        Height="1"
+                        HorizontalAlignment="Stretch"
+                        SnapsToDevicePixels="True" />
+                </StackPanel>
+
+                <Grid
+                    Margin="0 5 0 5"
+                    Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="2*" />
+                        <ColumnDefinition
+                            Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Margin="0 0 16 0"
+                        HorizontalAlignment="Stretch"
+                        materialDesign:HintAssist.Hint="Skills"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Center" />
+                    <StackPanel
+                        Grid.Column="1">
+                        <!-- Binding with StringFormat -->
+                        <TextBlock
+                            VerticalAlignment="Center">
+                            Difficulty:
+                        </TextBlock>
+                        <Slider
+                            HorizontalAlignment="Stretch"
+                            TickFrequency="1"
+                            Orientation="Horizontal"
+                            TickPlacement="BottomRight"
+                            Minimum="1"
+                            Maximum="3"
+                            Value="1"
+                            VerticalAlignment="Center"
+                            IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid
+                Margin="16 5 16 16"
+                Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Margin="0 5 0 5">
+                    <TextBlock
+                        VerticalAlignment="Center">
+                        Preview Question
+                    </TextBlock>
+                    <Border
+                        Background="{DynamicResource MaterialDesignDivider}"
+                        Height="1"
+                        HorizontalAlignment="Stretch"
+                        SnapsToDevicePixels="True" />
+                </StackPanel>
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Add a new question">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                VerticalAlignment="Center"
+                                Kind="Refresh" />
+                            <TextBlock
+                                VerticalAlignment="Center">
+                                REFRESH
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <ToggleButton
+                        Margin="16 0 5 0"
+                        VerticalAlignment="Center"
+                        Grid.Column="1"
+                        Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                        ToolTip="Toggle whether to automatically refresh the preview as you edit the question"
+                        IsChecked="True" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Grid.Column="2">
+                        Auto refresh
+                    </TextBlock>
+                </Grid>
+                <cefSharp:ChromiumWebBrowser
+                    Name="browserPreview"
+                    Grid.Row="2">
+                </cefSharp:ChromiumWebBrowser>
+            </Grid>
+            <Border
+                Grid.Column="4"
+                Background="{DynamicResource MaterialDesignDivider}"
+                Width="1"
+                VerticalAlignment="Stretch"
+                SnapsToDevicePixels="True" />
+            <Expander
+                Grid.Column="5"
+                ExpandDirection="Right">
+                <Expander.Header>
+                    <TextBlock
+                        Text="Media List"
+                        RenderTransformOrigin=".5,.5">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform
+                                Angle="-90" />
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <Grid
+                    MinWidth="200"
+                    Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Margin="8"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                        Media List
+                    </TextBlock>
+                    <Button
+                        Grid.Row="2"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="Add a new question">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                VerticalAlignment="Center"
+                                Kind="Plus" />
+                            <TextBlock
+                                VerticalAlignment="Center">
+                                ADD MEDIA
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Expander>
+        </Grid>
+
+        <materialDesign:ColorZone
+            Grid.Row="2"
+            Padding="5"
+            Mode="PrimaryMid">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Orientation="Horizontal">
+                    <ProgressBar
+                        Margin="0 0 5 0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        Value="0"
+                        IsIndeterminate="True" />
+                    <TextBlock
+                        VerticalAlignment="Center">
+                        Saving
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+    </Grid>
+</Window>

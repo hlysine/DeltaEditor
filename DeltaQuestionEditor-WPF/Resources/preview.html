@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
+    <style>
+        div, h1, h2, h3, h4, h5, h6 {
+            font-family: 'Oxygen', sans-serif;
+        }
+
+        img {
+            max-width: 70%;
+            max-height: 70%;
+            vertical-align: top;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.0/markdown-it.min.js"
+            integrity="sha512-0tDdhRf9dcDufaaOQQdvywK56y+cwomy6rjOrqk05N61cQOTdO2Cqqgq8EfXVBDXJe0TH9smqvDicQzMiBG14g=="
+            crossorigin="anonymous"></script>
+    <script>
+        MathJax = {
+            loader: { load: ['input/asciimath', 'output/chtml', 'ui/menu'] },
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js">
+    </script>
+
+</head>
+
+<body>
+    <h2>Question</h2>
+    <div id="question">
+
+    </div>
+    <hr>
+    <h4>A (correct)</h4>
+    <div id="answer1">
+
+    </div>
+    <hr>
+    <h4>B</h4>
+    <div id="answer2">
+
+    </div>
+    <hr>
+    <h4>C</h4>
+    <div id="answer3">
+
+    </div>
+    <hr>
+    <h4>D</h4>
+    <div id="answer4">
+
+    </div>
+    <hr>
+    <h5>Skills</h5>
+    <div id="skills">
+
+    </div>
+    <script>
+        function setContent(content, selector) {
+            var md = window.markdownit().disable('backticks');
+            var result = md.render(content);
+            document.querySelector(selector).innerHTML = result;
+            MathJax.typeset();
+        }
+
+    </script>
+</body>
+
+</html>
