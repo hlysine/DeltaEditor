@@ -1,4 +1,5 @@
 ﻿using CefSharp.Wpf;
+using DeltaQuestionEditor_WPF.Helpers;
 using Squirrel;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,9 @@ namespace DeltaQuestionEditor_WPF
     {
         public App()
         {
+            Logger.Loggers.Add(new ConsoleLogger());
+            // TODO: DEBUG
+            //Logger.Loggers.Add(new TextFileLogger());
             try
             {
                 // TODO: github link
@@ -61,38 +65,21 @@ namespace DeltaQuestionEditor_WPF
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-                LogException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+                Logger.LogException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
 
             DispatcherUnhandledException += (s, e) =>
             {
-                LogException(e.Exception, "Application.Current.DispatcherUnhandledException");
+                Logger.LogException(e.Exception, "Application.Current.DispatcherUnhandledException");
                 e.Handled = true;
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                LogException(e.Exception, "TaskScheduler.UnobservedTaskException");
+                Logger.LogException(e.Exception, "TaskScheduler.UnobservedTaskException");
                 e.SetObserved();
             };
         }
 
-        public static void LogException(Exception exception, string source)
-        {
-            StringBuilder message = new StringBuilder();
-            message.AppendLine($"[{DateTime.Now:R}] Exception ({source})");
-            try
-            {
-                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-                message.AppendLine($" in {assemblyName.Name} v{assemblyName.Version}");
-                message.AppendLine(exception.Message);
-                message.AppendLine(exception.StackTrace);
-                message.AppendLine();
-                message.AppendLine();
-                File.AppendAllText(AppDataPath("log.txt"), message.ToString());
-            }
-            catch (Exception)
-            {
-            }
-        }
+        
     }
 }

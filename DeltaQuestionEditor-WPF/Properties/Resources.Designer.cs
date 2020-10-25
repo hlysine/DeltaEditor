@@ -61,6 +61,39 @@ namespace DeltaQuestionEditor_WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!doctype html&gt;
+        ///&lt;html&gt;
+        ///
+        ///&lt;head&gt;
+        ///  &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///  &lt;title&gt;Markdown Editor&lt;/title&gt;
+        ///  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+        ///  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
+        ///  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;
+        ///  &lt;style&gt;
+        ///    html,
+        ///    body {
+        ///      display: flex;
+        ///      flex-direction: column;
+        ///      height: 100vh;
+        ///      margin: 0;
+        ///    }
+        ///
+        ///    #codeedit {
+        ///      flex-grow: 1;
+        ///    }
+        ///  &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///
+        ///&lt;body  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string editor {
+            get {
+                return ResourceManager.GetString("editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;
         ///

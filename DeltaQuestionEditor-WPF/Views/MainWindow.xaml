@@ -1,12 +1,14 @@
 ﻿<Window
-    x:Class="DeltaQuestionEditor_WPF.MainWindow"
+    x:Class="DeltaQuestionEditor_WPF.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:DeltaQuestionEditor_WPF"
+    xmlns:views="clr-namespace:DeltaQuestionEditor_WPF.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+    xmlns:cmd="clr-namespace:AttachedCommandBehavior;assembly=AttachedCommandBehavior"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
     TextElement.FontSize="13"
@@ -15,13 +17,22 @@
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     mc:Ignorable="d"
-    Title="Delta Question Editor"
     Height="800"
     Width="1000"
     WindowState="Maximized"
     Name="mainWindow"
-    SourceInitialized="mainWindow_SourceInitialized"
-    Closing="mainWindow_Closing">
+    Closing="mainWindow_Closing"
+    cmd:CommandBehavior.Action="{Binding AppInitialize}"
+    cmd:CommandBehavior.Event="SourceInitialized">
+    <Window.Title>
+        <MultiBinding
+            StringFormat="Delta Question Editor v{0}{1}">
+            <Binding
+                Path="AppVersion" />
+            <Binding
+                Path="UpdateString" />
+        </MultiBinding>
+    </Window.Title>
     <Grid
         Name="root">
         <Grid.RowDefinitions>
@@ -207,65 +218,8 @@
                 Width="1"
                 VerticalAlignment="Stretch"
                 SnapsToDevicePixels="True" />
-            <Grid
-                Margin="16 5 16 16"
-                Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="*" />
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Margin="0 5 0 5">
-                    <TextBlock
-                        VerticalAlignment="Center">
-                        Edit Question
-                    </TextBlock>
-                    <Border
-                        Background="{DynamicResource MaterialDesignDivider}"
-                        Height="1"
-                        HorizontalAlignment="Stretch"
-                        SnapsToDevicePixels="True" />
-                </StackPanel>
-
-                <Grid
-                    Margin="0 5 0 5"
-                    Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="2*" />
-                        <ColumnDefinition
-                            Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox
-                        Margin="0 0 16 0"
-                        HorizontalAlignment="Stretch"
-                        materialDesign:HintAssist.Hint="Skills"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        VerticalAlignment="Center" />
-                    <StackPanel
-                        Grid.Column="1">
-                        <!-- Binding with StringFormat -->
-                        <TextBlock
-                            VerticalAlignment="Center">
-                            Difficulty:
-                        </TextBlock>
-                        <Slider
-                            HorizontalAlignment="Stretch"
-                            TickFrequency="1"
-                            Orientation="Horizontal"
-                            TickPlacement="BottomRight"
-                            Minimum="1"
-                            Maximum="3"
-                            Value="1"
-                            VerticalAlignment="Center"
-                            IsSnapToTickEnabled="True" />
-                    </StackPanel>
-                </Grid>
-            </Grid>
+            <views:QuestionEditPanel
+                Grid.Column="2" />
             <Grid
                 Margin="16 5 16 16"
                 Grid.Column="3">
@@ -327,10 +281,6 @@
                         Auto refresh
                     </TextBlock>
                 </Grid>
-                <cefSharp:ChromiumWebBrowser
-                    Name="browserPreview"
-                    Grid.Row="2">
-                </cefSharp:ChromiumWebBrowser>
             </Grid>
             <Border
                 Grid.Column="4"

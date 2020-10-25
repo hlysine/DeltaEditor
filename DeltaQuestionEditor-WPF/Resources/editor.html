@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Markdown Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <style>
+        html,
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #codeedit {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="codeedit"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+    <script>
+        var edit;
+
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+
+            var editor = monaco.editor.create(document.getElementById('codeedit'), {
+                value: '',
+                language: 'markdown',
+                fixedOverflowWidgets: true
+            });
+
+            edit = editor;
+            window.onresize = function () { editor.layout({ width: window.innerWidth, height: window.innerHeight }) };
+            (async function () {
+                await CefSharp.BindObjectAsync("cefCode", "bound");
+
+                editor.getModel().onDidChangeContent((event) => {
+                    cefCode.setCode(editor.getModel().getValue());
+                });
+            })();
+        });
+    </script>
+</body>
+
+</html>

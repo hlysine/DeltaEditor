@@ -4,6 +4,7 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,14 +12,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace DeltaQuestionEditor_WPF.Helpers
 {
     public static class Helper
     {
+        public static string AppDataPath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeltaQuestionEditor");
+        }
+
         public static string AppDataPath(string path)
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeltaQuestionEditor", path);
+            return Path.Combine(AppDataPath(), path);
+        }
+
+        public static void EnsurePathExist(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
 
         public static void HideBoundingBox(object root)
@@ -49,6 +62,11 @@ namespace DeltaQuestionEditor_WPF.Helpers
             }
         }
 
+        public static uint ToArgb(this Color color)
+        {
+            return BitConverter.ToUInt32(new byte[] { color.B, color.G, color.R, color.A }, 0);
+        }
+
         public static void Show(this UIElement element)
         {
             element.Visibility = Visibility.Visible;
@@ -57,6 +75,16 @@ namespace DeltaQuestionEditor_WPF.Helpers
         public static void Hide(this UIElement element, bool collapse = true)
         {
             element.Visibility = collapse ? Visibility.Collapsed : Visibility.Hidden;
+        }
+
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+        
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
         }
 
         /// <summary>
@@ -102,16 +130,22 @@ namespace DeltaQuestionEditor_WPF.Helpers
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void SetAndNotify<T>(ref T field, T value, [CallerMemberName] string propertyName = null, IEnumerable<string> calculatedProperties = null)
-        {
-            field = value;
-            Notify(propertyName);
-            calculatedProperties?.ForEach(x => Notify(x));
-        }
-
-        protected void Notify(string propertyName)
+        protected void NotifyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void NotifyChanged(IEnumerable<string> propertyName)
+        {
+            propertyName.ForEach(x => NotifyChanged(x));
+        }
+
+        protected void SetAndNotify<T>(ref T variable, T value, IEnumerable<string> calculatedProperties = null, [CallerMemberName] string memberName = null)
+        {
+            Contract.Requires(memberName != null);
+            variable = value;
+            NotifyChanged(memberName);
+            if (calculatedProperties != null) NotifyChanged(calculatedProperties);
         }
     }
 }
