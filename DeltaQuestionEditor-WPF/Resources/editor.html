@@ -36,7 +36,8 @@
             var editor = monaco.editor.create(document.getElementById('codeedit'), {
                 value: '',
                 language: 'markdown',
-                fixedOverflowWidgets: true
+                fixedOverflowWidgets: true,
+                wordWrap: 'on'
             });
 
             edit = editor;

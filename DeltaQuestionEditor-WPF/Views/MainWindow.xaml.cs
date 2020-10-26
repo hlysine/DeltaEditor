@@ -40,6 +40,7 @@ namespace DeltaQuestionEditor_WPF.Views
         {
             if (canExit)
             {
+                viewModel.AppClosing(null);
                 return;
             }
             if (!viewModel.UpdateFinished)
@@ -52,6 +53,12 @@ namespace DeltaQuestionEditor_WPF.Views
                 canExit = true;
                 Close();
             }
+            viewModel.AppClosing(null);
+        }
+
+        private void btnExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

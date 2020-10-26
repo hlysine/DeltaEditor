@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,14 @@ namespace DeltaQuestionEditor_WPF.Helpers
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
+        }
+
+        public static void ClearDirectory(string path)
+        {
+            foreach (string folder in Directory.EnumerateDirectories(path))
+                Directory.Delete(folder, true);
+            foreach (string file in Directory.EnumerateFiles(path))
+                File.Delete(file);
         }
 
         public static void HideBoundingBox(object root)

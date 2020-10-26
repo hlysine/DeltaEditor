@@ -83,6 +83,7 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void setEditorTextAsync(string text)
         {
+            if (text == null) text = "";
             browserEditor.ExecuteScriptAsync($@"edit.getModel().setValue({text.ToJSLiteral()});");
         }
 

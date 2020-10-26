@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace DeltaQuestionEditor_WPF.Helpers
 {
-    public class BoolToHVisibilityConverter : IValueConverter
+    class BoolToHVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

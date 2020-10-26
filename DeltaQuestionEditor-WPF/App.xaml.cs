@@ -49,16 +49,8 @@ namespace DeltaQuestionEditor_WPF
             }
         }
 
-        Mutex myMutex;
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            bool aIsNewInstance = false;
-            myMutex = new Mutex(true, "DeltaQuestionEditor", out aIsNewInstance);
-            if (!aIsNewInstance)
-            {
-                Current.Shutdown();
-            }
-
             SetupExceptionHandling();
         }
 
