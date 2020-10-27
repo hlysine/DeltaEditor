@@ -12,7 +12,7 @@ namespace DeltaQuestionEditor_WPF.Helpers
     {
         protected override bool OnBeforeBrowse(IWebBrowser browserControl, IBrowser browser, IFrame frame, IRequest request, bool userGesture, bool isRedirect)
         {
-            if (!request.Url.Equals("http://localhtml/"))
+            if (!request.Url.Equals("http://localhtml/") && !request.Url.StartsWith("file:///"))
             {
                 System.Diagnostics.Process.Start(request.Url);
                 return true;

@@ -58,6 +58,11 @@ namespace DeltaQuestionEditor_WPF.Helpers
             }
         }
 
+        public static string NewGuid()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
         public static string ToJSLiteral(this string input)
         {
             using (var writer = new StringWriter())

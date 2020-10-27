@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Models
 {
-    public class Question : NotifyPropertyChanged
+    public class Question : NotifyPropertyChanged, ICloneable
     {
         private string id;
         public string Id
@@ -68,11 +68,24 @@ namespace DeltaQuestionEditor_WPF.Models
         }
 
 
-        private ObservableCollection<string> skills;
+        private ObservableCollection<string> skills = new ObservableCollection<string>();
         public ObservableCollection<string> Skills
         {
             get => skills;
             set => SetAndNotify(ref skills, value);
+        }
+
+        public object Clone()
+        {
+            return new Question()
+            {
+                Id = Helper.NewGuid(),
+                Text = Text,
+                Answers = new ObservableCollection<string>(Answers ?? new ObservableCollection<string>()),
+                Difficulty = Difficulty,
+                Skills = new ObservableCollection<string>(Skills ?? new ObservableCollection<string>()),
+                SelectedAnswerIndex = SelectedAnswerIndex,
+            };
         }
     }
 }

@@ -58,10 +58,10 @@ namespace DeltaQuestionEditor_WPF.Helpers
 
     public class RelayCommand : RelayCommand<object>
     {
-        public RelayCommand(Action execute)
+        public RelayCommand(Action<object> execute)
             : this(execute, null) { }
 
-        public RelayCommand(Action execute, Func<bool> canExecute)
-            : base(param => execute(), param => canExecute()) { }
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+            : base(param => execute(param), param => canExecute(param)) { }
     }
 }

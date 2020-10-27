@@ -99,6 +99,9 @@
             <helpers:SkillsListConverter
                 x:Key="SkillsListConverter" />
 
+            <helpers:BitmapFrameConverter
+                x:Key="BitmapFrameConverter" />
+
             <Storyboard
                 x:Key="shakeStoryboard">
                 <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">-->

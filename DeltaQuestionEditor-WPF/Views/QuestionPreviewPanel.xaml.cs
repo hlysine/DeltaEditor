@@ -3,18 +3,14 @@ using DeltaQuestionEditor_WPF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -96,6 +92,31 @@ namespace DeltaQuestionEditor_WPF.Views
                 setPreviewAnswersAsync(Answers);
         }
 
+        public static readonly DependencyProperty TempPathProperty =
+         DependencyProperty.Register("TempPath", typeof(string), typeof(QuestionPreviewPanel), new
+            PropertyMetadata("", new PropertyChangedCallback(TempPathChanged)));
+
+        public string TempPath
+        {
+            get { return (string)GetValue(TempPathProperty); }
+            set { SetValue(TempPathProperty, value); }
+        }
+
+        private static void TempPathChanged(DependencyObject d,
+           DependencyPropertyChangedEventArgs e)
+        {
+            QuestionPreviewPanel control = d as QuestionPreviewPanel;
+            control.TempPathChanged(e);
+        }
+
+        private void TempPathChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (!browserPreview.IsBrowserInitialized) return;
+            if (!browserPreview.CanExecuteJavascriptInMainFrame) return;
+            setPreviewAnswersAsync(Answers);
+            setPreviewQuestionAsync(Question);
+        }
+
         private void Answers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (toggleAutoRefresh.IsChecked.GetValueOrDefault())
@@ -124,14 +145,20 @@ namespace DeltaQuestionEditor_WPF.Views
             });
         }
 
+        private string processMarkdownForPreview(string text)
+        {
+            // Nothing to do here for now
+            return text;
+        }
+
         private void setPreviewQuestionAsync(string text)
         {
-            browserPreview.ExecuteScriptAsync($@"setContent({text.ToJSLiteral()}, '#question');");
+            browserPreview.ExecuteScriptAsync($@"setContent({processMarkdownForPreview(text).ToJSLiteral()}, '#question');");
         }
 
         private void setPreviewAnswerAsync(int index, string text)
         {
-            browserPreview.ExecuteScriptAsync($@"setContent({text.ToJSLiteral()}, '#answer{(index + 1)}');");
+            browserPreview.ExecuteScriptAsync($@"setContent({processMarkdownForPreview(text).ToJSLiteral()}, '#answer{(index + 1)}');");
         }
 
         private void clearPreviewAnswersAsync()
@@ -150,7 +177,9 @@ namespace DeltaQuestionEditor_WPF.Views
         private void browserPreview_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (browserPreview.IsBrowserInitialized)
-                browserPreview.LoadHtml(Properties.Resources.preview, "http://localhtml/");
+            {
+                browserPreview.LoadHtml(Properties.Resources.preview, $"file:///{TempPath.Replace('\\','/')}/");
+            }
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)

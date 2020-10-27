@@ -40,7 +40,6 @@ namespace DeltaQuestionEditor_WPF.Views
         {
             if (canExit)
             {
-                viewModel.AppClosing(null);
                 return;
             }
             if (!viewModel.UpdateFinished)
@@ -53,12 +52,22 @@ namespace DeltaQuestionEditor_WPF.Views
                 canExit = true;
                 Close();
             }
-            viewModel.AppClosing(null);
         }
 
         private void btnExitApp_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void mediaPanel_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (viewModel.AddMediaCommand.CanExecute(files))
+                    viewModel.AddMediaCommand.Execute(files);
+            }
         }
     }
 }
