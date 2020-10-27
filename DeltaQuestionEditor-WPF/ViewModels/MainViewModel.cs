@@ -1,14 +1,17 @@
 ﻿using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models;
+using GongSolutions.Wpf.DragDrop;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Squirrel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -18,7 +21,7 @@ using System.Windows.Input;
 
 namespace DeltaQuestionEditor_WPF.ViewModels
 {
-    class MainViewModel : NotifyPropertyChanged
+    class MainViewModel : NotifyPropertyChanged, IDropTarget
     {
         #region App Update
 
@@ -63,6 +66,42 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         public async Task AwaitUpdateFinish()
         {
             await updateFinished.WaitAsync();
+        }
+
+        DefaultDropHandler dropHandler = new DefaultDropHandler();
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            DataObject dataObj = dropInfo.Data as DataObject;
+            if (dataObj != null && dataObj.ContainsFileDropList())
+            {
+                var list = dataObj.GetFileDropList();
+                if (AddMediaCommand.CanExecute(list))
+                {
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+            }
+            else
+            {
+                dropHandler.DragOver(dropInfo);
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            DataObject dataObj = dropInfo.Data as DataObject;
+            if (dataObj != null && dataObj.ContainsFileDropList())
+            {
+                var list = dataObj.GetFileDropList().Cast<string>();
+                if (AddMediaCommand.CanExecute(list))
+                {
+                    AddMediaCommand.Execute(list);
+                }
+            }
+            else
+            {
+                dropHandler.Drop(dropInfo);
+            }
         }
 
         public string AppVersion
@@ -151,7 +190,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                         else
                         {
-                            // TODO
+                            Process.Start(Assembly.GetEntryAssembly().Location);
                         }
                     },
                     // can execute
@@ -172,33 +211,61 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // execute
                     async (param) =>
                     {
-                        if (DataSource.QuestionSet == null)
+                        List<string> paths = (param as IEnumerable<string>)?.ToList();
+                        if (paths == null) paths = new List<string>();
+                        string paramPath = param as string;
+                        if (paramPath != null) paths.Add(paramPath);
+                        if (paths.Count == 0) paths.Add(null);
+                        foreach (string path in paths)
                         {
-                            string paramPath = param as string;
-                            if (paramPath == null)
+                            if (DataSource.QuestionSet == null)
                             {
-                                OpenFileDialog dialog = new OpenFileDialog();
-                                dialog.Filter = "Question Set|*.qdb";
-                                dialog.Title = "Open - Choose a question set file";
-                                dialog.CheckFileExists = true;
-                                dialog.CheckPathExists = true;
-                                if (dialog.ShowDialog() == true)
+                                if (path == null)
+                                {
+                                    OpenFileDialog dialog = new OpenFileDialog();
+                                    dialog.Filter = "Question Set|*.qdb";
+                                    dialog.Title = "Open - Choose a question set file";
+                                    dialog.CheckFileExists = true;
+                                    dialog.CheckPathExists = true;
+                                    if (dialog.ShowDialog() == true)
+                                    {
+                                        LoadingState = "Opening";
+                                        if (!await DataSource.LoadQuestionSet(dialog.FileName))
+                                        {
+                                            MainMessageQueue.Enqueue($"Failed to open {dialog.SafeFileName}. The file is probably in use.");
+                                        }
+                                        LoadingState = null;
+                                    }
+                                }
+                                else
                                 {
                                     LoadingState = "Opening";
-                                    await DataSource.LoadQuestionSet(dialog.FileName);
+                                    if (!await DataSource.LoadQuestionSet(path))
+                                    {
+                                        MainMessageQueue.Enqueue($"Failed to open {Path.GetFileName(path)}. The file is probably in use.");
+                                    }
                                     LoadingState = null;
                                 }
                             }
                             else
                             {
-                                LoadingState = "Opening";
-                                await DataSource.LoadQuestionSet(paramPath);
-                                LoadingState = null;
+                                if (path == null)
+                                {
+                                    OpenFileDialog dialog = new OpenFileDialog();
+                                    dialog.Filter = "Question Set|*.qdb";
+                                    dialog.Title = "Open - Choose a question set file";
+                                    dialog.CheckFileExists = true;
+                                    dialog.CheckPathExists = true;
+                                    if (dialog.ShowDialog() == true)
+                                    {
+                                        Process.Start(Assembly.GetEntryAssembly().Location, dialog.FileName);
+                                    }
+                                }
+                                else
+                                {
+                                    Process.Start(Assembly.GetEntryAssembly().Location, path);
+                                }
                             }
-                        }
-                        else
-                        {
-                            // TODO
                         }
                     },
                     // can execute
@@ -503,7 +570,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             true,
                             TimeSpan.FromSeconds(5));
                         await Task.Delay(6000);
-                        if (!undo && !DataSource.QuestionSet.Media.Any(x=>x.FileName == media.FileName))
+                        if (!undo && !DataSource.QuestionSet.Media.Any(x => x.FileName == media.FileName))
                             await DataSource.DeleteMedia(media);
                     },
                     // can execute
@@ -521,8 +588,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             {
                 try
                 {
-                    // TODO: github link
-                    using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF"))
+                    using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues"))
                     {
                         var updateInfo = await mgr.CheckForUpdate(false, (progress) =>
                         {

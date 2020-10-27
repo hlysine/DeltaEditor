@@ -15,7 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -67,6 +67,21 @@ namespace DeltaQuestionEditor_WPF.Views
 
                 if (viewModel.AddMediaCommand.CanExecute(files))
                     viewModel.AddMediaCommand.Execute(files);
+            }
+        }
+
+        private void gridWelcomePanel_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (files.Length == 0) return;
+
+                files = files.Where(x => Path.GetExtension(x) == ".qdb").ToArray();
+
+                if (viewModel.OpenFileCommand.CanExecute(files))
+                    viewModel.OpenFileCommand.Execute(files);
             }
         }
     }

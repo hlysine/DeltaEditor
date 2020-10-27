@@ -47,6 +47,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
             set => SetAndNotify(ref tempPath, value);
         }
 
+        private FileStream fileStream;
+
         public LocalFileDataSource()
         {
             TempPath = Path.Combine(Path.GetTempPath(), "DeltaQuestionEditor", Guid.NewGuid().ToString());
@@ -57,6 +59,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
         public void Dispose()
         {
             Directory.Delete(TempPath, true);
+            if (fileStream != null)
+                fileStream.Dispose();
         }
 
         private static readonly Dictionary<int, Dictionary<int, string>> topicNames = new Dictionary<int, Dictionary<int, string>>
@@ -187,18 +191,25 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// Load a question set (.qdb) file.
         /// </summary>
         /// <param name="path">Path to qdb file.</param>
-        public async Task LoadQuestionSet(string path)
+        public async Task<bool> LoadQuestionSet(string path)
         {
             FilePath = path;
+            if (IsFileLocked(FilePath)) return false;
             await Task.Run(() =>
             {
                 ClearDirectory(TempPath);
-                ZipFile.ExtractToDirectory(path, TempPath);
+                if (fileStream == null)
+                    fileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Read, true))
+                {
+                    archive.ExtractToDirectory(TempPath);
+                }
                 QuestionSet = JsonConvert.DeserializeObject<QuestionSet>(File.ReadAllText(Path.Combine(TempPath, "questionset.json")));
                 QuestionSet.DataSource = this;
                 QuestionSet.Media.ForEach(x => x.DataSource = this);
             });
             LastSaved = DateTime.Now;
+            return true;
         }
 
         /// <summary>
@@ -210,8 +221,15 @@ namespace DeltaQuestionEditor_WPF.DataSources
         public async Task SaveQuestionSet(string path = null)
         {
             if (QuestionSet == null) throw new InvalidOperationException("QuestionSet is null");
+            if (fileStream != null && FilePath != path)
+            {
+                fileStream.Dispose();
+                fileStream = null;
+            }
             if (path != null) FilePath = path;
             else if (FilePath == null) throw new ArgumentNullException("path is null and there is no saved file path");
+            if (fileStream == null)
+                fileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             await Task.Run(() =>
             {
                 File.WriteAllText(Path.Combine(TempPath, "questionset.json"), JsonConvert.SerializeObject(QuestionSet));
@@ -226,10 +244,14 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     }
                 }
 
-                // TODO: overwrite?
-                if (File.Exists(FilePath))
-                    File.Delete(FilePath);
-                ZipFile.CreateFromDirectory(TempPath, FilePath);
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Update, true))
+                {
+                    for (int i = archive.Entries.Count - 1; i >= 0; i--)
+                    {
+                        archive.Entries[i].Delete();
+                    }
+                    archive.CreateEntryFromDirectory(TempPath);
+                }
             });
             LastSaved = DateTime.Now;
         }

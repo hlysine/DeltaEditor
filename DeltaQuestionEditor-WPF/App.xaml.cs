@@ -1,5 +1,7 @@
 ﻿using CefSharp.Wpf;
 using DeltaQuestionEditor_WPF.Helpers;
+using DeltaQuestionEditor_WPF.ViewModels;
+using DeltaQuestionEditor_WPF.Views;
 using Squirrel;
 using System;
 using System.Collections.Generic;
@@ -23,12 +25,10 @@ namespace DeltaQuestionEditor_WPF
         public App()
         {
             Logger.Loggers.Add(new ConsoleLogger());
-            // TODO: DEBUG
-            //Logger.Loggers.Add(new TextFileLogger());
+            Logger.Loggers.Add(new TextFileLogger());
             try
             {
-                // TODO: github link
-                using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF").Result)
+                using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues").Result)
                 {
                     // Note, in most of these scenarios, the app exits after this method
                     // completes!
@@ -57,21 +57,31 @@ namespace DeltaQuestionEditor_WPF
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-                Logger.LogException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+                ShowExceptionDialog((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
 
             DispatcherUnhandledException += (s, e) =>
             {
-                Logger.LogException(e.Exception, "Application.Current.DispatcherUnhandledException");
+                ShowExceptionDialog(e.Exception, "Application.Current.DispatcherUnhandledException");
                 e.Handled = true;
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                Logger.LogException(e.Exception, "TaskScheduler.UnobservedTaskException");
+                ShowExceptionDialog(e.Exception, "TaskScheduler.UnobservedTaskException");
                 e.SetObserved();
             };
         }
 
-        
+        private void ShowExceptionDialog(Exception ex, string source)
+        {
+            Logger.LogException(ex, source);
+            // TODO: what is this exception?
+            if (ex is NullReferenceException && ex.Source == "MaterialDesignExtensions") return;
+            ExceptionWindow window = new ExceptionWindow();
+            ExceptionViewModel viewModel = new ExceptionViewModel();
+            viewModel.Exception = ex;
+            window.DataContext = viewModel;
+            window.ShowDialog();
+        }
     }
 }

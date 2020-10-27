@@ -197,8 +197,11 @@
                 </MenuItem>
             </Menu>
             <Grid
+                Name="gridWelcomePanel"
                 Grid.Row="1"
-                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}">
+                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
+                Drop="gridWelcomePanel_Drop"
+                AllowDrop="True">
                 <StackPanel
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
@@ -213,7 +216,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="10">
-                    You haven't loaded in a question set yet.
+                        You haven't loaded in a question set yet.
                     </TextBlock>
                     <StackPanel
                         HorizontalAlignment="Center"
@@ -328,19 +331,19 @@
                                         Max="6"
                                         Min="1"
                                         ToolTip="Form number of the topic, between 1 to 6"
-                                        Value="{Binding DataSource.QuestionSet.Form, Mode=TwoWay}" />
+                                        Value="{Binding DataSource.QuestionSet.Form, Mode=TwoWay, TargetNullValue=1, FallbackValue=1}" />
                                     <TextBlock
                                         Margin="5"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource MaterialDesignHeadline6TextBlock}">
-                                    .
+                                        .
                                     </TextBlock>
                                     <mde:OversizedNumberSpinner
                                         VerticalAlignment="Center"
                                         Max="15"
                                         Min="0"
                                         ToolTip="Chapter number of the topic, between 0 to 15 (some chapter numbers are invalid depending on the form)"
-                                        Value="{Binding DataSource.QuestionSet.Chapter, Mode=TwoWay}" />
+                                        Value="{Binding DataSource.QuestionSet.Chapter, Mode=TwoWay, TargetNullValue=1, FallbackValue=1}" />
                                 </StackPanel>
                                 <TextBlock
                                     Margin="14 8 8 8"
@@ -593,8 +596,7 @@
                             VirtualizingStackPanel.VirtualizationMode="Recycling"
                             dd:DragDrop.IsDragSource="True"
                             dd:DragDrop.IsDropTarget="True"
-                            Drop="mediaPanel_Drop"
-                            AllowDrop="True">
+                            dd:DragDrop.DropHandler="{Binding}">
                             <ListBox.Style>
                                 <Style
                                     TargetType="ListBox"
