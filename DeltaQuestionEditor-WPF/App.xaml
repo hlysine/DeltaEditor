@@ -102,6 +102,9 @@
             <helpers:BitmapFrameConverter
                 x:Key="BitmapFrameConverter" />
 
+            <helpers:WindowTitleConverter
+                x:Key="WindowTitleConverter" />
+
             <Storyboard
                 x:Key="shakeStoryboard">
                 <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">-->

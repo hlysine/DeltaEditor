@@ -75,7 +75,8 @@
         </ScrollViewer>
         <StackPanel
             Grid.Row="3"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
             <Button
                 Margin="5"
                 Style="{DynamicResource MaterialDesignFlatButton}"

@@ -34,24 +34,10 @@ namespace DeltaQuestionEditor_WPF.Views
             HideBoundingBox(root);
         }
 
-        bool canExit = false;
-
-        private async void mainWindow_Closing(object sender, CancelEventArgs e)
+        private void mainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (canExit)
-            {
-                return;
-            }
-            if (!viewModel.UpdateFinished)
-            {
-                // Still updating
-                e.Cancel = true;
-                //Show progress panel
-
-                await viewModel.AwaitUpdateFinish();
-                canExit = true;
-                Close();
-            }
+            if (viewModel.CloseWindowCommand.CanExecute((e,this)))
+                viewModel.CloseWindowCommand.Execute((e,this));
         }
 
         private void btnExitApp_Click(object sender, RoutedEventArgs e)

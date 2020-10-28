@@ -40,7 +40,7 @@ namespace DeltaQuestionEditor_WPF
                           mgr.RemoveShortcutForThisExe();
                           mgr.RemoveUninstallerRegistryEntry();
                       },
-                      onFirstRun: () => { });
+                      onFirstRun: () => { FileAssociations.EnsureAssociationsSet(); });
                 }
             }
             catch (Exception)

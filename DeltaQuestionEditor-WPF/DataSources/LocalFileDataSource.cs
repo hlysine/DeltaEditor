@@ -28,7 +28,13 @@ namespace DeltaQuestionEditor_WPF.DataSources
         public string FilePath
         {
             get => filePath;
-            private set => SetAndNotify(ref filePath, value);
+            private set => SetAndNotify(ref filePath, value, new[] { SafeFileName });
+        }
+
+
+        public string SafeFileName
+        {
+            get => FilePath == null ? null : Path.GetFileName(FilePath);
         }
 
 
@@ -46,6 +52,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
             get => tempPath;
             set => SetAndNotify(ref tempPath, value);
         }
+
 
         private FileStream fileStream;
 
