@@ -43,7 +43,8 @@
             </MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>
-    <Grid>
+    <Grid
+        Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition
                 Width="*" />

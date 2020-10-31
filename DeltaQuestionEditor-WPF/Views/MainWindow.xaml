@@ -74,770 +74,753 @@
             Command="{Binding AddMediaCommand}" />
     </Window.InputBindings>
     <materialDesign:DialogHost
-        Name="mainDialogHost"
-        IsOpen="{Binding ConfirmExitDialog}">
+        Name="topicSelectorDialogHost"
+        IsOpen="{Binding TopicSelectorDialog}">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel
                 Margin="16">
                 <TextBlock
                     Margin="5"
-                    Style="{DynamicResource MaterialDesignHeadline5TextBlock}">
-                    Are you sure you want to quit?
+                    Style="{DynamicResource MaterialDesignHeadline5TextBlock}"
+                    TextWrapping="Wrap">
+                    Select the topic of this question set
                 </TextBlock>
-                <TextBlock
-                    Margin="5">
-                    Press "No" and save changes if you haven't already done so.
-                </TextBlock>
-                <StackPanel
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-                    <Button
-                        Margin="5"
-                        Style="{DynamicResource MaterialDesignFlatButton}"
-                        Foreground="{DynamicResource MaterialDesignBody}"
-                        Command="{Binding CancelCloseCommand}"
-                        Content="NO" />
-                    <Button
-                        Margin="5"
-                        Style="{DynamicResource MaterialDesignFlatButton}"
-                        Command="{Binding ConfirmCloseCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-                        Content="YES" />
-                </StackPanel>
+                <views:TopicSelector 
+                    HorizontalAlignment="Stretch"/>
+                <Button
+                    Margin="5"
+                    HorizontalAlignment="Right"
+                    Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    Content="DONE" />
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
-        <Grid
-            Name="root">
-            <Grid
-                Name="mainApp"
-                Visibility="{Binding ShowUpdatePanel, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}">
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="*" />
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-                <Menu
-                    Background="{DynamicResource MaterialDesignCardBackground}"
-                    Foreground="{DynamicResource MaterialDesignBody}"
-                    IsMainMenu="True">
-                    <MenuItem
-                        Header="_File">
-                        <MenuItem
-                            Header="New"
-                            Command="{Binding NewFileCommand}">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="Plus" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Open"
-                            Command="{Binding OpenFileCommand}"
-                            InputGestureText="Ctrl+O">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="FolderOpen" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Save"
-                            Command="{Binding SaveFileCommand}"
-                            InputGestureText="Ctrl+S">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="ContentSave" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Save as.."
-                            Command="{Binding SaveAsCommand}"
-                            InputGestureText="Ctrl+Shift+S">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="ContentSaveAll" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <MenuItem
-                            Name="btnExitApp"
-                            Header="Exit"
-                            Click="btnExitApp_Click">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="ExitToApp" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem
-                        Header="_Questions">
-                        <MenuItem
-                            Header="New Question"
-                            Command="{Binding AddQuestionCommand}"
-                            InputGestureText="Ctrl+Q">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="Plus" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Duplicate Question"
-                            Command="{Binding CopyQuestionCommand}"
-                            CommandParameter="{Binding SelectedQuestion}"
-                            InputGestureText="Ctrl+Shift+D">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="ContentDuplicate" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Delete Question"
-                            Command="{Binding DeleteQuestionCommand}"
-                            CommandParameter="{Binding SelectedQuestion}">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="Delete" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem
-                        Header="_Media">
-                        <MenuItem
-                            Header="Add Media"
-                            Command="{Binding AddMediaCommand}"
-                            InputGestureText="Ctrl+Shift+Q">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="Plus" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Copy Media Code"
-                            Command="{Binding CopyMediaCodeCommand}"
-                            CommandParameter="{Binding SelectedMedia}">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="ContentCopy" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Header="Delete Media"
-                            Command="{Binding DeleteMediaCommand}"
-                            CommandParameter="{Binding SelectedMedia}">
-                            <MenuItem.Icon>
-                                <materialDesign:PackIcon
-                                    Kind="Delete" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                </Menu>
-                <Grid
-                    Name="gridWelcomePanel"
-                    Grid.Row="1"
-                    Background="{DynamicResource MaterialDesignPaper}"
-                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
-                    Drop="gridWelcomePanel_Drop"
-                    AllowDrop="True">
+        <materialDesign:DialogHost
+            Name="mainDialogHost"
+            IsOpen="{Binding ConfirmExitDialog}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel
+                    Margin="16">
+                    <TextBlock
+                        Margin="5"
+                        Style="{DynamicResource MaterialDesignHeadline5TextBlock}">
+                    Are you sure you want to quit?
+                    </TextBlock>
+                    <TextBlock
+                        Margin="5">
+                    Press "No" and save changes if you haven't already done so.
+                    </TextBlock>
                     <StackPanel
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                        <materialDesign:PackIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Paper"
-                            Foreground="{DynamicResource MaterialDesignDivider}"
-                            Width="200"
-                            Height="200" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="10">
-                            You haven't loaded in a question set yet.
-                        </TextBlock>
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Button
+                            Margin="5"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Foreground="{DynamicResource MaterialDesignBody}"
+                            Command="{Binding CancelCloseCommand}"
+                            Content="NO" />
+                        <Button
+                            Margin="5"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Command="{Binding ConfirmCloseCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                            Content="YES" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+            <Grid
+                Name="root">
+                <Grid
+                    Name="mainApp"
+                    Visibility="{Binding ShowUpdatePanel, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="Auto" />
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Menu
+                        Background="{DynamicResource MaterialDesignCardBackground}"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        IsMainMenu="True">
+                        <MenuItem
+                            Header="_File">
+                            <MenuItem
+                                Header="New"
+                                Command="{Binding NewFileCommand}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="Plus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Open"
+                                Command="{Binding OpenFileCommand}"
+                                InputGestureText="Ctrl+O">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="FolderOpen" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Import from Excel"
+                                Command="{Binding ImportFromExcelCommand}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="FileImport" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Save"
+                                Command="{Binding SaveFileCommand}"
+                                InputGestureText="Ctrl+S">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="ContentSave" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Save as.."
+                                Command="{Binding SaveAsCommand}"
+                                InputGestureText="Ctrl+Shift+S">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="ContentSaveAll" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem
+                                Name="btnExitApp"
+                                Header="Exit"
+                                Click="btnExitApp_Click">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="ExitToApp" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <MenuItem
+                            Header="_Questions">
+                            <MenuItem
+                                Header="New Question"
+                                Command="{Binding AddQuestionCommand}"
+                                InputGestureText="Ctrl+Q">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="Plus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Duplicate Question"
+                                Command="{Binding CopyQuestionCommand}"
+                                CommandParameter="{Binding SelectedQuestion}"
+                                InputGestureText="Ctrl+Shift+D">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="ContentDuplicate" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Delete Question"
+                                Command="{Binding DeleteQuestionCommand}"
+                                CommandParameter="{Binding SelectedQuestion}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <MenuItem
+                            Header="_Media">
+                            <MenuItem
+                                Header="Add Media"
+                                Command="{Binding AddMediaCommand}"
+                                InputGestureText="Ctrl+Shift+Q">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="Plus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Copy Media Code"
+                                Command="{Binding CopyMediaCodeCommand}"
+                                CommandParameter="{Binding SelectedMedia}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="ContentCopy" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem
+                                Header="Delete Media"
+                                Command="{Binding DeleteMediaCommand}"
+                                CommandParameter="{Binding SelectedMedia}">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                        Kind="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                    <Grid
+                        Name="gridWelcomePanel"
+                        Grid.Row="1"
+                        Background="{DynamicResource MaterialDesignPaper}"
+                        Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
+                        Drop="gridWelcomePanel_Drop"
+                        AllowDrop="True">
                         <StackPanel
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <Button
+                            VerticalAlignment="Center">
+                            <materialDesign:PackIcon
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Style="{DynamicResource MaterialDesignFlatButton}"
-                                Command="{Binding NewFileCommand}">
-                                CREATE A NEW SET
-                            </Button>
+                                Kind="Paper"
+                                Foreground="{DynamicResource MaterialDesignDivider}"
+                                Width="200"
+                                Height="200" />
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Margin="16 0 16 0">
-                                Or
+                                Margin="10">
+                            You haven't loaded in a question set yet.
                             </TextBlock>
-                            <Button
+                            <StackPanel
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Style="{DynamicResource MaterialDesignFlatButton}"
-                                Command="{Binding OpenFileCommand}">
-                                LOAD AN EXISTING SET
-                            </Button>
+                                Orientation="Vertical">
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Style="{DynamicResource MaterialDesignFlatButton}"
+                                    Command="{Binding NewFileCommand}">
+                                    CREATE A NEW SET
+                                </Button>
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Style="{DynamicResource MaterialDesignFlatButton}"
+                                    Command="{Binding OpenFileCommand}">
+                                    LOAD AN EXISTING SET
+                                </Button>
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Style="{DynamicResource MaterialDesignFlatButton}"
+                                    Command="{Binding ImportFromExcelCommand}">
+                                    IMPORT FROM EXCEL
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Grid>
-                <Grid
-                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}"
-                    Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="Auto" />
-                        <ColumnDefinition
-                            Width="Auto" />
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="*" />
-                        <ColumnDefinition
-                            Width="Auto" />
-                        <ColumnDefinition
-                            Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Expander
-                        ExpandDirection="Left">
-                        <Expander.Header>
-                            <TextBlock
-                                Text="Question List"
-                                RenderTransformOrigin=".5,.5">
-                                <TextBlock.LayoutTransform>
-                                    <RotateTransform
-                                        Angle="90" />
-                                </TextBlock.LayoutTransform>
-                            </TextBlock>
-                        </Expander.Header>
-                        <Grid
-                            Width="300"
-                            Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="*" />
-                                <RowDefinition
-                                    Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <materialDesign:Card
-                                Margin="5"
-                                Padding="8">
-                                <StackPanel
-                                    Orientation="Vertical">
-                                    <Grid
-                                        Margin="8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="*" />
-                                            <ColumnDefinition
-                                                Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                                    Question Set Topic
-                                        </TextBlock>
-                                        <Button
-                                            Grid.Column="1"
-                                            VerticalAlignment="Center"
-                                            Style="{DynamicResource MaterialDesignToolForegroundButton}"
-                                            Margin="5"
-                                            materialDesign:RippleAssist.IsDisabled="True"
-                                            Cursor="Arrow"
-                                            ToolTip="Topic that the questions in this set belong to">
-                                            <materialDesign:PackIcon
-                                                Kind="InfoCircle" />
-                                        </Button>
-                                    </Grid>
-                                    <StackPanel
-                                        Margin="8 -8 8 8"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            Margin="5"
-                                            VerticalAlignment="Center"
-                                            Style="{StaticResource MaterialDesignHeadline6TextBlock}">
-                                        Topic
-                                        </TextBlock>
-                                        <mde:OversizedNumberSpinner
-                                            VerticalAlignment="Center"
-                                            Max="6"
-                                            Min="1"
-                                            ToolTip="Form number of the topic, between 1 to 6"
-                                            Value="{Binding DataSource.QuestionSet.Form, Mode=TwoWay, TargetNullValue=1, FallbackValue=1}" />
-                                        <TextBlock
-                                            Margin="5"
-                                            VerticalAlignment="Center"
-                                            Style="{StaticResource MaterialDesignHeadline6TextBlock}">
-                                        .
-                                        </TextBlock>
-                                        <mde:OversizedNumberSpinner
-                                            VerticalAlignment="Center"
-                                            Max="15"
-                                            Min="0"
-                                            ToolTip="Chapter number of the topic, between 0 to 15 (some chapter numbers are invalid depending on the form)"
-                                            Value="{Binding DataSource.QuestionSet.Chapter, Mode=TwoWay, TargetNullValue=1, FallbackValue=1}" />
-                                    </StackPanel>
-                                    <TextBlock
-                                        Margin="14 8 8 8"
-                                        HorizontalAlignment="Stretch"
-                                        TextWrapping="Wrap"
-                                        Text="{Binding DataSource.QuestionSet.TopicName}">
-                                    </TextBlock>
-                                </StackPanel>
-                            </materialDesign:Card>
-                            <Grid
-                                Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="*" />
-                                    <ColumnDefinition
-                                        Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Margin="8"
-                                    VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
-                                    Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                                Question List
-                                </TextBlock>
-                                <ToggleButton
-                                    Grid.Column="1"
-                                    Margin="10 0 0 0"
-                                    Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
-                                    ToolTip="Toggle edit mode for question list"
-                                    IsChecked="{Binding QuestionListEditMode, Mode=TwoWay}">
-                                    <materialDesign:PackIcon
-                                        Kind="Edit"
-                                        Height="21"
-                                        Width="21" />
-                                </ToggleButton>
-                            </Grid>
-                            <ListBox
-                                Grid.Row="2"
-                                VerticalAlignment="Stretch"
-                                ItemsSource="{Binding DataSource.QuestionSet.Questions}"
-                                SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}"
-                                VirtualizingStackPanel.IsVirtualizing="True"
-                                VirtualizingStackPanel.VirtualizationMode="Recycling"
-                                dd:DragDrop.IsDragSource="True"
-                                dd:DragDrop.IsDropTarget="True">
-                                <ListBox.Style>
-                                    <Style
-                                        TargetType="ListBox"
-                                        BasedOn="{StaticResource {x:Type ListBox}}">
-                                        <Style.Triggers>
-                                            <Trigger
-                                                Property="HasItems"
-                                                Value="False">
-                                                <Setter
-                                                    Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <StackPanel
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center">
-                                                                <materialDesign:PackIcon
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="HelpRhombus"
-                                                                    Foreground="{DynamicResource MaterialDesignDivider}"
-                                                                    Width="100"
-                                                                    Height="100" />
-                                                                <TextBlock
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Margin="10">
-                                                                There are no questions in the set
-                                                                </TextBlock>
-                                                                <Button
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Style="{DynamicResource MaterialDesignFlatButton}"
-                                                                    Command="{Binding AddQuestionCommand}">
-                                                                    ADD A NEW QUESTION
-                                                                </Button>
-                                                            </StackPanel>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.Style>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:QuestionListItem
-                                            HorizontalAlignment="Stretch" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <ListBox.ItemContainerStyle>
-                                    <Style
-                                        TargetType="ListBoxItem"
-                                        BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                                        <Setter
-                                            Property="HorizontalAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="HorizontalContentAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="Padding"
-                                            Value="0" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                            <Button
-                                Grid.Row="3"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                ToolTip="Add a new question"
-                                Command="{Binding AddQuestionCommand}">
-                                <StackPanel
-                                    Orientation="Horizontal">
-                                    <materialDesign:PackIcon
-                                        VerticalAlignment="Center"
-                                        Kind="Plus" />
-                                    <TextBlock
-                                        VerticalAlignment="Center">
-                                NEW QUESTION
-                                    </TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </Expander>
-                    <Border
-                        Grid.Column="1"
-                        Background="{DynamicResource MaterialDesignDivider}"
-                        Width="1"
-                        VerticalAlignment="Stretch"
-                        SnapsToDevicePixels="True" />
-                    <views:QuestionEditPanel
-                        Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
-                        DataContext="{Binding SelectedQuestion}"
-                        Grid.Column="2" />
-                    <StackPanel
-                        Visibility="{Binding SelectedQuestion, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
-                        Grid.Column="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                        <materialDesign:PackIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FileDocumentEdit"
-                            Foreground="{DynamicResource MaterialDesignDivider}"
-                            Width="100"
-                            Height="100" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="10"
-                            TextWrapping="Wrap">
-                        Select a question in the question list to start editing
-                        </TextBlock>
-                    </StackPanel>
-                    <views:QuestionPreviewPanel
-                        Question="{Binding SelectedQuestion.Text}"
-                        Answers="{Binding SelectedQuestion.Answers}"
-                        Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
-                        Grid.Column="3"
-                        TempPath="{Binding DataSource.TempPath}" />
-                    <StackPanel
-                        Visibility="{Binding SelectedQuestion, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
-                        Grid.Column="3"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                        <materialDesign:PackIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Eye"
-                            Foreground="{DynamicResource MaterialDesignDivider}"
-                            Width="100"
-                            Height="100" />
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="10"
-                            TextWrapping="Wrap">
-                        Select a question in the question list to see preview
-                        </TextBlock>
-                    </StackPanel>
-                    <Border
-                        Grid.Column="4"
-                        Background="{DynamicResource MaterialDesignDivider}"
-                        Width="1"
-                        VerticalAlignment="Stretch"
-                        SnapsToDevicePixels="True" />
-                    <Expander
-                        Name="mediaPanel"
-                        Grid.Column="5"
-                        ExpandDirection="Right"
-                        Drop="mediaPanel_Drop"
-                        AllowDrop="True">
-                        <Expander.Header>
-                            <TextBlock
-                                Text="Media List"
-                                RenderTransformOrigin=".5,.5">
-                                <TextBlock.LayoutTransform>
-                                    <RotateTransform
-                                        Angle="-90" />
-                                </TextBlock.LayoutTransform>
-                            </TextBlock>
-                        </Expander.Header>
-                        <Grid
-                            Width="300"
-                            Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="Auto" />
-                                <RowDefinition
-                                    Height="*" />
-                                <RowDefinition
-                                    Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="*" />
-                                    <ColumnDefinition
-                                        Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Margin="8"
-                                    VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
-                                    Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                            Media List
-                                </TextBlock>
-                                <ToggleButton
-                                    Grid.Column="1"
-                                    Margin="10 0 0 0"
-                                    Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
-                                    ToolTip="Toggle edit mode for media list"
-                                    IsChecked="{Binding MediaListEditMode, Mode=TwoWay}">
-                                    <materialDesign:PackIcon
-                                        Kind="Edit"
-                                        Height="21"
-                                        Width="21" />
-                                </ToggleButton>
-                            </Grid>
-                            <ListBox
-                                Grid.Row="1"
-                                VerticalAlignment="Stretch"
-                                ItemsSource="{Binding DataSource.QuestionSet.Media}"
-                                SelectedItem="{Binding SelectedMedia, Mode=TwoWay}"
-                                VirtualizingStackPanel.IsVirtualizing="True"
-                                VirtualizingStackPanel.VirtualizationMode="Recycling"
-                                dd:DragDrop.IsDragSource="True"
-                                dd:DragDrop.IsDropTarget="True"
-                                dd:DragDrop.DropHandler="{Binding}">
-                                <ListBox.Style>
-                                    <Style
-                                        TargetType="ListBox"
-                                        BasedOn="{StaticResource {x:Type ListBox}}">
-                                        <Style.Triggers>
-                                            <Trigger
-                                                Property="HasItems"
-                                                Value="False">
-                                                <Setter
-                                                    Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <StackPanel
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center">
-                                                                <materialDesign:PackIcon
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Kind="Image"
-                                                                    Foreground="{DynamicResource MaterialDesignDivider}"
-                                                                    Width="100"
-                                                                    Height="100" />
-                                                                <TextBlock
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Margin="10">
-                                                                There are no media files in the set
-                                                                </TextBlock>
-                                                                <Button
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"
-                                                                    Style="{DynamicResource MaterialDesignFlatButton}"
-                                                                    Command="{Binding AddMediaCommand}">
-                                                                    ADD MEDIA
-                                                                </Button>
-                                                            </StackPanel>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.Style>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:MediaListItem
-                                            HorizontalAlignment="Stretch" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                <ListBox.ItemContainerStyle>
-                                    <Style
-                                        TargetType="ListBoxItem"
-                                        BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                                        <Setter
-                                            Property="HorizontalAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="HorizontalContentAlignment"
-                                            Value="Stretch" />
-                                        <Setter
-                                            Property="Padding"
-                                            Value="0" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                            <Button
-                                Grid.Row="2"
-                                Style="{StaticResource MaterialDesignFlatButton}"
-                                ToolTip="Add new media file(s)"
-                                Command="{Binding AddMediaCommand}">
-                                <StackPanel
-                                    Orientation="Horizontal">
-                                    <materialDesign:PackIcon
-                                        VerticalAlignment="Center"
-                                        Kind="Plus" />
-                                    <TextBlock
-                                        VerticalAlignment="Center">
-                                    ADD MEDIA
-                                    </TextBlock>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-                    </Expander>
-                </Grid>
-                <materialDesign:ColorZone
-                    Grid.Row="2"
-                    Padding="5"
-                    Mode="PrimaryMid">
-                    <Grid>
+                    </Grid>
+                    <Grid
+                        Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}"
+                        Grid.Row="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
                             <ColumnDefinition
                                 Width="Auto" />
                             <ColumnDefinition
                                 Width="*" />
                             <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition
                                 Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <Expander
+                            IsExpanded="True"
+                            ExpandDirection="Left">
+                            <Expander.Header>
+                                <TextBlock
+                                    Text="Question List"
+                                    RenderTransformOrigin=".5,.5">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform
+                                            Angle="90" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </Expander.Header>
+                            <Grid
+                                Width="300"
+                                Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Expander
+                                    materialDesign:ExpanderAssist.HorizontalHeaderPadding="8 5 8 5"
+                                    ToolTip="Topic that the questions in this set belong to">
+                                    <Expander.Header>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            TextTrimming="CharacterEllipsis"
+                                            Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                                        Question Set Topic
+                                        </TextBlock>
+                                    </Expander.Header>
+                                    <views:TopicSelector />
+                                </Expander>
+                                <Grid
+                                    Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="*" />
+                                        <ColumnDefinition
+                                            Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                                        Question List
+                                    </TextBlock>
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        Margin="10 0 0 0"
+                                        Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
+                                        ToolTip="Toggle edit mode for question list"
+                                        IsChecked="{Binding QuestionListEditMode, Mode=TwoWay}">
+                                        <materialDesign:PackIcon
+                                            Kind="Edit"
+                                            Height="21"
+                                            Width="21" />
+                                    </ToggleButton>
+                                </Grid>
+                                <ListBox
+                                    Grid.Row="2"
+                                    VerticalAlignment="Stretch"
+                                    ItemsSource="{Binding DataSource.QuestionSet.Questions}"
+                                    SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}"
+                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                    VirtualizingPanel.ScrollUnit="Pixel"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.IsDropTarget="True">
+                                    <ListBox.Style>
+                                        <Style
+                                            TargetType="ListBox"
+                                            BasedOn="{StaticResource {x:Type ListBox}}">
+                                            <Style.Triggers>
+                                                <Trigger
+                                                    Property="HasItems"
+                                                    Value="False">
+                                                    <Setter
+                                                        Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <StackPanel
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center">
+                                                                    <materialDesign:PackIcon
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Kind="HelpRhombus"
+                                                                        Foreground="{DynamicResource MaterialDesignDivider}"
+                                                                        Width="100"
+                                                                        Height="100" />
+                                                                    <TextBlock
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="10">
+                                                                        There are no questions in the set
+                                                                    </TextBlock>
+                                                                    <Button
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Style="{DynamicResource MaterialDesignFlatButton}"
+                                                                        Command="{Binding AddQuestionCommand}">
+                                                                        ADD A NEW QUESTION
+                                                                    </Button>
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.Style>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:QuestionListItem
+                                                HorizontalAlignment="Stretch" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style
+                                            TargetType="ListBoxItem"
+                                            BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                            <Setter
+                                                Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                            <Setter
+                                                Property="HorizontalContentAlignment"
+                                                Value="Stretch" />
+                                            <Setter
+                                                Property="Padding"
+                                                Value="0" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                                <Button
+                                    Grid.Row="3"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    ToolTip="Add a new question"
+                                    Command="{Binding AddQuestionCommand}">
+                                    <StackPanel
+                                        Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            VerticalAlignment="Center"
+                                            Kind="Plus" />
+                                        <TextBlock
+                                            VerticalAlignment="Center">
+                                NEW QUESTION
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Expander>
+                        <Border
+                            Grid.Column="1"
+                            Background="{DynamicResource MaterialDesignDivider}"
+                            Width="1"
+                            VerticalAlignment="Stretch"
+                            SnapsToDevicePixels="True" />
+                        <views:QuestionEditPanel
+                            Visibility="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
+                            DataContext="{Binding SelectedQuestion}"
+                            Grid.Column="2" />
                         <StackPanel
-                            Visibility="{Binding LoadingState, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
-                            Orientation="Horizontal">
-                            <ProgressBar
-                                Margin="0 0 5 0"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                                Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                                Value="0"
-                                IsIndeterminate="True" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Text="{Binding LoadingState}">
-                            </TextBlock>
-                        </StackPanel>
-                        <StackPanel
+                            Visibility="{Binding SelectedQuestion, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
                             Grid.Column="2"
-                            Orientation="Horizontal">
-                            <StackPanel
-                                Margin="10 0 0 0"
-                                Orientation="Horizontal"
-                                ToolTip="Number of questions"
-                                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
-                                <materialDesign:PackIcon
-                                    VerticalAlignment="Center"
-                                    Kind="HelpRhombus" />
-                                <TextBlock
-                                    Margin="5 0 0 0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding DataSource.QuestionSet.Questions.Count}">
-                                </TextBlock>
-                            </StackPanel>
-                            <StackPanel
-                                Margin="10 0 0 0"
-                                Orientation="Horizontal"
-                                ToolTip="Number of media files"
-                                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
-                                <materialDesign:PackIcon
-                                    VerticalAlignment="Center"
-                                    Kind="Image" />
-                                <TextBlock
-                                    Margin="5 0 0 0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding DataSource.QuestionSet.Media.Count}">
-                                </TextBlock>
-                            </StackPanel>
-                            <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <materialDesign:PackIcon
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Margin="10 0 0 0"
-                                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}">
-                            No question set loaded
-                            </TextBlock>
+                                Kind="FileDocumentEdit"
+                                Foreground="{DynamicResource MaterialDesignDivider}"
+                                Width="100"
+                                Height="100" />
                             <TextBlock
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Margin="10 0 0 0"
-                                Text="{Binding DataSource.LastSaved, StringFormat='Last saved: {0:h:mm tt}'}"
-                                Visibility="{Binding DataSource.FilePath, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
-                            </TextBlock>
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Margin="10 0 0 0"
-                                ToolTip="Path to the loaded .qdb file"
-                                Text="{Binding DataSource.FilePath, TargetNullValue='Not saved', FallbackValue='Not saved'}"
-                                Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
+                                Margin="10"
+                                TextWrapping="Wrap">
+                        Select a question in the question list to start editing
                             </TextBlock>
                         </StackPanel>
+                        <views:QuestionPreviewPanel
+                            Question="{Binding SelectedQuestion.Text}"
+                            Answers="{Binding SelectedQuestion.Answers}"
+                            Visibility="{Binding SelectedQuestion, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
+                            Grid.Column="3"
+                            TempPath="{Binding DataSource.TempPath}" />
+                        <StackPanel
+                            Visibility="{Binding SelectedQuestion, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}"
+                            Grid.Column="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <materialDesign:PackIcon
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Eye"
+                                Foreground="{DynamicResource MaterialDesignDivider}"
+                                Width="100"
+                                Height="100" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="10"
+                                TextWrapping="Wrap">
+                        Select a question in the question list to see preview
+                            </TextBlock>
+                        </StackPanel>
+                        <Border
+                            Grid.Column="4"
+                            Background="{DynamicResource MaterialDesignDivider}"
+                            Width="1"
+                            VerticalAlignment="Stretch"
+                            SnapsToDevicePixels="True" />
+                        <Expander
+                            Name="mediaPanel"
+                            Grid.Column="5"
+                            ExpandDirection="Right"
+                            Drop="mediaPanel_Drop"
+                            AllowDrop="True">
+                            <Expander.Header>
+                                <TextBlock
+                                    Text="Media List"
+                                    RenderTransformOrigin=".5,.5">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform
+                                            Angle="-90" />
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </Expander.Header>
+                            <Grid
+                                Width="300"
+                                Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="Auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                    <RowDefinition
+                                        Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="*" />
+                                        <ColumnDefinition
+                                            Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Margin="8"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                            Media List
+                                    </TextBlock>
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        Margin="10 0 0 0"
+                                        Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"
+                                        ToolTip="Toggle edit mode for media list"
+                                        IsChecked="{Binding MediaListEditMode, Mode=TwoWay}">
+                                        <materialDesign:PackIcon
+                                            Kind="Edit"
+                                            Height="21"
+                                            Width="21" />
+                                    </ToggleButton>
+                                </Grid>
+                                <ListBox
+                                    Grid.Row="1"
+                                    VerticalAlignment="Stretch"
+                                    ItemsSource="{Binding DataSource.QuestionSet.Media}"
+                                    SelectedItem="{Binding SelectedMedia, Mode=TwoWay}"
+                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                    VirtualizingPanel.ScrollUnit="Pixel"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.DropHandler="{Binding}">
+                                    <ListBox.Style>
+                                        <Style
+                                            TargetType="ListBox"
+                                            BasedOn="{StaticResource {x:Type ListBox}}">
+                                            <Style.Triggers>
+                                                <Trigger
+                                                    Property="HasItems"
+                                                    Value="False">
+                                                    <Setter
+                                                        Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <StackPanel
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center">
+                                                                    <materialDesign:PackIcon
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Kind="Image"
+                                                                        Foreground="{DynamicResource MaterialDesignDivider}"
+                                                                        Width="100"
+                                                                        Height="100" />
+                                                                    <TextBlock
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Margin="10">
+                                                                        There are no media files in the set
+                                                                    </TextBlock>
+                                                                    <Button
+                                                                        HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"
+                                                                        Style="{DynamicResource MaterialDesignFlatButton}"
+                                                                        Command="{Binding AddMediaCommand}">
+                                                                        ADD MEDIA
+                                                                    </Button>
+                                                                </StackPanel>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.Style>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:MediaListItem
+                                                HorizontalAlignment="Stretch" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style
+                                            TargetType="ListBoxItem"
+                                            BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                            <Setter
+                                                Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                            <Setter
+                                                Property="HorizontalContentAlignment"
+                                                Value="Stretch" />
+                                            <Setter
+                                                Property="Padding"
+                                                Value="0" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                                <Button
+                                    Grid.Row="2"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    ToolTip="Add new media file(s)"
+                                    Command="{Binding AddMediaCommand}">
+                                    <StackPanel
+                                        Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            VerticalAlignment="Center"
+                                            Kind="Plus" />
+                                        <TextBlock
+                                            VerticalAlignment="Center">
+                                    ADD MEDIA
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Expander>
                     </Grid>
-                </materialDesign:ColorZone>
-            </Grid>
-            <Grid
-                Visibility="{Binding ShowUpdatePanel, Converter={StaticResource BoolToVisibilityConverter}}"
-                Name="updatePanel">
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
-                    <TextBlock
-                        Margin="5"
-                        HorizontalAlignment="Left"
-                        Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                    <materialDesign:ColorZone
+                        Grid.Row="2"
+                        Padding="5"
+                        Mode="PrimaryMid">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto" />
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel
+                                Visibility="{Binding LoadingState, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=True, TargetNullValue=Hidden, FallbackValue=Hidden}"
+                                Orientation="Horizontal">
+                                <ProgressBar
+                                    Margin="0 0 5 0"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    Value="0"
+                                    IsIndeterminate="True" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Text="{Binding LoadingState}">
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Column="2"
+                                Orientation="Horizontal">
+                                <StackPanel
+                                    Margin="10 0 0 0"
+                                    Orientation="Horizontal"
+                                    ToolTip="Number of questions"
+                                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
+                                    <materialDesign:PackIcon
+                                        VerticalAlignment="Center"
+                                        Kind="HelpRhombus" />
+                                    <TextBlock
+                                        Margin="5 0 0 0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding DataSource.QuestionSet.Questions.Count}">
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel
+                                    Margin="10 0 0 0"
+                                    Orientation="Horizontal"
+                                    ToolTip="Number of media files"
+                                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
+                                    <materialDesign:PackIcon
+                                        VerticalAlignment="Center"
+                                        Kind="Image" />
+                                    <TextBlock
+                                        Margin="5 0 0 0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding DataSource.QuestionSet.Media.Count}">
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Margin="10 0 0 0"
+                                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}">
+                            No question set loaded
+                                </TextBlock>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Margin="10 0 0 0"
+                                    Text="{Binding DataSource.LastSaved, StringFormat='Last saved: {0:h:mm tt}'}"
+                                    Visibility="{Binding DataSource.FilePath, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
+                                </TextBlock>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Margin="10 0 0 0"
+                                    ToolTip="Path to the loaded .qdb file"
+                                    Text="{Binding DataSource.FilePath, TargetNullValue='Not saved', FallbackValue='Not saved'}"
+                                    Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </materialDesign:ColorZone>
+                </Grid>
+                <Grid
+                    Visibility="{Binding ShowUpdatePanel, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Name="updatePanel">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <TextBlock
+                            Margin="5"
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}">
                     Update in progress...
-                    </TextBlock>
-                    <TextBlock
-                        Margin="5"
-                        HorizontalAlignment="Left">
+                        </TextBlock>
+                        <TextBlock
+                            Margin="5"
+                            HorizontalAlignment="Left">
                     The app is still updating and will close automatically when it's done.
-                    </TextBlock>
-                    <ProgressBar
-                        Margin="5"
-                        HorizontalAlignment="Stretch"
-                        Minimum="0"
-                        Maximum="100"
-                        Value="{Binding UpdateProgress}">
-                    </ProgressBar>
-                    <TextBlock
-                        Margin="5"
-                        HorizontalAlignment="Right"
-                        Text="{Binding UpdateProgress, StringFormat={}{0}%}">
-                    </TextBlock>
-                </StackPanel>
+                        </TextBlock>
+                        <ProgressBar
+                            Margin="5"
+                            HorizontalAlignment="Stretch"
+                            Minimum="0"
+                            Maximum="100"
+                            Value="{Binding UpdateProgress}">
+                        </ProgressBar>
+                        <TextBlock
+                            Margin="5"
+                            HorizontalAlignment="Right"
+                            Text="{Binding UpdateProgress, StringFormat={}{0}%}">
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+                <materialDesign:Snackbar
+                    MessageQueue="{Binding MainMessageQueue}"
+                    VerticalAlignment="Top"
+                    Margin="0 0 10 0"
+                    HorizontalAlignment="Right" />
             </Grid>
-            <materialDesign:Snackbar
-                MessageQueue="{Binding MainMessageQueue}"
-                VerticalAlignment="Top"
-                Margin="0 0 10 0"
-                HorizontalAlignment="Right" />
-        </Grid>
+        </materialDesign:DialogHost>
+
     </materialDesign:DialogHost>
 </Window>

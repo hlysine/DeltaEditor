@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace DeltaQuestionEditor_WPF.DataSources
 {
@@ -268,7 +270,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// </summary>
         /// <param name="path">Path to the media file</param>
         /// <exception cref="InvalidOperationException">Thrown if <code>QuestionSet</code> is null.</exception>
-        public async Task<bool> AddMedia(string path)
+        public async Task<string> AddMedia(string path)
         {
             if (QuestionSet == null) throw new InvalidOperationException("QuestionSet is null");
 
@@ -290,13 +292,14 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 if (!File.Exists(newPath))
                     File.Copy(path, newPath);
             });
-            if (!QuestionSet.Media.Any(x => x.Id == media.Id))
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                QuestionSet.Media.Add(media);
-                return true;
-            }
-            else
-                return false;
+                if (!QuestionSet.Media.Any(x => x.Id == media.Id))
+                {
+                    QuestionSet.Media.Add(media);
+                }
+            });
+            return media.Id;
         }
 
         /// <summary>

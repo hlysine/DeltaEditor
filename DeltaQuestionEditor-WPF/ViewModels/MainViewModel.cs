@@ -2,13 +2,17 @@
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models;
 using DeltaQuestionEditor_WPF.Views;
+using ExcelDataReader;
 using GongSolutions.Wpf.DragDrop;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
+using MoreLinq;
 using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,6 +21,7 @@ using System.Reflection;
 using System.Security.Policy;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -194,6 +199,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             set => SetAndNotify(ref confirmExitDialog, value);
         }
 
+
+        private bool topicSelectorDialog;
+        public bool TopicSelectorDialog
+        {
+            get => topicSelectorDialog;
+            set => SetAndNotify(ref topicSelectorDialog, value);
+        }
+
         ICommand closeWindowCommand;
         public ICommand CloseWindowCommand
         {
@@ -285,6 +298,100 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             }
         }
 
+
+        ICommand importFromExcelCommand;
+        public ICommand ImportFromExcelCommand
+        {
+            get
+            {
+                return importFromExcelCommand ??= new RelayCommand(
+                    // execute
+                    async (param) =>
+                    {
+                        async Task<string> importExcel(string path)
+                        {
+                            DataSource.CreateQuestionSet();
+                            TopicSelectorDialog = true;
+                            await WaitUntil(() => !TopicSelectorDialog);
+                            LoadingState = "Reading";
+                            ExcelFileDataSource importer = new ExcelFileDataSource();
+                            if (!await importer.ReadFile(path))
+                            {
+                                return $"Failed to open {Path.GetFileName(path)}. The file is probably in use.";
+                            }
+                            LoadingState = "Analyzing";
+                            if (!await importer.AnalyzeFile())
+                            {
+                                return $"Analysis of {Path.GetFileName(path)} failed: {importer.LastFailMessage}.";
+                            }
+                            LoadingState = "Importing questions";
+                            await importer.ImportQuestions(DataSource);
+                            LoadingState = "Importing media files";
+                            await importer.ImportMedia(DataSource);
+                            LoadingState = null;
+                            EnsurePathExist(AppDataPath("Imports"));
+                            string log = AppDataPath(Path.Combine("Imports", $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss} {Path.GetFileName(path)}.txt"));
+                            File.WriteAllText(log, importer.GetImportReport());
+                            Process.Start(log);
+                            return $"Successfully imported {Path.GetFileName(path)}";
+                        }
+
+                        List<string> paths = (param as IEnumerable<string>)?.ToList();
+                        if (paths == null) paths = new List<string>();
+                        string paramPath = param as string;
+                        if (paramPath != null) paths.Add(paramPath);
+                        if (paths.Count == 0) paths.Add(null);
+                        foreach (string path in paths)
+                        {
+                            if (DataSource.QuestionSet == null)
+                            {
+                                if (path == null)
+                                {
+                                    OpenFileDialog dialog = new OpenFileDialog();
+                                    dialog.Filter = "Excel workbook|*.xls;*.xlsx;*.xlsb";
+                                    dialog.Title = "Import from Excel - Choose an Excel workbook file";
+                                    dialog.CheckFileExists = true;
+                                    dialog.CheckPathExists = true;
+                                    if (dialog.ShowDialog() == true)
+                                    {
+                                        MainMessageQueue.Enqueue(await importExcel(dialog.FileName));
+                                    }
+                                }
+                                else
+                                {
+                                    MainMessageQueue.Enqueue(await importExcel(path));
+                                }
+                            }
+                            else
+                            {
+                                if (path == null)
+                                {
+                                    OpenFileDialog dialog = new OpenFileDialog();
+                                    dialog.Filter = "Excel workbook|*.xls;*.xlsx;*.xlsb";
+                                    dialog.Title = "Import from Excel - Choose an Excel workbook file";
+                                    dialog.CheckFileExists = true;
+                                    dialog.CheckPathExists = true;
+                                    if (dialog.ShowDialog() == true)
+                                    {
+                                        Process.Start(Assembly.GetEntryAssembly().Location, $"-i \"{dialog.FileName}\"");
+                                    }
+                                }
+                                else
+                                {
+                                    Process.Start(Assembly.GetEntryAssembly().Location, $"-i \"{path}\"");
+                                }
+                            }
+                        }
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return true;
+                    }
+                );
+            }
+        }
+
         ICommand newFileCommand;
         public ICommand NewFileCommand
         {
@@ -297,6 +404,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         if (DataSource.QuestionSet == null)
                         {
                             DataSource.CreateQuestionSet();
+                            TopicSelectorDialog = true;
                         }
                         else
                         {
@@ -321,6 +429,16 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // execute
                     async (param) =>
                     {
+                        async Task openFile(string path)
+                        {
+                            LoadingState = "Opening";
+                            if (!await DataSource.LoadQuestionSet(path))
+                            {
+                                MainMessageQueue.Enqueue($"Failed to open {Path.GetFileName(path)}. The file is probably in use.");
+                            }
+                            LoadingState = null;
+                        }
+
                         List<string> paths = (param as IEnumerable<string>)?.ToList();
                         if (paths == null) paths = new List<string>();
                         string paramPath = param as string;
@@ -339,22 +457,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                     dialog.CheckPathExists = true;
                                     if (dialog.ShowDialog() == true)
                                     {
-                                        LoadingState = "Opening";
-                                        if (!await DataSource.LoadQuestionSet(dialog.FileName))
-                                        {
-                                            MainMessageQueue.Enqueue($"Failed to open {dialog.SafeFileName}. The file is probably in use.");
-                                        }
-                                        LoadingState = null;
+                                        await openFile(dialog.FileName);
                                     }
                                 }
                                 else
                                 {
-                                    LoadingState = "Opening";
-                                    if (!await DataSource.LoadQuestionSet(path))
-                                    {
-                                        MainMessageQueue.Enqueue($"Failed to open {Path.GetFileName(path)}. The file is probably in use.");
-                                    }
-                                    LoadingState = null;
+                                    await openFile(path);
                                 }
                             }
                             else

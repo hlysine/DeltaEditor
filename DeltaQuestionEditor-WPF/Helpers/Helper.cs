@@ -59,6 +59,11 @@ namespace DeltaQuestionEditor_WPF.Helpers
             }
         }
 
+        public static bool Contains(this string str, IEnumerable<string> values)
+        {
+            return values.Any(str.Contains);
+        }
+
         public static bool IsFileLocked(string file)
         {
             try

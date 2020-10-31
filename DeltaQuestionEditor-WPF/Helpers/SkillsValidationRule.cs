@@ -17,7 +17,7 @@ namespace DeltaQuestionEditor_WPF.Helpers
             if (val.IsNullOrWhiteSpace())
                 return ValidationResult.ValidResult;
             val = val.Trim().ToLower();
-            if (Regex.IsMatch(val.Replace(" ", ""), @"^(?:\d+\.){3}\d+(?:,(?:\d+\.){3}\d+)*$"))
+            if (Regex.IsMatch(val.Replace(" ", ""), @"^(?:\d+\.){2,4}\d+(?:,(?:\d+\.){2,4}\d+)*$"))
                 return ValidationResult.ValidResult;
             return new ValidationResult(false, "Invalid skills code");
         }
