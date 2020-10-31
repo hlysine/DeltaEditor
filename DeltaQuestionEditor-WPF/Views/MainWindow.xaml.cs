@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -36,8 +37,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void mainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (viewModel.CloseWindowCommand.CanExecute((e,this)))
-                viewModel.CloseWindowCommand.Execute((e,this));
+            if (viewModel.CloseWindowCommand.CanExecute((e, this)))
+                viewModel.CloseWindowCommand.Execute((e, this));
         }
 
         private void btnExitApp_Click(object sender, RoutedEventArgs e)
@@ -64,10 +65,17 @@ namespace DeltaQuestionEditor_WPF.Views
 
                 if (files.Length == 0) return;
 
-                files = files.Where(x => Path.GetExtension(x) == ".qdb").ToArray();
+                var qdb = files.Where(x => Path.GetExtension(x) == ".qdb").ToArray();
 
-                if (viewModel.OpenFileCommand.CanExecute(files))
-                    viewModel.OpenFileCommand.Execute(files);
+                if (qdb.Length > 0)
+                    if (viewModel.OpenFileCommand.CanExecute(qdb))
+                        viewModel.OpenFileCommand.Execute(qdb);
+
+                var xls = files.Where(x => Regex.IsMatch(Path.GetExtension(x), @"\.xls[xb]?")).ToArray();
+
+                if (xls.Length > 0)
+                    if (viewModel.ImportFromExcelCommand.CanExecute(xls))
+                        viewModel.ImportFromExcelCommand.Execute(xls);
             }
         }
     }

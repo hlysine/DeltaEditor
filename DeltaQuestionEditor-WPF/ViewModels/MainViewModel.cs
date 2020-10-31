@@ -809,7 +809,18 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                 string[] args = Environment.GetCommandLineArgs();
                 if (args.Length > 1 && !args[1].IsNullOrWhiteSpace())
                 {
-                    if (File.Exists(args[1]))
+                    if (args[1] == "-i")
+                    {
+                        if (args.Length > 2 && !args[2].IsNullOrWhiteSpace())
+                        {
+                            if (File.Exists(args[2]))
+                            {
+                                if (ImportFromExcelCommand.CanExecute(args[2]))
+                                    ImportFromExcelCommand.Execute(args[2]);
+                            }
+                        }
+                    }
+                    else if (File.Exists(args[1]))
                     {
                         if (OpenFileCommand.CanExecute(args[1]))
                             OpenFileCommand.Execute(args[1]);
@@ -817,7 +828,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     else
                     {
                         Logger.Log($"File not found: {args[1]}", Severity.Error);
-                        MainMessageQueue.Enqueue($"Invalid commandline argument: {args[1]}");
+                        MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
                     }
                 }
                 try
