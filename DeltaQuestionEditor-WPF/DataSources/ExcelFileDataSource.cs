@@ -303,7 +303,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          {
                              string tmp = row[mapping.Item2].Replace(" ", "");
                              bool fix = false;
-                             tmp.Split(',').ForEach(x =>
+                             tmp.Split('|', ',', ';', '&', '+', '\n').ForEach(x =>
                              {
                                  if (x.Count(y => y == '.') < 2 && Regex.IsMatch(x, @"^\d+(?:\.\d+)*$"))
                                  {
