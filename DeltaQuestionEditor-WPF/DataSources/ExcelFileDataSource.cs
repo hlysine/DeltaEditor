@@ -88,14 +88,14 @@ namespace DeltaQuestionEditor_WPF.DataSources
             {
                 if (dataSet.Tables.Count < 1)
                 {
-                    failed("no worksheets found in the file");
+                    failed(ExcelImportFailures.NO_WORKSHEETS_FOUND);
                     return false;
                 }
                 DataTable table = null;
                 var candidates = dataSet.Tables.Cast<DataTable>().Where(x => x.Columns.Count >= 5 && x.Rows.Count >= 1);
                 if (candidates.Count() == 0)
                 {
-                    failed("all worksheets have too few columns");
+                    failed(ExcelImportFailures.TOO_FEW_COLUMNS);
                     return false;
                 }
                 tableScores = candidates.Select(x =>
@@ -127,7 +127,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 if (tableScoreSet != default) table = tableScoreSet.Item1;
                 if (table == null)
                 {
-                    failed("no valid worksheet found");
+                    failed(ExcelImportFailures.NO_VALID_WORKSHEET);
                     return false;
                 }
 
@@ -155,7 +155,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 else
                 {
                     hasHeader = false;
-                    problems.Add("This table has no headers. Detection of columns may be less accurate. Be sure to check the import summary carefully.");
+                    problems.Add(ExcelImportProblems.NO_HEADERS);
                     columnMapping.Add((Field.Question, 0));
                     columnMapping.Add((Field.CorrectAnswer, 1));
                     columnMapping.Add((Field.WrongAnswer1, 2));
@@ -204,15 +204,15 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 }
                 if (!columnMapping.Any(x => x.Item1 == Field.Skills))
                 {
-                    problems.Add("There isn't a field for \"Required Skills\" in the worksheet. Please enter the skills for each question manually in the editor.");
+                    problems.Add(ExcelImportProblems.MISSING_COLUMN_REQUIRED_SKILLS);
                 }
                 if (!columnMapping.Any(x => x.Item1 == Field.Difficulty))
                 {
-                    problems.Add("There isn't a field for \"Difficulty\" in the worksheet. Please rate the difficulty of each question manually in the editor.");
+                    problems.Add(ExcelImportProblems.MISSING_COLUMN_DIFFICULTY);
                 }
                 if (columnMapping.Any(x => x.Item1 == Field.Media))
                 {
-                    problems.Add("A separate column for media files has been found. Media files in this column will be inserted to the question text automatically. Edit the questions manually if this isn't what you want.");
+                    problems.Add(ExcelImportProblems.EXTRA_COLUMN_MEDIA);
                 }
                 List<int> nonemptyColumns = new List<int>();
                 rows = dataTable.Rows.Cast<DataRow>().Select(x => x.ItemArray.Select(y => y.ToString()).ToArray()).ToList();
@@ -221,7 +221,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     if (rows.Any(x => !x[i].IsNullOrWhiteSpace()))
                         nonemptyColumns.Add(i);
                 }
-                nonemptyColumns.Where(x => !columnMapping.Any(y => y.Item2 == x)).ForEach(x => problems.Add($"Column {x + 1}{(hasHeader ? $"({rows[0][x]})" : "")} is not used when importing. If this column contains useful information, please copy it manually in the editor."));
+                nonemptyColumns.Where(x => !columnMapping.Any(y => y.Item2 == x)).ForEach(x => problems.Add(string.Format(ExcelImportProblems.UNUSED_COLUMN, x + 1, hasHeader ? $"({rows[0][x]})" : "")));
                 return true;
             });
         }
@@ -244,7 +244,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          question.Text = row[mapping.Item2];
                          if (row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             problems.Add($"Question text of question {dataSource.QuestionSet.Questions.Count + 1} is empty!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_QUESTION_TEXT, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.CorrectAnswer)) != default)
@@ -252,7 +252,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          question.Answers[0] = row[mapping.Item2];
                          if (row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             problems.Add($"The correct answer of question {dataSource.QuestionSet.Questions.Count + 1} is empty!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_CORRECT_ANSWER, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.WrongAnswer1)) != default)
@@ -260,7 +260,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          question.Answers[1] = row[mapping.Item2];
                          if (row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             problems.Add($"Wrong answer 1 of question {dataSource.QuestionSet.Questions.Count + 1} is empty!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_WRONG_ANSWER, 1, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.WrongAnswer2)) != default)
@@ -268,7 +268,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          question.Answers[2] = row[mapping.Item2];
                          if (row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             problems.Add($"Wrong answer 2 of question {dataSource.QuestionSet.Questions.Count + 1} is empty!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_WRONG_ANSWER, 2, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.WrongAnswer3)) != default)
@@ -276,7 +276,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                          question.Answers[3] = row[mapping.Item2];
                          if (row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             problems.Add($"Wrong answer 3 of question {dataSource.QuestionSet.Questions.Count + 1} is empty!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_WRONG_ANSWER, 3, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.Difficulty)) != default)
@@ -289,12 +289,12 @@ namespace DeltaQuestionEditor_WPF.DataSources
                              }
                              else
                              {
-                                 problems.Add($"Difficulty rating of question {dataSource.QuestionSet.Questions.Count + 1} is invalid! Please rate the difficulty manually in the editor.");
+                                 problems.Add(string.Format(ExcelImportProblems.INVALID_DIFFICULTY, dataSource.QuestionSet.Questions.Count + 1));
                              }
                          }
                          else
                          {
-                             problems.Add($"There is no difficulty rating in question {dataSource.QuestionSet.Questions.Count + 1}!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_DIFFICULTY, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.Skills)) != default)
@@ -312,14 +312,19 @@ namespace DeltaQuestionEditor_WPF.DataSources
                                  }
                                  else
                                  {
+                                     if (!Regex.IsMatch(x, @"^\d+(?:\.\d+)*$"))
+                                     {
+                                         problems.Add(string.Format(ExcelImportProblems.INVALID_SKILLS, dataSource.QuestionSet.Questions.Count + 1));
+                                     }
                                      question.Skills.Add(x);
                                  }
                              });
-                             if (fix) problems.Add($"Skills in question {dataSource.QuestionSet.Questions.Count + 1} are too short. The topic code ({dataSource.QuestionSet.Form}.{dataSource.QuestionSet.Chapter}) has been appended in front of the skills codes. Please check if this fix is correct.");
+                             if (fix)
+                                 problems.Add(string.Format(ExcelImportProblems.SKILLS_TOO_SHORT, dataSource.QuestionSet.Questions.Count + 1, dataSource.QuestionSet.Form, dataSource.QuestionSet.Chapter));
                          }
                          else
                          {
-                             problems.Add($"There are no skills in question {dataSource.QuestionSet.Questions.Count + 1}!");
+                             problems.Add(string.Format(ExcelImportProblems.EMPTY_SKILLS, dataSource.QuestionSet.Questions.Count + 1));
                          }
                      }
                      if ((mapping = columnMapping.FirstOrDefault(x => x.Item1 == Field.Media)) != default)
@@ -369,7 +374,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     }
                     else
                     {
-                        problems.Add($"Media not found: \"{mediaName}\". Please add the media file manually in the editor.");
+                        problems.Add(string.Format(ExcelImportProblems.MEDIA_NOT_FOUND, mediaName));
                         return null;
                     }
                 }
