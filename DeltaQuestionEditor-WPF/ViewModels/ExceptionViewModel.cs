@@ -37,7 +37,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         message.AppendLine(exception.Message);
                         message.AppendLine();
                         message.AppendLine(exception.StackTrace);
-                        Process.Start($"https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues/issues/new?body={WebUtility.UrlEncode(message.ToString())}&labels=bug");
+                        Process.Start($"https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/issues/new?assignees=&labels=bug&template=bug_report.md&title=&body={WebUtility.UrlEncode(string.Format(Properties.Resources.issue_template, message.ToString()))}");
                         Window window = param as Window;
                         if (window == null) return;
                         window.Close();
