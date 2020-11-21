@@ -28,17 +28,17 @@ jobs:
 
     - name: Build App
       run: msbuild DeltaQuestionEditor-WPF.sln /p:Configuration=Release /p:Platform=x64
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2.2.1
-      with:
-        name: releases_x64
-        path: DeltaQuestionEditor-WPF\Releases
-        retention-days: 30
+      
+    - name: Get release
+      id: get_release
+      uses: bruceadams/get-release@v1.2.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Upload artifacts as release
-      uses: skx/github-action-publish-binaries@release-0.14
+    - name: Upload release binary
+      uses: dwenegar/upload-release-assets@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        args: 'DeltaQuestionEditor-WPF\Releases\*'
+        release_id: ${{ steps.get_release.outputs.id }}
+        path: DeltaQuestionEditor-WPF\Releases
