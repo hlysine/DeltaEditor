@@ -1,11 +1,9 @@
 name: Release build
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+  release:
+    types: [created]
+    
 jobs:
   build:
 
@@ -37,3 +35,10 @@ jobs:
         name: releases_x64
         path: DeltaQuestionEditor-WPF\Releases
         retention-days: 30
+    
+    - name: Upload artifacts as release
+      uses: skx/github-action-publish-binaries@release-0.14
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: 'DeltaQuestionEditor-WPF\Releases\*'
