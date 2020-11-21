@@ -833,7 +833,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                 }
                 try
                 {
-                    using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues"))
+                    using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF"))
                     {
                         var updateInfo = await mgr.CheckForUpdate(false, (progress) =>
                         {

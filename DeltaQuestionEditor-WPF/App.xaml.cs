@@ -28,7 +28,7 @@ namespace DeltaQuestionEditor_WPF
             Logger.Loggers.Add(new TextFileLogger());
             try
             {
-                using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues").Result)
+                using (var mgr = UpdateManager.GitHubUpdateManager("https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF").Result)
                 {
                     // Note, in most of these scenarios, the app exits after this method
                     // completes!
