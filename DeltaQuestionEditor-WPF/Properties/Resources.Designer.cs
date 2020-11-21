@@ -65,31 +65,54 @@ namespace DeltaQuestionEditor_WPF.Properties {
         ///&lt;html&gt;
         ///
         ///&lt;head&gt;
-        ///  &lt;meta charset=&quot;utf-8&quot; /&gt;
-        ///  &lt;title&gt;Markdown Editor&lt;/title&gt;
-        ///  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
-        ///  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
-        ///  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;
-        ///  &lt;style&gt;
-        ///    html,
-        ///    body {
-        ///      display: flex;
-        ///      flex-direction: column;
-        ///      height: 100vh;
-        ///      margin: 0;
-        ///    }
-        ///
-        ///    #codeedit {
-        ///      flex-grow: 1;
-        ///    }
-        ///  &lt;/style&gt;
-        ///&lt;/head&gt;
-        ///
-        ///&lt;body  [rest of string was truncated]&quot;;.
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;title&gt;Markdown Editor&lt;/title&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;&gt;
+        ///    &lt;style&gt;
+        ///        html,
+        ///        body {
+        ///            display: flex;
+        ///            flex-direction: column;
+        ///            height: 100vh;
+        ///            margin: 0;
+        ///            overflow: hidden;
+        ///         [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string editor {
             get {
                 return ResourceManager.GetString("editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to **Describe the bug**
+        ///A clear and concise description of what the bug is.
+        ///
+        ///**To Reproduce**
+        ///Steps to reproduce the behavior:
+        ///1. Go to &apos;...&apos;
+        ///2. Click on &apos;....&apos;
+        ///3. Scroll down to &apos;....&apos;
+        ///4. See error
+        ///
+        ///**Expected behavior**
+        ///A clear and concise description of what you expected to happen.
+        ///
+        ///**Screenshots**
+        ///If applicable, add screenshots to help explain your problem.
+        ///
+        ///**Additional context**
+        ///Add any other context about the problem here.
+        ///
+        ///**Stack trace (Auto-filled)**
+        ///
+        ///{0}.
+        /// </summary>
+        internal static string issue_template {
+            get {
+                return ResourceManager.GetString("issue_template", resourceCulture);
             }
         }
         
@@ -105,13 +128,18 @@ namespace DeltaQuestionEditor_WPF.Properties {
         ///        }
         ///
         ///        img {
-        ///            max-width: 70%;
-        ///            max-height: 70%;
+        ///            max-width: 100%;
+        ///            max-height: 100%;
         ///            vertical-align: top;
         ///        }
-        ///    &lt;/style&gt;
-        ///    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/markdown-it/11.0.0/markdown-it.min.js&quot;
-        ///            integrity=&quot;sha512-0tDdhRf9 [rest of string was truncated]&quot;;.
+        ///
+        ///        hr {
+        ///            border: 0px;
+        ///            border-top: 1px solid gray;
+        ///        }
+        ///
+        ///        table, th, td {
+        ///            border: 2px s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string preview {
             get {
