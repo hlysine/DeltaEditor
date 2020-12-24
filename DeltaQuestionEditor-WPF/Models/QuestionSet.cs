@@ -31,6 +31,14 @@ namespace DeltaQuestionEditor_WPF.Models
             set => SetAndNotify(ref chapter, value, new[] { nameof(TopicName) });
         }
 
+
+        private ValidationToken validation;
+        public ValidationToken Validation
+        {
+            get => validation;
+            set => SetAndNotify(ref validation, value);
+        }
+
         [JsonIgnore]
         public string TopicName
         {
@@ -50,6 +58,16 @@ namespace DeltaQuestionEditor_WPF.Models
         {
             get => media;
             set => SetAndNotify(ref media, value);
+        }
+
+        public string GetHash()
+        {
+            return Helper.SHA1Hash(JsonConvert.SerializeObject(this, new JsonSerializerSettings() { 
+                Formatting = Formatting.None, 
+                ContractResolver = new DynamicContractResolver(new[] { 
+                    nameof(Validation) 
+                }) 
+            }));
         }
     }
 }

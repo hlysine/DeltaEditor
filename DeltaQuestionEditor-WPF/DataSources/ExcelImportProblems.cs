@@ -71,5 +71,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// If the media file is not found in the specified path, the editor will then search for the file in the same directory as the Excel file recursively (so as to fix incorrect relative paths). If the file is still not found, this problem will be issued.
         /// </summary>
         public const string MEDIA_NOT_FOUND = "Media not found: \"{0}\". Please add the media file manually in the editor.";
+
+        public const string MEDIA_TOO_LARGE = "The file \"{0}\" is too large. Maximum file size is 500KB. The file will still be imported but you have to replace this file for the question set to be successfully validated.";
     }
 }

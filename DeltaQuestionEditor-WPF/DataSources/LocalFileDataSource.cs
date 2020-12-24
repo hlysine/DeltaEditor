@@ -36,7 +36,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
 
         public string SafeFileName
         {
-            get => FilePath == null ? null : Path.GetFileName(FilePath);
+            get => FilePath.IsNullOrEmpty() ? string.Empty : Path.GetFileName(FilePath);
         }
 
 

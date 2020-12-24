@@ -1,6 +1,8 @@
 ﻿using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models;
+using DeltaQuestionEditor_WPF.Models.Validation;
+using DeltaQuestionEditor_WPF.Update;
 using DeltaQuestionEditor_WPF.Views;
 using ExcelDataReader;
 using GongSolutions.Wpf.DragDrop;
@@ -8,7 +10,6 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using MoreLinq;
-using Squirrel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,19 +33,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
     using static DeltaQuestionEditor_WPF.Helpers.Helper;
     class MainViewModel : NotifyPropertyChanged, IDropTarget
     {
-        int updateProgress = 0;
-        public int UpdateProgress
-        {
-            get => updateProgress;
-            set => SetAndNotify(ref updateProgress, value, new[] { nameof(UpdateString) });
-        }
-
-        string updateStatus = "";
-        public string UpdateStatus
-        {
-            get => updateStatus;
-            set => SetAndNotify(ref updateStatus, value, new[] { nameof(UpdateString) });
-        }
+        
 
 
         private bool showUpdatePanel = false;
@@ -53,30 +42,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => showUpdatePanel;
             set => SetAndNotify(ref showUpdatePanel, value);
         }
-
-        public string UpdateString
-        {
-            get
-            {
-                if (UpdateStatus.IsNullOrWhiteSpace())
-                {
-                    return "";
-                }
-                else
-                {
-                    if (UpdateFinished)
-                    {
-                        return $" - {UpdateStatus}";
-                    }
-                    else
-                    {
-                        return $" - {UpdateStatus} {UpdateProgress}%";
-                    }
-                }
-            }
-        }
-
-        SemaphoreSlim updateFinished = new SemaphoreSlim(0, 1);
 
         DefaultDropHandler dropHandler = new DefaultDropHandler();
 
@@ -114,18 +79,16 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             }
         }
 
-        public string AppVersion
-        {
-            get => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-
-        public bool UpdateFinished
-        {
-            get => updateFinished.CurrentCount > 0;
-        }
-
         public Action<object> AppInitialize { get; private set; }
         public Action<object> AppClosed { get; private set; }
+
+
+        private UpdateManager updater = new UpdateManager();
+        public UpdateManager Updater
+        {
+            get => updater;
+            set => SetAndNotify(ref updater, value);
+        }
 
 
         private LocalFileDataSource dataSource;
@@ -133,6 +96,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         {
             get => dataSource;
             set => SetAndNotify(ref dataSource, value);
+        }
+
+
+        private QuestionSetValidator validator;
+        public QuestionSetValidator Validator
+        {
+            get => validator;
+            set => SetAndNotify(ref validator, value);
         }
 
 
@@ -207,6 +178,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             set => SetAndNotify(ref topicSelectorDialog, value);
         }
 
+
+        private bool validatorDialog;
+        public bool ValidatorDialog
+        {
+            get => validatorDialog;
+            set => SetAndNotify(ref validatorDialog, value);
+        }
+
         ICommand closeWindowCommand;
         public ICommand CloseWindowCommand
         {
@@ -222,13 +201,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             ExitConfirmed = true;
                         if (ExitConfirmed)
                         {
-                            if (!UpdateFinished)
+                            if (!Updater.UpdateFinished)
                             {
                                 args.Item1.Cancel = true;
                                 // Still updating
                                 ShowUpdatePanel = true;
-                                await updateFinished.WaitAsync();
-                                updateFinished.Release();
+                                await Updater.WaitForUpdateAsync();
                                 args.Item2.Close();
                             }
                             else
@@ -333,6 +311,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             string log = AppDataPath(Path.Combine("Imports", $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss} {Path.GetFileName(path)}.txt"));
                             File.WriteAllText(log, importer.GetImportReport());
                             Process.Start(log);
+                            Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             return $"Successfully imported {Path.GetFileName(path)}";
                         }
 
@@ -404,6 +383,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         if (DataSource.QuestionSet == null)
                         {
                             DataSource.CreateQuestionSet();
+                            Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             TopicSelectorDialog = true;
                         }
                         else
@@ -436,6 +416,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             {
                                 MainMessageQueue.Enqueue($"Failed to open {Path.GetFileName(path)}. The file is probably in use.");
                             }
+                            Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             LoadingState = null;
                         }
 
@@ -800,6 +781,79 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             }
         }
 
+        ICommand validateQuestionSetCommand;
+        public ICommand ValidateQuestionSetCommand
+        {
+            get
+            {
+                return validateQuestionSetCommand ??= new RelayCommand(
+                    // execute
+                    _ =>
+                    {
+                        Validator.Validate();
+                        if (Validator.IsValid)
+                        {
+                            if (SaveFileCommand.CanExecute(null))
+                            {
+                                SaveFileCommand.Execute(null);
+                            }
+                        }
+                        MainMessageQueue.Clear();
+                        MainMessageQueue.Enqueue($"Validation completed");
+                    },
+                    // can execute
+                    _ =>
+                    {
+                        return DataSource?.QuestionSet != null && Validator != null;
+                    }
+                );
+            }
+        }
+
+
+        ICommand openValidatorDialogCommand;
+        public ICommand OpenValidatorDialogCommand
+        {
+            get
+            {
+                return openValidatorDialogCommand ??= new RelayCommand(
+                    // execute
+                    (param) =>
+                    {
+                        Validator.RefreshValidation();
+                        ValidatorDialog = true;
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return DataSource?.QuestionSet != null && Validator != null;
+                    }
+                );
+            }
+        }
+
+
+        ICommand validationProblemLocateObjectCommand;
+        public ICommand ValidationProblemLocateObjectCommand
+        {
+            get
+            {
+                return validationProblemLocateObjectCommand ??= new RelayCommand(
+                    // execute
+                    (param) =>
+                    {
+                        ValidatorDialog = false;
+
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return true;
+                    }
+                );
+            }
+        }
+
         public MainViewModel()
         {
             AppInitialize = async _ =>
@@ -831,62 +885,8 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
                     }
                 }
-                try
-                {
-                    using (var mgr = await UpdateManager.GitHubUpdateManager("https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF"))
-                    {
-                        var updateInfo = await mgr.CheckForUpdate(false, (progress) =>
-                        {
-                            UpdateProgress = progress;
-                            UpdateStatus = "Checking";
-                        });
-                        if (updateInfo.ReleasesToApply.Any())
-                        {
-                            string updateFile = AppDataPath("update");
-                            EnsurePathExist(AppDataPath());
-                            bool locked = false;
-                            if (File.Exists(updateFile))
-                            {
-                                if (long.TryParse(File.ReadAllText(updateFile), out long res))
-                                {
-                                    if (TimeSpan.FromTicks(DateTime.Now.Ticks - res) < TimeSpan.FromDays(1))  // consider the update lock file as expired if its created 24 hours ago
-                                    {
-                                        locked = true;
-                                    }
-                                }
-                            }
-                            if (!locked)
-                            {
-                                File.WriteAllText(updateFile, DateTime.Now.Ticks.ToString());
-                                var result = await mgr.UpdateApp((progress) =>
-                                {
-                                    UpdateProgress = progress;
-                                    UpdateStatus = "Updating";
-                                });
-                                await Task.Delay(500);
-                                if (File.Exists(updateFile))
-                                {
-                                    File.Delete(updateFile);
-                                }
-                                UpdateStatus = "Restart app to update";
-                            }
-                            else
-                            {
-                                UpdateStatus = "Updating elsewhere";
-                            }
-                        }
-                        else
-                        {
-                            UpdateStatus = "";
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogException(ex, ex.Source);
-                }
-                updateFinished.Release();
-                NotifyChanged(nameof(UpdateFinished));
+
+                await Updater.PerformUpdate();
             };
             AppClosed = _ =>
             {

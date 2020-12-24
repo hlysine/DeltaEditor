@@ -81,6 +81,15 @@
                 </Style.Triggers>
             </Style>
 
+            <helpers:SeverityToPackIconConverter
+                x:Key="SeverityToPackIconConverter" />
+
+            <helpers:BoolToPackIconConverter
+                x:Key="BoolToPackIconConverter" />
+
+            <helpers:BoolToStringNotConverter
+                x:Key="BoolToStringNotConverter" />
+
             <helpers:BoolToVisibilityConverter
                 x:Key="BoolToVisibilityConverter" />
 

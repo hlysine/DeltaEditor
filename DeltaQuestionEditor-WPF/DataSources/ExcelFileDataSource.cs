@@ -379,6 +379,10 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     }
                 }
             }
+            if (new FileInfo(path).Length > 500 * 1024)
+            {
+                problems.Add(string.Format(ExcelImportProblems.MEDIA_TOO_LARGE, mediaName));
+            }
             string id = await dataSource.AddMedia(path);
             Media media = dataSource.QuestionSet.Media.First(x => x.Id == id);
             this.media++;

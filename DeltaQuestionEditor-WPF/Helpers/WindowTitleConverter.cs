@@ -13,14 +13,14 @@ namespace DeltaQuestionEditor_WPF.Helpers
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length < 3) return "Delta Question Editor";
+            if (values.Length < 1) return "Delta Question Editor";
             string fileName = values[0] as string;
-            string appVersion = values[1] as string;
-            string updateString = values[2] as string;
+            string appVersion = null;
+            if (values.Length > 1)
+                appVersion = values[1] as string;
             string ret = "Delta Question Editor";
-            if (fileName != null) ret = fileName + " - " + ret;
+            if (!fileName.IsNullOrEmpty()) ret = fileName + " - " + ret;
             if (!appVersion.IsNullOrWhiteSpace()) ret += " v" + appVersion;
-            if (!updateString.IsNullOrWhiteSpace()) ret += " - " + updateString;
             return ret;
 
         }

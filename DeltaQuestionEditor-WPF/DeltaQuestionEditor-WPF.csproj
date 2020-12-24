@@ -33,7 +33,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.1.5.0</ApplicationVersion>
+    <ApplicationVersion>1.2.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -114,6 +114,9 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.2.0.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.2.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Cecil, Version=0.11.2.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.11.2\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
@@ -152,6 +155,9 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -175,7 +181,11 @@
     <Compile Include="DataSources\IDataSource.cs" />
     <Compile Include="DataSources\LocalFileDataSource.cs" />
     <Compile Include="Helpers\BitmapFrameConverter.cs" />
+    <Compile Include="Helpers\SeverityToPackIconConverter.cs" />
+    <Compile Include="Helpers\BoolToStringNotConverter.cs" />
+    <Compile Include="Helpers\BoolToPackIconConverter.cs" />
     <Compile Include="Helpers\DataContextEx.cs" />
+    <Compile Include="Helpers\DynamicContractResolver.cs" />
     <Compile Include="Helpers\FileAssociation.cs" />
     <Compile Include="Helpers\InverseNullToVisibilityConverter.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
@@ -186,6 +196,15 @@
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionSet.cs" />
+    <Compile Include="Models\Validation.cs" />
+    <Compile Include="Models\Validation\Rules\QuestionSkillsRule.cs" />
+    <Compile Include="Models\Validation\Rules\QuestionSetRule.cs" />
+    <Compile Include="Models\Validation\Rules\QuestionContentEmptyRule.cs" />
+    <Compile Include="Models\Validation\Rules\MediaFileSizeRule.cs" />
+    <Compile Include="Models\Validation\Rules\QuestionSetValidationRule.cs" />
+    <Compile Include="Models\Validation\QuestionSetValidator.cs" />
+    <Compile Include="Models\Validation\ValidationProblem.cs" />
+    <Compile Include="Update\UpdateManager.cs" />
     <Compile Include="ViewModels\ExceptionViewModel.cs" />
     <Compile Include="Views\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
@@ -198,6 +217,9 @@
     </Compile>
     <Compile Include="Views\MediaListItem.xaml.cs">
       <DependentUpon>MediaListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ValidationProblemListItem.xaml.cs">
+      <DependentUpon>ValidationProblemListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\QuestionListItem.xaml.cs">
       <DependentUpon>QuestionListItem.xaml</DependentUpon>
@@ -240,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MediaListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ValidationProblemListItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
