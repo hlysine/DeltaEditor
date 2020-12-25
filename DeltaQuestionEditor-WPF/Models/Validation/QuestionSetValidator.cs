@@ -16,7 +16,9 @@ namespace DeltaQuestionEditor_WPF.Models.Validation
             new MediaFileSizeRule(),
             new QuestionSetRule(),
             new QuestionContentEmptyRule(),
-            new QuestionSkillsRule()
+            new QuestionSkillsRule(),
+            new QuestionMediaMarkdownRule(),
+            new QuestionTextMarkdownRule()
         }.ToList();
 
         public QuestionSetValidator(QuestionSet questionSet)

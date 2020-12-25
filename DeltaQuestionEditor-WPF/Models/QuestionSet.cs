@@ -49,9 +49,28 @@ namespace DeltaQuestionEditor_WPF.Models
         public ObservableCollection<Question> Questions
         {
             get => questions;
-            set => SetAndNotify(ref questions, value);
+            set
+            {
+                if (questions != null) 
+                    questions.CollectionChanged -= Questions_CollectionChanged;
+                SetAndNotify(ref questions, value);
+                if (questions != null)
+                    questions.CollectionChanged += Questions_CollectionChanged;
+            }
         }
 
+        public QuestionSet()
+        {
+            questions.CollectionChanged += Questions_CollectionChanged;
+        }
+
+        private void Questions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            for (int i = 0; i < questions.Count; i++)
+            {
+                questions[i].QuestionIndex = i + 1;
+            }
+        }
 
         private ObservableCollection<Media> media = new ObservableCollection<Media>();
         public ObservableCollection<Media> Media

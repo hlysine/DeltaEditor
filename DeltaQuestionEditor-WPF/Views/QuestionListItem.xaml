@@ -71,10 +71,18 @@
                 Grid.ColumnSpan="2"
                 Margin="2"
                 Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
-                Text="{Binding Text, TargetNullValue='&lt;Empty&gt;'}"
                 MaxHeight="40"
                 TextWrapping="Wrap"
                 TextTrimming="CharacterEllipsis">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}. {1}">
+                        <Binding
+                            Path="QuestionIndex" />
+                        <Binding
+                            Path="Text"
+                            TargetNullValue="&lt;Empty&gt;" />
+                    </MultiBinding>
+                </TextBlock.Text>
             </TextBlock>
             <TextBlock
                 Grid.Row="1"

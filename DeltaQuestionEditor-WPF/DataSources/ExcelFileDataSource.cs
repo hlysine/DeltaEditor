@@ -301,11 +301,28 @@ namespace DeltaQuestionEditor_WPF.DataSources
                      {
                          if (!row[mapping.Item2].IsNullOrWhiteSpace())
                          {
-                             string tmp = row[mapping.Item2].Replace(" ", "");
                              bool fix = false;
-                             tmp.Split('|', ',', ';', '&', '+', '\n').ForEach(x =>
+                             string tmp = row[mapping.Item2];
+                             string[] arr;
+                             if (tmp.Trim().TrimEnd('\r', '\n').Contains(new[] { "|", ",", ";", "&", "+", "\n" }))
+                                 arr = tmp.Split('|', ',', ';', '&', '+', '\n');
+                             else
                              {
-                                 if (x.Count(y => y == '.') < 2 && Regex.IsMatch(x, @"^\d+(?:\.\d+)*$"))
+                                 arr = tmp.Split('|', ',', ';', '&', '+', '\n', ' ');
+                                 if (arr.Any(x => x.StartsWith(".") || x.EndsWith(".") || x == "."))
+                                 {
+                                     arr = new[] { tmp };
+                                 }
+                             }
+                             arr = arr.Select(x => Regex.Replace(x, @"\s", "")).ToArray();
+                             arr.ForEach(x =>
+                             {
+                                 //if ((x.Count(y => y == '.') < 2 && Regex.IsMatch(x, @"^\d+(?:\.\d+)*$")) || (x.Count(y => y == '.') == 2 && !x.StartsWith($"{dataSource.QuestionSet.Form}.{dataSource.QuestionSet.Chapter}")))
+                                 //{
+                                 //    question.Skills.Add($"{dataSource.QuestionSet.Form}.{dataSource.QuestionSet.Chapter}.{x}");
+                                 //    fix = true;
+                                 //}
+                                 if (Regex.IsMatch(x, @"^\d+(?:\.\d+)*$") && (!x.StartsWith($"{dataSource.QuestionSet.Form}.{dataSource.QuestionSet.Chapter}") || x.Count(y => y == '.') < 3))
                                  {
                                      question.Skills.Add($"{dataSource.QuestionSet.Form}.{dataSource.QuestionSet.Chapter}.{x}");
                                      fix = true;
@@ -432,7 +449,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
             sb.AppendLine($"If there are problems listed in the report, please resolve them manually.");
             sb.AppendLine();
             sb.AppendLine($"If the import result is very different from your expected result, you may create an issue through this link to notify the developers:");
-            sb.AppendLine("    https://github.com/Henry-YSLin/DeltaQuestionEditor-WPF-Issues/issues/new");
+            sb.AppendLine("    https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/issues/new/choose");
             sb.AppendLine($"Make sure to include a link to the Excel file that you are trying to import when creating the issue.");
             sb.AppendLine();
             sb.AppendLine();

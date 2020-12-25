@@ -4,9 +4,7 @@ using DeltaQuestionEditor_WPF.Models;
 using DeltaQuestionEditor_WPF.Models.Validation;
 using DeltaQuestionEditor_WPF.Update;
 using DeltaQuestionEditor_WPF.Views;
-using ExcelDataReader;
 using GongSolutions.Wpf.DragDrop;
-using GongSolutions.Wpf.DragDrop.Utilities;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using MoreLinq;
@@ -17,13 +15,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Security.Policy;
-using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -33,7 +25,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
     using static DeltaQuestionEditor_WPF.Helpers.Helper;
     class MainViewModel : NotifyPropertyChanged, IDropTarget
     {
-        
+
 
 
         private bool showUpdatePanel = false;
@@ -112,6 +104,22 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         {
             get => loadingState;
             set => SetAndNotify(ref loadingState, value);
+        }
+
+
+        private bool questionListPanel = true;
+        public bool QuestionListPanel
+        {
+            get => questionListPanel;
+            set => SetAndNotify(ref questionListPanel, value);
+        }
+
+
+        private bool mediaListPanel = true;
+        public bool MediaListPanel
+        {
+            get => mediaListPanel;
+            set => SetAndNotify(ref mediaListPanel, value);
         }
 
 
@@ -312,6 +320,8 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             File.WriteAllText(log, importer.GetImportReport());
                             Process.Start(log);
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
+                            QuestionListPanel = true;
+                            MediaListPanel = true;
                             return $"Successfully imported {Path.GetFileName(path)}";
                         }
 
@@ -385,6 +395,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             DataSource.CreateQuestionSet();
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             TopicSelectorDialog = true;
+                            QuestionListPanel = true;
                         }
                         else
                         {
@@ -418,6 +429,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             }
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             LoadingState = null;
+                            QuestionListPanel = true;
                         }
 
                         List<string> paths = (param as IEnumerable<string>)?.ToList();
@@ -561,6 +573,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             question.Answers.Add(null);
                         question.Id = Helper.NewGuid();
                         DataSource.QuestionSet.Questions.Add(question);
+                        SelectedQuestion = question;
                         MainMessageQueue.Clear();
                         mainMessageQueue.Enqueue("New question added");
                     },
@@ -680,6 +693,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                         LoadingState = $"Inserting media {i + 1}/{dialog.FileNames.Length}";
                                         await DataSource.AddMedia(dialog.FileNames[i]);
                                     }
+                                    MediaListPanel = true;
                                     MainMessageQueue.Clear();
                                     MainMessageQueue.Enqueue($"{dialog.FileNames.Length} media files loaded");
                                     LoadingState = null;
@@ -692,6 +706,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                     LoadingState = $"Inserting media {i + 1}/{paramPaths.Count()}";
                                     await DataSource.AddMedia(paramPaths.ElementAt(i));
                                 }
+                                MediaListPanel = true;
                                 MainMessageQueue.Clear();
                                 MainMessageQueue.Enqueue($"{paramPaths.Count()} media files loaded");
                                 LoadingState = null;
@@ -701,6 +716,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         {
                             LoadingState = "Inserting media 1/1";
                             await DataSource.AddMedia(paramPath);
+                            MediaListPanel = true;
                             MainMessageQueue.Clear();
                             MainMessageQueue.Enqueue($"1 media file loaded");
                             LoadingState = null;
@@ -843,7 +859,42 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     (param) =>
                     {
                         ValidatorDialog = false;
+                        if (param is Question question)
+                        {
+                            if (DataSource.QuestionSet.Questions.Contains(question))
+                            {
+                                SelectedQuestion = question;
+                            }
+                        }
+                        else if (param is Media media)
+                        {
+                            if (DataSource.QuestionSet.Media.Contains(media))
+                            {
+                                MediaListPanel = true;
+                                SelectedMedia = media;
+                            }
+                        }
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return true;
+                    }
+                );
+            }
+        }
 
+
+        ICommand openHelpCommand;
+        public ICommand OpenHelpCommand
+        {
+            get
+            {
+                return openHelpCommand ??= new RelayCommand(
+                    // execute
+                    (param) =>
+                    {
+                        Process.Start("https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/wiki");
                     },
                     // can execute
                     (param) =>
@@ -881,8 +932,16 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     }
                     else
                     {
-                        Logger.Log($"File not found: {args[1]}", Severity.Error);
-                        MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
+                        if (args[1] == "--squirrel-firstrun")
+                        {
+                            Logger.Log($"Squirrel first run. Cmd argument: {args[1]}", Severity.Info);
+                            MainMessageQueue.Enqueue($"Welcome to Delta Question Editor. Press Help for quick guides.");
+                        }
+                        else
+                        {
+                            Logger.Log($"File not found: {args[1]}", Severity.Warning);
+                            MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
+                        }
                     }
                 }
 

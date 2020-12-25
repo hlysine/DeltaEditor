@@ -26,6 +26,15 @@ namespace DeltaQuestionEditor_WPF.Models
         }
 
 
+        private int questionIndex;
+        [JsonIgnore]
+        public int QuestionIndex
+        {
+            get => questionIndex;
+            set => SetAndNotify(ref questionIndex, value);
+        }
+
+
         private int selectedAnswerIndex;
         [JsonIgnore]
         public int SelectedAnswerIndex

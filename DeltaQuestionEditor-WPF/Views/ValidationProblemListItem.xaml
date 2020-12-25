@@ -20,53 +20,58 @@
     FontFamily="{DynamicResource MaterialDesignFont}"
     mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    helpers:DataContextEx.DataContextEx="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}">
-    <i:Interaction.Triggers>
-        <i:EventTrigger
-            EventName="MouseUp">
-            <i:InvokeCommandAction
-                Command="{Binding Path=(helpers:DataContextEx.DataContextEx).ValidationProblemLocateObjectCommand, RelativeSource={RelativeSource Self}}"
-                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
-    <Grid
-        Margin="5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="Auto" />
-            <ColumnDefinition
-                Width="*" />
-        </Grid.ColumnDefinitions>
-        <materialDesign:PackIcon
-            VerticalAlignment="Center"
-            Kind="{Binding Severity, Converter={StaticResource SeverityToPackIconConverter}}"
-            Height="30"
-            Width="30"
-            Foreground="{DynamicResource MaterialDesignDivider}" />
+    d:DesignWidth="800">
+    <Button
+        Style="{StaticResource MaterialDesignFlatButton}"
+        Padding="0"
+        Margin="0"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Height="Auto"
+        Foreground="{DynamicResource MaterialDesignBody}"
+        Command="{Binding Path=DataContext.ValidationProblemLocateObjectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+        CommandParameter="{Binding DataContext.FocusObject, RelativeSource={RelativeSource Self}}">
         <Grid
-            Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition
-                    Height="*" />
-                <RowDefinition
-                    Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock
-                Margin="5"
+            Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon
                 VerticalAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
-                Text="{Binding Description, TargetNullValue='&lt;Empty&gt;'}"
-                TextWrapping="Wrap"
-                TextTrimming="CharacterEllipsis">
-            </TextBlock>
-            <Border
-                Grid.Row="2"
-                Background="{DynamicResource MaterialDesignDivider}"
-                Height="1"
-                HorizontalAlignment="Stretch"
-                SnapsToDevicePixels="True" />
+                Kind="{Binding Severity, Converter={StaticResource SeverityToPackIconConverter}}"
+                Height="30"
+                Width="30"
+                Foreground="{DynamicResource MaterialDesignDivider}" />
+            <Grid
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Margin="5"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                    Text="{Binding Description, TargetNullValue='&lt;Empty&gt;'}"
+                    TextWrapping="Wrap"
+                    TextTrimming="CharacterEllipsis">
+                </TextBlock>
+                <Border
+                    Grid.Row="2"
+                    Background="{DynamicResource MaterialDesignDivider}"
+                    Height="1"
+                    HorizontalAlignment="Stretch"
+                    SnapsToDevicePixels="True" />
+            </Grid>
         </Grid>
-    </Grid>
+    </Button>
+   
 </UserControl>

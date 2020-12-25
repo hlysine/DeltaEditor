@@ -19,7 +19,7 @@ namespace DeltaQuestionEditor_WPF.Helpers
             val = val.Trim().ToLower();
             if (Regex.IsMatch(val.Replace(" ", ""), @"^(?:\d+\.){2,4}\d+(?:,(?:\d+\.){2,4}\d+)*$"))
                 return ValidationResult.ValidResult;
-            return new ValidationResult(false, "Invalid skills code");
+            return new ValidationResult(false, "Invalid skill codes");
         }
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)

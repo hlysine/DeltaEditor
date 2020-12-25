@@ -110,7 +110,7 @@ namespace DeltaQuestionEditor_WPF.Update
             }
             catch (Exception ex)
             {
-                UpdateStatus = "Update error";
+                UpdateStatus = "Update error"; 
                 Logger.LogException(ex, ex.Source);
             }
             updateFinished.Release();
