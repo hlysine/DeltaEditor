@@ -424,6 +424,15 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
+                                    Header="Replace Media"
+                                    ToolTip="Replace the currently selected media item with a new one, updating all related media codes automatically."
+                                    Command="{Binding ReplaceMediaCommand}">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon
+                                            Kind="FileReplace" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
                                     Header="Delete Media"
                                     ToolTip="Delete the currently selected media item."
                                     Command="{Binding DeleteMediaCommand}"

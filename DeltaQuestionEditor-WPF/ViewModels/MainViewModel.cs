@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -757,6 +758,103 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         }
 
 
+        ICommand replaceMediaCommand;
+        public ICommand ReplaceMediaCommand
+        {
+            get
+            {
+                return replaceMediaCommand ??= new RelayCommand(
+                    // execute
+                    async (param) =>
+                    {
+                        async Task replaceMedia(string path)
+                        {
+                            Media oldMedia = SelectedMedia;
+                            LoadingState = $"Replacing media";
+
+                            Media newMedia = await DataSource.ReplaceMedia(oldMedia, path);
+                            if (newMedia == null)
+                            {
+                                MainMessageQueue.Clear();
+                                MainMessageQueue.Enqueue($"The new media file is the same as the old one. Replacement skipped.");
+                                LoadingState = null;
+                                return;
+                            }
+
+                            bool undo = false;
+                            MainMessageQueue.Clear();
+                            MainMessageQueue.Enqueue(
+                                $"{oldMedia.Name} is replaced with {newMedia.Name}",
+                                "UNDO",
+                                async (param) =>
+                                {
+                                    string replaceReferences(string text, string oldPath, string newPath)
+                                    {
+                                        return Regex.Replace(text, $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\', '/'))}\)", $"![$1]({newPath.Replace('\\', '/')})");
+                                    }
+
+                                    if (DataSource?.QuestionSet?.Media == null) return;
+                                    if (!DataSource.QuestionSet.Media.Contains(param.newMedia)) return;
+                                    LoadingState = "Undoing media replacement";
+                                    undo = true;
+                                    DataSource.QuestionSet.Media.Insert(DataSource.QuestionSet.Media.IndexOf(param.newMedia), param.oldMedia);
+                                    DataSource.QuestionSet.Media.Remove(param.newMedia);
+                                    await DataSource.DeleteMedia(newMedia);
+                                    foreach (Question question in DataSource.QuestionSet.Questions)
+                                    {
+                                        question.Text = replaceReferences(question.Text, param.newMedia.FileName, param.oldMedia.FileName);
+                                        if (question.Answers != null)
+                                        {
+                                            for (int i = 0; i < question.Answers.Count; i++)
+                                            {
+                                                question.Answers[i] = replaceReferences(question.Answers[i], param.newMedia.FileName, param.oldMedia.FileName);
+                                            }
+                                        }
+                                    }
+                                    LoadingState = null;
+                                },
+                                (oldMedia, newMedia),
+                                false,
+                                true,
+                                TimeSpan.FromSeconds(5));
+
+                            MediaListPanel = true;
+                            LoadingState = null;
+
+                            await Task.Delay(6000);
+                            if (!undo && !DataSource.QuestionSet.Media.Any(x => x.FileName == oldMedia.FileName))
+                                await DataSource.DeleteMedia(oldMedia);
+                        }
+
+                        string paramPath = param as string;
+                        if (paramPath == null)
+                        {
+                            OpenFileDialog dialog = new OpenFileDialog();
+                            dialog.Filter = "All files|*.*";
+                            dialog.Title = "Replace Media - Choose new media file";
+                            dialog.CheckFileExists = true;
+                            dialog.Multiselect = false;
+                            dialog.CheckPathExists = true;
+                            if (dialog.ShowDialog() == true)
+                            {
+                                await replaceMedia(dialog.FileName);
+                            }
+                        }
+                        else
+                        {
+                            await replaceMedia(paramPath);
+                        }
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return DataSource?.QuestionSet?.Media != null && SelectedMedia != null && DataSource.QuestionSet.Media.Contains(SelectedMedia);
+                    }
+                );
+            }
+        }
+
+
         ICommand deleteMediaCommand;
         public ICommand DeleteMediaCommand
         {
@@ -768,10 +866,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     {
                         Media media = param as Media;
                         if (media == null) throw new ArgumentNullException("Media to be deleted is null");
+                        LoadingState = "Deleting media";
                         int index = DataSource.QuestionSet.Media.IndexOf(media);
                         DataSource.QuestionSet.Media.Remove(media);
                         bool undo = false;
                         MainMessageQueue.Clear();
+                        LoadingState = null;
                         MainMessageQueue.Enqueue(
                             $"{media.Name} deleted",
                             "UNDO",

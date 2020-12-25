@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -300,6 +301,45 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 }
             });
             return media.Id;
+        }
+
+        /// <summary>
+        /// Replace a media file with another one, updating all related references
+        /// </summary>
+        /// <param name="oldMedia">Old media object</param>
+        /// <param name="newMediaPath">Path to new media file</param>
+        /// <returns>The new media object, null if the new media object is the same as the old one.</returns>
+        public async Task<Media> ReplaceMedia(Media oldMedia, string newMediaPath)
+        {
+            string replaceReferences(string text, string oldPath, string newPath)
+            {
+                return Regex.Replace(text, $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\','/'))}\)", $"![$1]({newPath.Replace('\\', '/')})");
+            }
+
+            string id = await AddMedia(newMediaPath);
+            if (id == oldMedia.Id) return null;
+            Media newMedia = QuestionSet.Media.First(x => x.Id == id);
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                QuestionSet.Media.Remove(newMedia);
+                QuestionSet.Media.Insert(QuestionSet.Media.IndexOf(oldMedia), newMedia);
+                foreach (Question question in QuestionSet.Questions)
+                {
+                    question.Text = replaceReferences(question.Text, oldMedia.FileName, newMedia.FileName);
+                    if (question.Answers != null)
+                    {
+                        for (int i = 0; i < question.Answers.Count; i++)
+                        {
+                            question.Answers[i] = replaceReferences(question.Answers[i], oldMedia.FileName, newMedia.FileName);
+                        }
+                    }
+                }
+
+                QuestionSet.Media.Remove(oldMedia);
+            });
+
+            return newMedia;
         }
 
         /// <summary>

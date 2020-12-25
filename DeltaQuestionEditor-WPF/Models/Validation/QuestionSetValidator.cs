@@ -11,20 +11,15 @@ namespace DeltaQuestionEditor_WPF.Models.Validation
 {
     public class QuestionSetValidator : NotifyPropertyChanged
     {
-        private readonly List<QuestionSetValidationRule> validationRules = new QuestionSetValidationRule[]
-        {
-            new MediaFileSizeRule(),
-            new QuestionSetRule(),
-            new QuestionContentEmptyRule(),
-            new QuestionSkillsRule(),
-            new QuestionMediaMarkdownRule(),
-            new QuestionTextMarkdownRule()
-        }.ToList();
+        private readonly List<QuestionSetValidationRule> validationRules;
 
         public QuestionSetValidator(QuestionSet questionSet)
         {
             QuestionSet = questionSet;
             Problems.CollectionChanged += Problems_CollectionChanged;
+            validationRules = typeof(QuestionSetValidationRule).Assembly.GetTypes()
+                .Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(QuestionSetValidationRule)))
+                .Select(x => (QuestionSetValidationRule)Activator.CreateInstance(x)).ToList();
         }
 
         private void Problems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

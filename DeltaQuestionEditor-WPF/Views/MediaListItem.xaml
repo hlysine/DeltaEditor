@@ -24,21 +24,29 @@
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem
-                Header="Delete Media"
-                Command="{Binding Path=PlacementTarget.(helpers:DataContextEx.DataContextEx).DeleteMediaCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
-                <MenuItem.Icon>
-                    <materialDesign:PackIcon
-                        Kind="Delete" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem
                 Header="Copy Media Code"
                 Command="{Binding Path=PlacementTarget.(helpers:DataContextEx.DataContextEx).CopyMediaCodeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
                 CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
                 <MenuItem.Icon>
                     <materialDesign:PackIcon
                         Kind="ContentCopy" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Header="Replace Media"
+                Command="{Binding Path=PlacementTarget.(helpers:DataContextEx.DataContextEx).ReplaceMediaCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}">
+                <MenuItem.Icon>
+                    <materialDesign:PackIcon
+                        Kind="FileReplace" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem
+                Header="Delete Media"
+                Command="{Binding Path=PlacementTarget.(helpers:DataContextEx.DataContextEx).DeleteMediaCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
+                <MenuItem.Icon>
+                    <materialDesign:PackIcon
+                        Kind="Delete" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
