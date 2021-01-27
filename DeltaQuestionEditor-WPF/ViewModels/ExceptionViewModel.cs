@@ -11,13 +11,31 @@ using System.Windows.Input;
 
 namespace DeltaQuestionEditor_WPF.ViewModels
 {
-    class ExceptionViewModel: NotifyPropertyChanged
+    class ExceptionViewModel : NotifyPropertyChanged
     {
         private Exception exception;
         public Exception Exception
         {
             get => exception;
-            set => SetAndNotify(ref exception, value);
+            set => SetAndNotify(ref exception, value, new[] { nameof(ExceptionBody) });
+        }
+
+        private string getExceptionBody(Exception ex)
+        {
+            string ret = string.Format("{0} in {1}\r\n\r\nStack Trace:\r\n{2}", ex.Message, ex.Source, ex.StackTrace);
+            if (ex.InnerException != null)
+            {
+                ret += "\r\n\r\nInner exception:\r\n" + getExceptionBody(ex.InnerException);
+            }
+            return ret;
+        }
+
+        public string ExceptionBody
+        {
+            get
+            {
+                return getExceptionBody(exception);
+            }
         }
 
 

@@ -49,30 +49,19 @@
             TextWrapping="Wrap">
             An error occurred and the app cannot handle it. Do you want to send a bug report to the developer? This will open a GitHub link in your browser.
         </TextBlock>
-        <ScrollViewer
+        <TextBox
             Margin="15"
             Grid.Row="2"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            IsReadOnly="True"
+            TextWrapping="Wrap"
+            TextAlignment="Left"
+            FontFamily="Consolas"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto"
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch">
-            <TextBlock
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                TextWrapping="Wrap">
-                <TextBlock.Text>
-                    <MultiBinding
-                        StringFormat="{}{0} in {1}&#x0d;&#x0a;&#x0d;&#x0a;Stack trace:&#x0d;&#x0a;{2}">
-                        <Binding
-                            Path="Exception.Message" />
-                        <Binding
-                            Path="Exception.Source" />
-                        <Binding
-                            Path="Exception.StackTrace" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </ScrollViewer>
+            Text="{Binding ExceptionBody, Mode=OneWay}">
+        </TextBox>
         <StackPanel
             Grid.Row="3"
             Orientation="Horizontal"
