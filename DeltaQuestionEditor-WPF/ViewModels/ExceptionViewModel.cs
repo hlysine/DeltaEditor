@@ -20,21 +20,19 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             set => SetAndNotify(ref exception, value, new[] { nameof(ExceptionBody) });
         }
 
-        private string getExceptionBody(Exception ex)
+
+        private string missingDependencyLink = null;
+        public string MissingDependencyLink
         {
-            string ret = string.Format("{0} in {1}\r\n\r\nStack Trace:\r\n{2}", ex.Message, ex.Source, ex.StackTrace);
-            if (ex.InnerException != null)
-            {
-                ret += "\r\n\r\nInner exception:\r\n" + getExceptionBody(ex.InnerException);
-            }
-            return ret;
+            get => missingDependencyLink;
+            set => SetAndNotify(ref missingDependencyLink, value);
         }
 
         public string ExceptionBody
         {
             get
             {
-                return getExceptionBody(exception);
+                return Helper.ExceptionToString(exception);
             }
         }
 
@@ -64,6 +62,27 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     (param) =>
                     {
                         return Exception != null;
+                    }
+                );
+            }
+        }
+
+
+        ICommand downloadDependencyCommand;
+        public ICommand DownloadDependencyCommand
+        {
+            get
+            {
+                return downloadDependencyCommand ??= new RelayCommand(
+                    // execute
+                    (param) =>
+                    {
+                        Process.Start(MissingDependencyLink);
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return !MissingDependencyLink.IsNullOrWhiteSpace();
                     }
                 );
             }

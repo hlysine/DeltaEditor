@@ -34,6 +34,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="*" />
             <RowDefinition
                 Height="Auto" />
@@ -49,9 +51,31 @@
             TextWrapping="Wrap">
             An error occurred and the app cannot handle it. Do you want to send a bug report to the developer? This will open a GitHub link in your browser.
         </TextBlock>
+        <materialDesign:Card
+            Grid.Row="2"
+            Margin="5"
+            Padding="5"
+            HorizontalAlignment="Stretch"
+            Visibility="{Binding MissingDependencyLink, Converter={StaticResource NullToVisibilityConverter}}">
+            <StackPanel
+                HorizontalAlignment="Stretch">
+                <TextBlock
+                    Margin="5"
+                    TextWrapping="Wrap">
+                    It seems like this problem is caused by a missing package in your system.<LineBreak />
+                    Please click this link to install the package and solve the problem.
+                </TextBlock>
+                <Button
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    Command="{Binding DownloadDependencyCommand}">
+                    Open
+                </Button>
+            </StackPanel>
+        </materialDesign:Card>
         <TextBox
             Margin="15"
-            Grid.Row="2"
+            Grid.Row="3"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
             IsReadOnly="True"
@@ -63,7 +87,7 @@
             Text="{Binding ExceptionBody, Mode=OneWay}">
         </TextBox>
         <StackPanel
-            Grid.Row="3"
+            Grid.Row="4"
             Orientation="Horizontal"
             HorizontalAlignment="Right">
             <Button

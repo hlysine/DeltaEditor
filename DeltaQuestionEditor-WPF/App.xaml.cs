@@ -72,6 +72,11 @@ namespace DeltaQuestionEditor_WPF
             };
         }
 
+        private bool matchAssemblyException(Exception ex)
+        {
+            return ex != null && ex.Source == "DeltaQuestionEditor-WPF" && ex is FileNotFoundException && ex.Message.Contains(".dll");
+        }
+
         private void ShowExceptionDialog(Exception ex, string source)
         {
             Logger.LogException(ex, source);
@@ -80,6 +85,9 @@ namespace DeltaQuestionEditor_WPF
             ExceptionWindow window = new ExceptionWindow();
             ExceptionViewModel viewModel = new ExceptionViewModel();
             viewModel.Exception = ex;
+            if (matchAssemblyException(ex.GetInnermostException()))
+                viewModel.MissingDependencyLink =
+                    "https://www.microsoft.com/en-us/download/details.aspx?id=48145";
             window.DataContext = viewModel;
             window.ShowDialog();
         }

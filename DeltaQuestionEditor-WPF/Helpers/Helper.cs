@@ -146,7 +146,7 @@ namespace DeltaQuestionEditor_WPF.Helpers
         {
             return string.IsNullOrEmpty(str);
         }
-        
+
         public static bool IsNullOrWhiteSpace(this string str)
         {
             return string.IsNullOrWhiteSpace(str);
@@ -205,6 +205,24 @@ namespace DeltaQuestionEditor_WPF.Helpers
 
                 return sb.ToString();
             }
+        }
+
+        public static Exception GetInnermostException(this Exception ex)
+        {
+            if (ex == null) return ex;
+            else if (ex.InnerException == null) return ex;
+            else return GetInnermostException(ex.InnerException);
+        }
+
+        public static string ExceptionToString(this Exception ex)
+        {
+            System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+            string ret = string.Format("Exception caught in {0} v{1}\r\nHappened in {2}\r\n{3}", assemblyName.Name, assemblyName.Version, ex.Source, ex.ToString());
+            if (ex.InnerException != null)
+            {
+                ret += "\r\n\r\nInner exception:\r\n" + ExceptionToString(ex.InnerException);
+            }
+            return ret;
         }
     }
 
