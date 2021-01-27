@@ -15,6 +15,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -1009,6 +1010,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         {
             AppInitialize = async _ =>
             {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                       | SecurityProtocolType.Tls11
+                       | SecurityProtocolType.Tls12
+                       | SecurityProtocolType.Ssl3;
+
                 FileAssociations.EnsureAssociationsSet();
                 DataSource = new LocalFileDataSource();
                 string[] args = Environment.GetCommandLineArgs();
