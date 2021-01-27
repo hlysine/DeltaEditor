@@ -8,7 +8,7 @@ A native question editor for Windows
 
 ## Download and Install
 
-| [Download for Windows x64](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/releases/download/latest/Setup.exe) |
+| [Download for Windows x64](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/releases/latest/download/Setup.exe) |
 |-------------|
 
 For other download options, check out the [Releases](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/releases/latest) page
