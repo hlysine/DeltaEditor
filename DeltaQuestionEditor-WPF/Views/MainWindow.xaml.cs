@@ -33,6 +33,10 @@ namespace DeltaQuestionEditor_WPF.Views
             DataContext = viewModel = new MainViewModel();
             InitializeComponent();
             HideBoundingBox(root);
+            HideBoundingBox(topicSelectorDialogHost.DialogContent);
+            HideBoundingBox(welcomeDialogHost.DialogContent);
+            HideBoundingBox(validatorDialogHost.DialogContent);
+            HideBoundingBox(mainDialogHost.DialogContent);
         }
 
         private void mainWindow_Closing(object sender, CancelEventArgs e)

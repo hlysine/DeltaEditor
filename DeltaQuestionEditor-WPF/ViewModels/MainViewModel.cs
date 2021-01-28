@@ -1,4 +1,5 @@
-﻿using DeltaQuestionEditor_WPF.DataSources;
+﻿using DeltaQuestionEditor_WPF.Config;
+using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models;
 using DeltaQuestionEditor_WPF.Models.Validation;
@@ -195,6 +196,16 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => validatorDialog;
             set => SetAndNotify(ref validatorDialog, value);
         }
+
+
+        private bool welcomeDialog;
+        public bool WelcomeDialog
+        {
+            get => welcomeDialog;
+            set => SetAndNotify(ref welcomeDialog, value);
+        }
+
+        public ConfigObject Config { get; set; } = ConfigStore.Config;
 
         ICommand closeWindowCommand;
         public ICommand CloseWindowCommand
@@ -986,6 +997,28 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         }
 
 
+        ICommand showWelcomeDialogCommand;
+        public ICommand ShowWelcomeDialogCommand
+        {
+            get
+            {
+                return showWelcomeDialogCommand ??= new RelayCommand(
+                    // execute
+                    (param) =>
+                    {
+                        Config.HideWelcomeDialog = false;
+                        WelcomeDialog = true;
+                    },
+                    // can execute
+                    (param) =>
+                    {
+                        return !WelcomeDialog;
+                    }
+                );
+            }
+        }
+
+
         ICommand openHelpCommand;
         public ICommand OpenHelpCommand
         {
@@ -1042,7 +1075,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         if (args[1] == "--squirrel-firstrun")
                         {
                             Logger.Log($"Squirrel first run. Cmd argument: {args[1]}", Severity.Info);
-                            MainMessageQueue.Enqueue($"Welcome to Delta Question Editor. Press Help for quick guides.");
+                            WelcomeDialog = true;
                         }
                         else
                         {
@@ -1050,6 +1083,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
                         }
                     }
+                }
+                if (!Config.HideWelcomeDialog)
+                {
+                    WelcomeDialog = true;
                 }
 
                 await Updater.PerformUpdate();
