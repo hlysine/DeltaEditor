@@ -203,8 +203,13 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// <param name="path">Path to qdb file.</param>
         public async Task<bool> LoadQuestionSet(string path)
         {
+            if (IsFileLocked(path)) return false;
+            if (fileStream != null && FilePath != path)
+            {
+                fileStream.Dispose();
+                fileStream = null;
+            }
             FilePath = path;
-            if (IsFileLocked(FilePath)) return false;
             await Task.Run(() =>
             {
                 ClearDirectory(TempPath);
@@ -262,6 +267,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     }
                     archive.CreateEntryFromDirectory(TempPath);
                 }
+                fileStream.Flush();
             });
             LastSaved = DateTime.Now;
         }

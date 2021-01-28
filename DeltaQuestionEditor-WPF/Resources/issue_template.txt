@@ -19,4 +19,6 @@ Add any other context about the problem here.
 
 **Stack trace (Auto-filled)**
 
+```
 {0}
+```
