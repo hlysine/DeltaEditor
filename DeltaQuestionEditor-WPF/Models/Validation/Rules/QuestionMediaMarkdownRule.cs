@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,11 +33,11 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 }
                 if (customAltText)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"The media code in the {textName} of question {i + 1} contains custom alternate text. Please avoid doing so if possible.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.MEDIA_CUSTOM_ALT_TEXT, textName, i + 1), question));
                 }
                 if (nonexistentPath)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The media code in the {textName} of question {i + 1} contains invalid path. Please make sure that the related media files are imported and the path is correct.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.MEDIA_INVALID_PATH, textName, i + 1), question));
                 }
             }
             return problems;

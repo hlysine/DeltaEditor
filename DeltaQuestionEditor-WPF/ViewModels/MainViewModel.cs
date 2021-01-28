@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DeltaQuestionEditor_WPF.Consts;
 
 namespace DeltaQuestionEditor_WPF.ViewModels
 {
@@ -312,20 +313,20 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             DataSource.CreateQuestionSet();
                             TopicSelectorDialog = true;
                             await WaitUntil(() => !TopicSelectorDialog);
-                            LoadingState = "Reading";
+                            LoadingState = EditorLoadingStates.EXCEL_READING;
                             ExcelFileDataSource importer = new ExcelFileDataSource();
                             if (!await importer.ReadFile(path))
                             {
-                                return $"Failed to open {Path.GetFileName(path)}. The file is probably in use.";
+                                return string.Format(EditorSnackMessages.EXCEL_OPEN_FAIL_FILE_IN_USE, Path.GetFileName(path));
                             }
-                            LoadingState = "Analyzing";
+                            LoadingState = EditorLoadingStates.EXCEL_ANALYZING;
                             if (!await importer.AnalyzeFile())
                             {
-                                return $"Analysis of {Path.GetFileName(path)} failed: {importer.LastFailMessage}.";
+                                return string.Format(EditorSnackMessages.EXCEL_ANALYSIS_FAIL, Path.GetFileName(path), importer.LastFailMessage);
                             }
-                            LoadingState = "Importing questions";
+                            LoadingState = EditorLoadingStates.EXCEL_IMPORTING_QUESTIONS;
                             await importer.ImportQuestions(DataSource);
-                            LoadingState = "Importing media files";
+                            LoadingState = EditorLoadingStates.EXCEL_IMPORTING_MEDIA;
                             await importer.ImportMedia(DataSource);
                             LoadingState = null;
                             EnsurePathExist(AppDataPath("Imports"));
@@ -335,7 +336,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             QuestionListPanel = true;
                             MediaListPanel = true;
-                            return $"Successfully imported {Path.GetFileName(path)}";
+                            return string.Format(EditorSnackMessages.EXCEL_IMPORT_SUCCESS, Path.GetFileName(path));
                         }
 
                         List<string> paths = (param as IEnumerable<string>)?.ToList();
@@ -435,10 +436,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     {
                         async Task openFile(string path)
                         {
-                            LoadingState = "Opening";
+                            LoadingState = EditorLoadingStates.FILE_OPENING;
                             if (!await DataSource.LoadQuestionSet(path))
                             {
-                                MainMessageQueue.Enqueue($"Failed to open {Path.GetFileName(path)}. The file is probably in use.");
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_FILE_IN_USE, Path.GetFileName(path)));
                             }
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             LoadingState = null;
@@ -517,19 +518,19 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             dialog.Title = "Save - Choose a save location";
                             if (dialog.ShowDialog() == true)
                             {
-                                LoadingState = "Saving";
+                                LoadingState = EditorLoadingStates.FILE_SAVE_AS_LOADING;
                                 MainMessageQueue.Clear();
                                 await DataSource.SaveQuestionSet(dialog.FileName);
-                                MainMessageQueue.Enqueue("New file saved");
+                                MainMessageQueue.Enqueue(EditorSnackMessages.FILE_SAVE_SUCCESS_NEW);
                                 LoadingState = null;
                             }
                         }
                         else
                         {
-                            LoadingState = "Saving";
+                            LoadingState = EditorLoadingStates.FILE_SAVING;
                             MainMessageQueue.Clear();
                             await DataSource.SaveQuestionSet();
-                            MainMessageQueue.Enqueue("Changes saved");
+                            MainMessageQueue.Enqueue(EditorSnackMessages.FILE_SAVE_SUCCESS);
                             LoadingState = null;
                         }
                     },
@@ -556,10 +557,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         dialog.Title = "Save As - Choose a save location";
                         if (dialog.ShowDialog() == true)
                         {
-                            LoadingState = "Saving";
+                            LoadingState = EditorLoadingStates.FILE_SAVE_AS_LOADING;
                             MainMessageQueue.Clear();
                             await DataSource.SaveQuestionSet(dialog.FileName);
-                            MainMessageQueue.Enqueue("New file saved and loaded");
+                            MainMessageQueue.Enqueue(EditorSnackMessages.FILE_SAVE_AS_SUCCESS);
                             LoadingState = null;
                         }
                     },
@@ -584,11 +585,11 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         Question question = new Question();
                         for (int i = 0; i < 4; i++)
                             question.Answers.Add(null);
-                        question.Id = Helper.NewGuid();
+                        question.Id = NewGuid();
                         DataSource.QuestionSet.Questions.Add(question);
                         SelectedQuestion = question;
                         MainMessageQueue.Clear();
-                        mainMessageQueue.Enqueue("New question added");
+                        mainMessageQueue.Enqueue(EditorSnackMessages.QUESTION_NEW_SUCCESS);
                     },
                     // can execute
                     _ =>
@@ -615,7 +616,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         DataSource.QuestionSet.Questions.Remove(question);
                         MainMessageQueue.Clear();
                         MainMessageQueue.Enqueue(
-                            $"Question {index + 1} deleted",
+                            string.Format(EditorSnackMessages.QUESTION_DELETE_SUCCESS, index + 1),
                             "UNDO",
                             (param) =>
                             {
@@ -655,7 +656,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             DataSource.QuestionSet.Questions.Add(clone);
                         MainMessageQueue.Clear();
                         MainMessageQueue.Enqueue(
-                            $"Question {index + 1} copied",
+                            string.Format(EditorSnackMessages.QUESTION_COPY_SUCCESS, index + 1),
                             "UNDO",
                             (param) =>
                             {
@@ -703,12 +704,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                 {
                                     for (int i = 0; i < dialog.FileNames.Length; i++)
                                     {
-                                        LoadingState = $"Inserting media {i + 1}/{dialog.FileNames.Length}";
+                                        LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1, dialog.FileNames.Length);
                                         await DataSource.AddMedia(dialog.FileNames[i]);
                                     }
                                     MediaListPanel = true;
                                     MainMessageQueue.Clear();
-                                    MainMessageQueue.Enqueue($"{dialog.FileNames.Length} media files loaded");
+                                    MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS, dialog.FileNames.Length, "s"));
                                     LoadingState = null;
                                 }
                             }
@@ -716,22 +717,22 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             {
                                 for (int i = 0; i < paramPaths.Count(); i++)
                                 {
-                                    LoadingState = $"Inserting media {i + 1}/{paramPaths.Count()}";
+                                    LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1, paramPaths.Count());
                                     await DataSource.AddMedia(paramPaths.ElementAt(i));
                                 }
                                 MediaListPanel = true;
                                 MainMessageQueue.Clear();
-                                MainMessageQueue.Enqueue($"{paramPaths.Count()} media files loaded");
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS, paramPaths.Count(), "s"));
                                 LoadingState = null;
                             }
                         }
                         else
                         {
-                            LoadingState = "Inserting media 1/1";
+                            LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, "1", "1");
                             await DataSource.AddMedia(paramPath);
                             MediaListPanel = true;
                             MainMessageQueue.Clear();
-                            MainMessageQueue.Enqueue($"1 media file loaded");
+                            MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS, "1", ""));
                             LoadingState = null;
                         }
                     },
@@ -758,7 +759,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         if (media == null) throw new ArgumentNullException("Media is null when getting copy code");
                         Clipboard.SetDataObject($"![media]({media.FileName.Replace('\\', '/')})");
                         MainMessageQueue.Clear();
-                        MainMessageQueue.Enqueue($"Code for {media.Name} copied");
+                        MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_COPY_CODE_SUCCESS, media.Name));
                     },
                     // can execute
                     (param) =>
@@ -782,13 +783,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         async Task replaceMedia(string path)
                         {
                             Media oldMedia = SelectedMedia;
-                            LoadingState = $"Replacing media";
+                            LoadingState = EditorLoadingStates.MEDIA_REPLACING;
 
                             Media newMedia = await DataSource.ReplaceMedia(oldMedia, path);
                             if (newMedia == null)
                             {
                                 MainMessageQueue.Clear();
-                                MainMessageQueue.Enqueue($"The new media file is the same as the old one. Replacement skipped.");
+                                MainMessageQueue.Enqueue(EditorSnackMessages.MEDIA_REPLACE_FAIL_SAME_MEDIA);
                                 LoadingState = null;
                                 return;
                             }
@@ -796,7 +797,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             bool undo = false;
                             MainMessageQueue.Clear();
                             MainMessageQueue.Enqueue(
-                                $"{oldMedia.Name} is replaced with {newMedia.Name}",
+                                string.Format(EditorSnackMessages.MEDIA_REPLACE_SUCCESS, oldMedia.Name, newMedia.Name),
                                 "UNDO",
                                 async (param) =>
                                 {
@@ -807,7 +808,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
                                     if (DataSource?.QuestionSet?.Media == null) return;
                                     if (!DataSource.QuestionSet.Media.Contains(param.newMedia)) return;
-                                    LoadingState = "Undoing media replacement";
+                                    LoadingState = EditorLoadingStates.MEDIA_REPLACE_UNDOING;
                                     undo = true;
                                     DataSource.QuestionSet.Media.Insert(DataSource.QuestionSet.Media.IndexOf(param.newMedia), param.oldMedia);
                                     DataSource.QuestionSet.Media.Remove(param.newMedia);
@@ -878,14 +879,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     {
                         Media media = param as Media;
                         if (media == null) throw new ArgumentNullException("Media to be deleted is null");
-                        LoadingState = "Deleting media";
+                        LoadingState = EditorLoadingStates.MEDIA_DELETING;
                         int index = DataSource.QuestionSet.Media.IndexOf(media);
                         DataSource.QuestionSet.Media.Remove(media);
                         bool undo = false;
                         MainMessageQueue.Clear();
                         LoadingState = null;
                         MainMessageQueue.Enqueue(
-                            $"{media.Name} deleted",
+                            string.Format(EditorSnackMessages.MEDIA_DELETE_SUCCESS, media.Name),
                             "UNDO",
                             (param) =>
                             {
@@ -927,7 +928,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             }
                         }
                         MainMessageQueue.Clear();
-                        MainMessageQueue.Enqueue($"Validation completed");
+                        MainMessageQueue.Enqueue(EditorSnackMessages.VALIDATION_COMPLETE);
                     },
                     // can execute
                     _ =>
@@ -1080,7 +1081,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         else
                         {
                             Logger.Log($"File not found: {args[1]}", Severity.Warning);
-                            MainMessageQueue.Enqueue($"Invalid commandline argument: {string.Join(" ", args.Skip(1))}");
+                            MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.INVALID_COMMANDLINE_ARGS, string.Join(" ", args.Skip(1))));
                         }
                     }
                 }

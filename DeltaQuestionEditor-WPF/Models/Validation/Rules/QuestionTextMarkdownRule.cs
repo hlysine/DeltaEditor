@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 matches = Regex.Matches(tmp, @"`.*?`");
                 if (matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}")))
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"The backtick signs (`) in the {textName} of question {i + 1} seem to be misinterpreted as AsciiMath. Please double-check for errors.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_ASCIIMATH_MISINTERPRETATION, textName, i + 1), question));
                 }
 
                 // Check for misinterpreted LaTeX
@@ -45,7 +46,7 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 matches = Regex.Matches(tmp, @"\$.*?\$");
                 if (matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}")))
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"The dollar signs ($) in the {textName} of question {i + 1} seem to be misinterpreted as LaTeX. Please double-check for errors.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_LATEX_MISINTERPRETATION, textName, i + 1), question));
                 }
 
                 // Check for unformatted math
@@ -84,7 +85,7 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 }
                 if (Regex.IsMatch(tmp, @"[+\-*/0-9]"))
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"There seems to be unformatted mathematical expressions/symbols in the {textName} of question {i + 1}. Please format all symbols and expressions (including plain numbers) by wrapping them with `` or $$.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_UNFORMATTED_MATH, textName, i + 1), question));
                 }
             }
             return problems;

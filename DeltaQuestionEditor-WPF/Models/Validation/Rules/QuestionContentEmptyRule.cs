@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,35 +19,35 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 Question question = questionSet.Questions[i];
                 if (question.Text.IsNullOrWhiteSpace())
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The question text of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "question text", i + 1), question));
                 }
                 if (question.Answers == null || question.Answers.Count != 4)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The number of answers in question {i + 1} is incorrect.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.WRONG_NUMBER_OF_ANSWERS, i + 1), question));
                 }
                 if (question.Answers[0].IsNullOrWhiteSpace())
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The correct answer of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "correct answer", i + 1), question));
                 }
                 if (question.Answers[1].IsNullOrWhiteSpace())
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The first wrong answer of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "first wrong answer", i + 1), question));
                 }
                 if (question.Answers[2].IsNullOrWhiteSpace())
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The second wrong answer of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "second wrong answer", i + 1), question));
                 }
                 if (question.Answers[3].IsNullOrWhiteSpace())
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The third wrong answer of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "third wrong answer", i + 1), question));
                 }
                 if (question.Difficulty < 1 || question.Difficulty > 3)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The difficulty of question {i + 1} is invalid.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.WRONG_DIFFICULTY, i + 1), question));
                 }
                 if (question.Skills == null || question.Skills.Count == 0)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The skills of question {i + 1} is empty.", question));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.CONTENT_EMPTY, "skills", i + 1), question));
                 }
             }
             return problems;

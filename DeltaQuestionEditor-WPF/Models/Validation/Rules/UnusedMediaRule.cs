@@ -1,4 +1,5 @@
-﻿using MoreLinq;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +40,7 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                 }
             }
             questionSet.Media.Where(x => !usedMedia.Contains(x.FileName.Replace('\\', '/')))
-                .ForEach(x => problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"{x.Name} is unused. Consider removing it.", x)));
+                .ForEach(x => problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.MEDIA_UNUSED, x.Name), x)));
             return problems;
         }
     }

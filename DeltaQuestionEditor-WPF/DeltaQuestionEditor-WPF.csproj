@@ -33,7 +33,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.4.0.0</ApplicationVersion>
+    <ApplicationVersion>1.4.1.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -178,8 +178,12 @@
     </ApplicationDefinition>
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ConfigStore.cs" />
+    <Compile Include="Consts\EditorLoadingStates.cs" />
+    <Compile Include="Consts\EditorSnackMessages.cs" />
+    <Compile Include="Consts\ExcelImportFailures.cs" />
+    <Compile Include="Consts\ValidationProblems.cs" />
     <Compile Include="DataSources\ExcelFileDataSource.cs" />
-    <Compile Include="DataSources\ExcelImportProblems.cs" />
+    <Compile Include="Consts\ExcelImportProblems.cs" />
     <Compile Include="DataSources\IDataSource.cs" />
     <Compile Include="DataSources\LocalFileDataSource.cs" />
     <Compile Include="Helpers\BitmapFrameConverter.cs" />

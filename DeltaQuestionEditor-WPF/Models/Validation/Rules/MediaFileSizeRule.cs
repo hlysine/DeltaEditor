@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
             {
                 if (new FileInfo(media.FullPath).Length > MAX_FILE_SIZE)
                 {
-                    problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The file size of {media.Name} ({media.FileName}) is too large! Max file size is 500KB.", media));
+                    problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.MEDIA_TOO_LARGE, media.Name, media.FileName), media));
                 }
             }
             return problems;

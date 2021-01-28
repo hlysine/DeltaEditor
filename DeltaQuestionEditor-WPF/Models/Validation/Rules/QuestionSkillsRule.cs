@@ -1,4 +1,5 @@
-﻿using DeltaQuestionEditor_WPF.Helpers;
+﻿using DeltaQuestionEditor_WPF.Consts;
+using DeltaQuestionEditor_WPF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,13 +40,13 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
                             }
                             if (!containsTopic)
                             {
-                                problems.Add(new ValidationProblem(ProblemSeverity.Warning, $"The skill code of question {i + 1} does not contain skills from the current topic ({questionSet.Form}.{questionSet.Chapter} {questionSet.TopicName}). Please double-check for errors.", question));
+                                problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.QUESTION_SKILL_NO_CURRENT_TOPIC, i + 1, questionSet.Form, questionSet.Chapter, questionSet.TopicName), question));
                             }
                         }
                     }
                     if (invalid)
                     {
-                        problems.Add(new ValidationProblem(ProblemSeverity.Error, $"The skill code of question {i + 1} is invalid.", question));
+                        problems.Add(new ValidationProblem(ProblemSeverity.Error, string.Format(ValidationProblems.QUESTION_SKILL_INVALID, i + 1), question));
                     }
                 }
             }
