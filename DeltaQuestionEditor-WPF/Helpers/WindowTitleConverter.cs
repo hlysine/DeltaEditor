@@ -18,7 +18,11 @@ namespace DeltaQuestionEditor_WPF.Helpers
             string appVersion = null;
             if (values.Length > 1)
                 appVersion = values[1] as string;
+#if DEBUG
+            string ret = "Delta Question Editor (Debug)";
+#else
             string ret = "Delta Question Editor";
+#endif
             if (!fileName.IsNullOrEmpty()) ret = fileName + " - " + ret;
             if (!appVersion.IsNullOrWhiteSpace()) ret += " v" + appVersion;
             return ret;
