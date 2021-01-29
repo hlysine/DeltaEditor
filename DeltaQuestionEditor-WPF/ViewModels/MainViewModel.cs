@@ -437,9 +437,23 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         async Task openFile(string path)
                         {
                             LoadingState = EditorLoadingStates.FILE_OPENING;
-                            if (!await DataSource.LoadQuestionSet(path))
+                            MainMessageQueue.Clear();
+                            LocalFileDataSource.LoadQuestionStatus status = await DataSource.LoadQuestionSet(path);
+                            if (status == LocalFileDataSource.LoadQuestionStatus.FileLocked)
                             {
                                 MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_FILE_IN_USE, Path.GetFileName(path)));
+                                LoadingState = null;
+                                return;
+                            }
+                            else if (status == LocalFileDataSource.LoadQuestionStatus.QuestionSetJsonNotFound)
+                            {
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_INVALID_FILE, Path.GetFileName(path)));
+                                LoadingState = null;
+                                return;
+                            }
+                            else if (status == LocalFileDataSource.LoadQuestionStatus.FolderStructureAutoFixed)
+                            {
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_SUCCESS_AUTO_FIXED, Path.GetFileName(path)), null, null, null, false, false, durationOverride: TimeSpan.FromSeconds(10));
                             }
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             LoadingState = null;

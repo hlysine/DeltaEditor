@@ -16,6 +16,10 @@ namespace DeltaQuestionEditor_WPF.Consts
 
         public const string FILE_OPEN_FAIL_FILE_IN_USE = "Failed to open {0}. The file is probably in use.";
 
+        public const string FILE_OPEN_FAIL_INVALID_FILE = "Failed to open {0}. The file is invalid.";
+
+        public const string FILE_OPEN_SUCCESS_AUTO_FIXED = "An automatic fix is available for {0}. Please save the file manually to apply the fix.";
+
         public const string FILE_SAVE_SUCCESS_NEW = "New file saved.";
 
         public const string FILE_SAVE_SUCCESS = "Changes saved.";
@@ -38,7 +42,7 @@ namespace DeltaQuestionEditor_WPF.Consts
 
         public const string MEDIA_DELETE_SUCCESS = "{0} deleted.";
 
-        public const string VALIDATION_COMPLETE = "Validation completed";
+        public const string VALIDATION_COMPLETE = "Validation completed.";
 
         public const string INVALID_COMMANDLINE_ARGS = "Invalid commandline argument: {0}";
     }

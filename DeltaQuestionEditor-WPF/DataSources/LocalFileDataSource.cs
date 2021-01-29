@@ -197,21 +197,30 @@ namespace DeltaQuestionEditor_WPF.DataSources
             FilePath = null;
         }
 
+        public enum LoadQuestionStatus
+        {
+            Success,
+            FolderStructureAutoFixed,
+            FileLocked,
+            QuestionSetJsonNotFound
+        }
+
         /// <summary>
         /// Load a question set (.qdb) file.
         /// </summary>
         /// <param name="path">Path to qdb file.</param>
-        public async Task<bool> LoadQuestionSet(string path)
+        public async Task<LoadQuestionStatus> LoadQuestionSet(string path)
         {
-            if (IsFileLocked(path)) return false;
+            if (IsFileLocked(path)) return LoadQuestionStatus.FileLocked;
             if (fileStream != null && FilePath != path)
             {
                 fileStream.Dispose();
                 fileStream = null;
             }
             FilePath = path;
-            await Task.Run(() =>
+            return await Task.Run(() =>
             {
+                bool autoFixed = false;
                 ClearDirectory(TempPath);
                 if (fileStream == null)
                     fileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -219,12 +228,77 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 {
                     archive.ExtractToDirectory(TempPath);
                 }
+                if (!File.Exists(Path.Combine(TempPath, "questionset.json")))
+                {
+                    var allFiles = Directory.GetFiles(TempPath, "questionset.json", SearchOption.AllDirectories);
+                    string jsonPath = null;
+                    if (allFiles.Length > 0)
+                    {
+                        jsonPath = allFiles.OrderBy(x => x.Length).First();
+                    }
+                    if (jsonPath != null)
+                    {
+                        // Attempt to fix folder structure
+                        string path = GetRelativePath(TempPath + "\\", jsonPath);
+                        if (path.StartsWith("."))
+                        {
+                            path = Regex.Match(path, @"\.\\(.*?)(\\|$)").Groups[1].Value;
+                        }
+                        else if (path.StartsWith("\\"))
+                        {
+                            path = Regex.Match(path, @"\\(.*?)(\\|$)").Groups[1].Value;
+                        }
+                        else
+                        {
+                            path = Regex.Match(path, @"(.*?)(\\|$)").Groups[1].Value;
+                        }
+                        string guid = NewGuid();
+                        Directory.Move(Path.Combine(TempPath, path), Path.Combine(TempPath, guid));
+                        jsonPath = jsonPath.Replace(Path.Combine(TempPath, path), Path.Combine(TempPath, guid));
+
+                        bool mediaExists = Directory.Exists(Path.Combine(Path.GetDirectoryName(jsonPath), "Media"));
+
+                        DirectoryInfo di = new DirectoryInfo(TempPath);
+
+                        foreach (FileInfo file in di.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            if (!(dir.Name == guid || (!mediaExists && dir.Name == "Media")))
+                                dir.Delete(true);
+                        }
+
+                        di = new DirectoryInfo(Path.GetDirectoryName(jsonPath));
+
+                        foreach (FileInfo file in di.GetFiles())
+                        {
+                            file.MoveTo(Path.Combine(TempPath, file.Name));
+                        }
+                        foreach (DirectoryInfo dir in di.GetDirectories())
+                        {
+                            dir.MoveTo(Path.Combine(TempPath, dir.Name));
+                        }
+
+                        Directory.Delete(Path.Combine(TempPath, guid), true);
+
+                        autoFixed = true;
+                    }
+                    else
+                    {
+                        return LoadQuestionStatus.QuestionSetJsonNotFound;
+                    }
+                }
                 QuestionSet = JsonConvert.DeserializeObject<QuestionSet>(File.ReadAllText(Path.Combine(TempPath, "questionset.json")));
                 QuestionSet.DataSource = this;
                 QuestionSet.Media.ForEach(x => x.DataSource = this);
+                LastSaved = DateTime.Now;
+                if (!autoFixed)
+                    return LoadQuestionStatus.Success;
+                else
+                    return LoadQuestionStatus.FolderStructureAutoFixed;
             });
-            LastSaved = DateTime.Now;
-            return true;
         }
 
         /// <summary>
@@ -319,7 +393,7 @@ namespace DeltaQuestionEditor_WPF.DataSources
         {
             string replaceReferences(string text, string oldPath, string newPath)
             {
-                return Regex.Replace(text, $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\','/'))}\)", $"![$1]({newPath.Replace('\\', '/')})");
+                return Regex.Replace(text, $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\', '/'))}\)", $"![$1]({newPath.Replace('\\', '/')})");
             }
 
             string id = await AddMedia(newMediaPath);

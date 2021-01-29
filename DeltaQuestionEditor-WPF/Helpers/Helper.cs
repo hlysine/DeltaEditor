@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,6 +59,16 @@ namespace DeltaQuestionEditor_WPF.Helpers
                     HideBoundingBox(child);
                 }
             }
+        }
+
+        [DllImport("shlwapi.dll", EntryPoint = "PathRelativePathTo")]
+        static extern bool PathRelativePathTo(StringBuilder lpszDst, string from, UInt32 attrFrom, string to, UInt32 attrTo);
+
+        public static string GetRelativePath(string from, string to)
+        {
+            StringBuilder builder = new StringBuilder(1024);
+            bool result = PathRelativePathTo(builder, from, 0, to, 0);
+            return builder.ToString();
         }
 
         public static bool Contains(this string str, IEnumerable<string> values)
