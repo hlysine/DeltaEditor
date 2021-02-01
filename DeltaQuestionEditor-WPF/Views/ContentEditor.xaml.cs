@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.IO;
 using MyScript.IInk.UIReferenceImplementation;
+using System.Text.RegularExpressions;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -159,6 +160,70 @@ namespace DeltaQuestionEditor_WPF.Views
                 edit.executeEdits('C# Toolbar', edits, 
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.endLineNumber, operation.range.endColumn - 23, operation.range.endLineNumber, operation.range.endColumn - 1);
+                    })
+                );
+            ");
+        }
+
+        private void btnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            if (!browserEditor.IsBrowserInitialized) return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            browserEditor.ExecuteScriptAsync(@"
+                var selections = edit.getSelections();
+                var edits = selections.map(selection => {
+                    var line = new monaco.Selection(selection.startLineNumber, 0, selection.endLineNumber, Number.MAX_SAFE_INTEGER);
+                    var text = edit.getModel().getValueInRange(line);
+                    var matches = [...text.replaceAll('\r\n','\n').matchAll(/^(#*) ?(.*?)$/gm)];
+                    return matches.map((match, idx) => {
+                        var newText;
+                        if (match[1].length >= 6) {
+                            newText = match[2];
+                        }
+                        else if (match[1].length == 0) {
+                            newText = '# ' + match[0];
+                        }
+                        else {
+                            newText = '#' + match[0];
+                        }
+                        return { range: new monaco.Selection(selection.startLineNumber + idx, 0, selection.startLineNumber + idx, Number.MAX_SAFE_INTEGER), text: newText, forceMoveMarkers: true };
+                    });
+                }).flat().filter((item, i, arr) => arr.findIndex(x => x.range.startLineNumber == item.range.startLineNumber) == i);
+                edit.executeEdits('C# Toolbar', edits, 
+                    inverseEditOperations => inverseEditOperations.map(operation => {
+                        return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
+                    })
+                );
+            "); 
+        }
+
+        private void btnBullets_Click(object sender, RoutedEventArgs e)
+        {
+            if (!browserEditor.IsBrowserInitialized) return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            browserEditor.ExecuteScriptAsync(@"
+                var selections = edit.getSelections();
+                var edits = selections.map(selection => {
+                    var line = new monaco.Selection(selection.startLineNumber, 0, selection.endLineNumber, Number.MAX_SAFE_INTEGER);
+                    var text = edit.getModel().getValueInRange(line);
+                    var matches = [...text.replaceAll('\r\n','\n').matchAll(/^( *)([*-] |[0-9]+\. )? *(.*?)$/gm)];
+                    return matches.map((match, idx) => {
+                        var newText;
+                        if (!match[2] || match[2].length == 0) {
+                            newText = match[1] + '- ' + match[3];
+                        }
+                        else if (/[0-9]/.test(match[2])) {
+                            newText = match[1] + match[3];
+                        }
+                        else {
+                            newText = match[1] + (idx + 1) + '. ' + match[3];
+                        }
+                        return { range: new monaco.Selection(selection.startLineNumber + idx, 0, selection.startLineNumber + idx, Number.MAX_SAFE_INTEGER), text: newText, forceMoveMarkers: true };
+                    });
+                }).flat().filter((item, i, arr) => arr.findIndex(x => x.range.startLineNumber == item.range.startLineNumber) == i);
+                edit.executeEdits('C# Toolbar', edits, 
+                    inverseEditOperations => inverseEditOperations.map(operation => {
+                        return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
                 );
             ");
@@ -319,6 +384,22 @@ namespace DeltaQuestionEditor_WPF.Views
             {
                 Logger.LogException(ex, "MyScript Convert");
             }
+        }
+
+        private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //if (toggleMath.IsSelected)
+            //{
+            //    // TODO: is it possible to clear the undo stack of the editor?
+            //    _editor.Clear();
+            //    string selection = (string)(await browserEditor.EvaluateScriptAsync(@"edit.getModel().getValueInRange(selection)")).Result;
+            //    if (selection.IsNullOrWhiteSpace()) return;
+            //    Match match = Regex.Match(selection, @"^\$(.*)\$$");
+            //    if (match.Success)
+            //    {
+            //        _editor.Import_(MimeType.LATEX, match.Groups[1].Value, null);
+            //    }
+            //}
         }
     }
 }

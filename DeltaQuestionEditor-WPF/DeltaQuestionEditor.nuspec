@@ -8,8 +8,10 @@
     <authors>Profound IT</authors>
     <description>Question editor for the Delta system</description>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright 2020</copyright>
-    <dependencies />
+    <copyright>Copyright 2021</copyright>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+    </dependencies>
   </metadata>
   <files>
     <file src="**.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*;log.txt"/>

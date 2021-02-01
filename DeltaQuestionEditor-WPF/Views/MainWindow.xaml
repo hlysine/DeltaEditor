@@ -113,10 +113,17 @@
                         Margin="5"
                         Style="{DynamicResource MaterialDesignBody1TextBlock}"
                         TextWrapping="Wrap">
-                        You can format text (bold, italic, underline, table, heading, etc) using the <Bold>Markdown</Bold> syntax. 
+                        You can format text (bold, italic, table, heading, etc) using the <Bold>Markdown</Bold> syntax. 
                         For math expressions and symbols, you can choose to use <Bold>AsciiMath</Bold> or <Bold>LaTeX</Bold> by wrapping your math with `` or $$ respectively.
                         Please remember to <Bold>format all math symbols and expressions</Bold>, including plain numbers and letters, to improve readability.
                         Use the preview panel to check if your formatting looks right.
+                    </TextBlock>
+                    <TextBlock
+                        Margin="5"
+                        Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                        TextWrapping="Wrap">
+                        To make formatting easier, the editor includes <Bold>buttons for common formattings</Bold>, such as bold and italic.
+                        You can also open a <Bold>math sketchpad</Bold> from the toolbar to draw math formulae, which can be converted to format code by clicking <Bold>Convert</Bold>.
                     </TextBlock>
                     <TextBlock
                         Margin="5"

@@ -359,6 +359,6 @@
       <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
     </GetAssemblyIdentity>
     <Exec Command="nuget pack DeltaQuestionEditor.nuspec -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
-    <Exec Command="..\packages\squirrel.windows.2.0.1\tools\squirrel --releasify $(OutDir)DeltaQuestionEditor.$([System.Version]::Parse(%(myAssemblyInfo.Version)).ToString(3)).nupkg" />
+    <Exec Command="%UserProfile%\.nuget\packages\squirrel.windows\2.0.1\tools\squirrel --releasify $(OutDir)DeltaQuestionEditor.$([System.Version]::Parse(%(myAssemblyInfo.Version)).ToString(3)).nupkg" />
   </Target>
 </Project>
