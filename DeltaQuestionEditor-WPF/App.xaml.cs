@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace DeltaQuestionEditor_WPF
 {
@@ -24,6 +26,7 @@ namespace DeltaQuestionEditor_WPF
     {
         public App()
         {
+            RenderOptions.ProcessRenderMode = RenderMode.Default;
             Logger.Loggers.Add(new ConsoleLogger());
             Logger.Loggers.Add(new TextFileLogger());
             try
@@ -57,18 +60,27 @@ namespace DeltaQuestionEditor_WPF
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
                 ShowExceptionDialog((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+            };
 
             DispatcherUnhandledException += (s, e) =>
             {
                 ShowExceptionDialog(e.Exception, "Application.Current.DispatcherUnhandledException");
+#if DEBUG
+                if (e.Exception is NullReferenceException && e.Exception.Source == "MaterialDesignExtensions") e.Handled = true;
+#else
                 e.Handled = true;
+#endif
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
                 ShowExceptionDialog(e.Exception, "TaskScheduler.UnobservedTaskException");
+#if DEBUG
+#else
                 e.SetObserved();
+#endif
             };
         }
 

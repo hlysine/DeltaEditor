@@ -27,12 +27,6 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
-                Height="Auto" />
-            <RowDefinition
-                Height="*" />
-            <RowDefinition
-                Height="Auto" />
-            <RowDefinition
                 Height="*" />
             <RowDefinition
                 Height="Auto" />
@@ -49,52 +43,99 @@
                 HorizontalAlignment="Stretch"
                 SnapsToDevicePixels="True" />
         </StackPanel>
-        <RadioButton
-            Margin="5"
-            Grid.Row="1"
-            Style="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}"
-            IsChecked="True"
-            GroupName="QuestionChip">
-            Question
-        </RadioButton>
-        <Border
-            Grid.Row="2"
-            BorderThickness="2"
-            BorderBrush="{DynamicResource MaterialDesignDivider}">
-            <views:MonacoEditor
-                Text="{Binding Text, Mode=TwoWay}"/>
-        </Border>
-        <ListBox
-            Name="listAnswerChips"
-            Margin="5"
-            Grid.Row="3"
-            SelectedIndex="{Binding SelectedAnswerIndex}"
-            Style="{StaticResource MaterialDesignChoiceChipOutlineListBox}">
-            <ListBoxItem
-                IsSelected="True">
-                Correct answer
-            </ListBoxItem>
-            <ListBoxItem>
-                Wrong answer 1
-            </ListBoxItem>
-            <ListBoxItem>
-                Wrong answer 2
-            </ListBoxItem>
-            <ListBoxItem>
-                Wrong answer 3
-            </ListBoxItem>
-        </ListBox>
-        <Border
-            Grid.Row="4"
-            BorderThickness="2"
-            BorderBrush="{DynamicResource MaterialDesignDivider}">
-            <views:MonacoEditor
-                Text="{Binding SelectedAnswer, Mode=TwoWay}">
-            </views:MonacoEditor>
-        </Border>
+        <Grid
+            Grid.Row="1">
+            <Grid.Resources>
+                <Style
+                    TargetType="RowDefinition">
+                    <Setter
+                        Property="Height"
+                        Value="Auto" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Tag.IsExpanded, RelativeSource={RelativeSource Self}}"
+                            Value="True">
+                            <Setter
+                                Property="Height"
+                                Value="*" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Tag="{Binding ElementName=questionExpander}" />
+                <RowDefinition
+                    Tag="{Binding ElementName=answerExpander}" />
+            </Grid.RowDefinitions>
+            <Expander
+                Name="questionExpander"
+                VerticalAlignment="Stretch"
+                Style="{StaticResource NonAnimatedExpander}"
+                IsExpanded="True"
+                materialDesign:ExpanderAssist.HorizontalHeaderPadding="0"
+                VerticalContentAlignment="Stretch">
+                <Expander.Header>
+                    <RadioButton
+                        Margin="5"
+                        Style="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}"
+                        IsChecked="True"
+                        GroupName="QuestionChip">
+                        Question
+                    </RadioButton>
+                </Expander.Header>
+                <Border
+                    BorderThickness="2"
+                    VerticalAlignment="Stretch"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}">
+                    <views:ContentEditor
+                        VerticalAlignment="Stretch"
+                        Text="{Binding Text, Mode=TwoWay}" />
+                </Border>
+            </Expander>
+            <Expander
+                Grid.Row="1"
+                Name="answerExpander"
+                IsExpanded="True"
+                Style="{StaticResource NonAnimatedExpander}"
+                VerticalAlignment="Stretch"
+                materialDesign:ExpanderAssist.HorizontalHeaderPadding="0"
+                VerticalContentAlignment="Stretch">
+                <Expander.Header>
+                    <ListBox
+                        Name="listAnswerChips"
+                        Margin="5"
+                        SelectedIndex="{Binding SelectedAnswerIndex}"
+                        Style="{StaticResource MaterialDesignChoiceChipOutlineListBox}">
+                        <ListBoxItem
+                            IsSelected="True">
+                            Correct answer
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            Wrong answer 1
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            Wrong answer 2
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            Wrong answer 3
+                        </ListBoxItem>
+                    </ListBox>
+                </Expander.Header>
+                <Border
+                    BorderThickness="2"
+                    VerticalAlignment="Stretch"
+                    BorderBrush="{DynamicResource MaterialDesignDivider}">
+                    <views:ContentEditor
+                        VerticalAlignment="Stretch"
+                        Text="{Binding SelectedAnswer, Mode=TwoWay}">
+                    </views:ContentEditor>
+                </Border>
+            </Expander>
+        </Grid>
         <Grid
             Margin="0 5 0 5"
-            Grid.Row="5">
+            Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     Width="2*" />
