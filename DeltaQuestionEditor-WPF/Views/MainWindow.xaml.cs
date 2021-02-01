@@ -82,5 +82,10 @@ namespace DeltaQuestionEditor_WPF.Views
                         viewModel.ImportFromExcelCommand.Execute(xls);
             }
         }
+
+        private void welcomeDialogHost_DialogOpened(object sender, MaterialDesignThemes.Wpf.DialogOpenedEventArgs eventArgs)
+        {
+            scrollWelcomeDialog.ScrollToTop();
+        }
     }
 }

@@ -78,9 +78,11 @@
     </Window.InputBindings>
     <materialDesign:DialogHost
         Name="welcomeDialogHost"
-        IsOpen="{Binding WelcomeDialog}">
+        IsOpen="{Binding WelcomeDialog}"
+        DialogOpened="welcomeDialogHost_DialogOpened">
         <materialDesign:DialogHost.DialogContent>
             <ScrollViewer
+                Name="scrollWelcomeDialog"
                 Width="800"
                 Margin="16"
                 HorizontalAlignment="Stretch"
