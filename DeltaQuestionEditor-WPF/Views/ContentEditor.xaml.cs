@@ -146,6 +146,24 @@ namespace DeltaQuestionEditor_WPF.Views
             ");
         }
 
+        private void btnHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            if (!browserEditor.IsBrowserInitialized) return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            browserEditor.ExecuteScriptAsync(@"
+                var selections = edit.getSelections();
+                var edits = selections.map(selection => {
+                    var text = `[${edit.getModel().getValueInRange(selection)}](<link address here...>)`;
+                    return { range: selection, text: text, forceMoveMarkers: true };
+                });
+                edit.executeEdits('C# Toolbar', edits, 
+                    inverseEditOperations => inverseEditOperations.map(operation => {
+                        return new monaco.Selection(operation.range.endLineNumber, operation.range.endColumn - 23, operation.range.endLineNumber, operation.range.endColumn - 1);
+                    })
+                );
+            ");
+        }
+
         class EditorCodeProxy
         {
             public string Content { get; set; }

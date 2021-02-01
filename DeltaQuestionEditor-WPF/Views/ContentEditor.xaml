@@ -48,7 +48,8 @@
                     VerticalContentAlignment="Center"
                     Name="btnBold"
                     Click="btnBold_Click"
-                    ToolTip="Bold">
+                    ToolTip="Bold"
+                    IsEnabled="{Binding IsSelected, ElementName=toggleMath, Converter={StaticResource BoolInverseConverter}}">
                     <materialDesign:PackIcon
                         Kind="FormatBold" />
                 </Button>
@@ -60,9 +61,23 @@
                     VerticalContentAlignment="Center"
                     Name="btnItalic"
                     Click="btnItalic_Click"
-                    ToolTip="Italic">
+                    ToolTip="Italic"
+                    IsEnabled="{Binding IsSelected, ElementName=toggleMath, Converter={StaticResource BoolInverseConverter}}">
                     <materialDesign:PackIcon
                         Kind="FormatItalic" />
+                </Button>
+                <Button
+                    Height="30"
+                    Width="30"
+                    Padding="0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Name="btnHyperlink"
+                    Click="btnHyperlink_Click"
+                    ToolTip="Insert a hyperlink"
+                    IsEnabled="{Binding IsSelected, ElementName=toggleMath, Converter={StaticResource BoolInverseConverter}}">
+                    <materialDesign:PackIcon
+                        Kind="Link" />
                 </Button>
                 <Separator />
                 <ListBox>
