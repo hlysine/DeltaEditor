@@ -337,6 +337,34 @@ namespace DeltaQuestionEditor_WPF.Views
         private void SetInputMode(InputMode inputMode)
         {
             UcEditor.InputMode = inputMode;
+            switch (UcEditor.InputMode)
+            {
+                case InputMode.PEN:
+                    iconInput.Kind = MaterialDesignThemes.Wpf.PackIconKind.Pen;
+                    break;
+                case InputMode.TOUCH:
+                    iconInput.Kind = MaterialDesignThemes.Wpf.PackIconKind.CursorMove;
+                    break;
+                case InputMode.AUTO:
+                    iconInput.Kind = MaterialDesignThemes.Wpf.PackIconKind.LetterA;
+                    break;
+            }
+        }
+
+        private void btnPen_Click(object sender, RoutedEventArgs e)
+        {
+            switch (UcEditor.InputMode)
+            {
+                case InputMode.AUTO:
+                    SetInputMode(InputMode.PEN);
+                    break;
+                case InputMode.PEN:
+                    SetInputMode(InputMode.TOUCH);
+                    break;
+                case InputMode.TOUCH:
+                    SetInputMode(InputMode.AUTO);
+                    break;
+            }
         }
 
         private void btnUndo_Click(object sender, RoutedEventArgs e)

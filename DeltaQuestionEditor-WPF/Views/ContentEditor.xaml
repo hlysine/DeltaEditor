@@ -127,6 +127,20 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     Visibility="{Binding IsSelected, ElementName=toggleMath, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Name="btnPen"
+                    Click="btnPen_Click"
+                    ToolTip="Switch Input Mode">
+                    <materialDesign:PackIcon
+                        Name="iconInput"
+                        Kind="Pen" />
+                </Button>
+                <Button
+                    Height="30"
+                    Width="30"
+                    Padding="0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Visibility="{Binding IsSelected, ElementName=toggleMath, Converter={StaticResource BoolToVisibilityConverter}}"
                     Name="btnUndo"
                     Click="btnUndo_Click"
                     ToolTip="Undo Stroke">
