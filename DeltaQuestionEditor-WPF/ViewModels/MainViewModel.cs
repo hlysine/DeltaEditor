@@ -27,12 +27,11 @@ using DeltaQuestionEditor_WPF.Consts;
 namespace DeltaQuestionEditor_WPF.ViewModels
 {
     using static DeltaQuestionEditor_WPF.Helpers.Helper;
+
     class MainViewModel : NotifyPropertyChanged, IDropTarget
     {
-
-
-
         private bool showUpdatePanel = false;
+
         public bool ShowUpdatePanel
         {
             get => showUpdatePanel;
@@ -80,6 +79,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private UpdateManager updater = new UpdateManager();
+
         public UpdateManager Updater
         {
             get => updater;
@@ -88,6 +88,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private LocalFileDataSource dataSource;
+
         public LocalFileDataSource DataSource
         {
             get => dataSource;
@@ -96,6 +97,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private QuestionSetValidator validator;
+
         public QuestionSetValidator Validator
         {
             get => validator;
@@ -104,6 +106,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private string loadingState;
+
         public string LoadingState
         {
             get => loadingState;
@@ -112,6 +115,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool questionListPanel = true;
+
         public bool QuestionListPanel
         {
             get => questionListPanel;
@@ -120,6 +124,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool mediaListPanel = true;
+
         public bool MediaListPanel
         {
             get => mediaListPanel;
@@ -128,6 +133,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private Question selectedQuestion;
+
         public Question SelectedQuestion
         {
             get => selectedQuestion;
@@ -136,6 +142,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool questionListEditMode;
+
         public bool QuestionListEditMode
         {
             get => questionListEditMode;
@@ -144,6 +151,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private Media selectedMedia;
+
         public Media SelectedMedia
         {
             get => selectedMedia;
@@ -152,6 +160,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool mediaListEditMode;
+
         public bool MediaListEditMode
         {
             get => mediaListEditMode;
@@ -160,6 +169,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private SnackbarMessageQueue mainMessageQueue = new SnackbarMessageQueue();
+
         public SnackbarMessageQueue MainMessageQueue
         {
             get => mainMessageQueue;
@@ -168,6 +178,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool exitConfirmed;
+
         public bool ExitConfirmed
         {
             get => exitConfirmed;
@@ -176,6 +187,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool confirmExitDialog = false;
+
         public bool ConfirmExitDialog
         {
             get => confirmExitDialog;
@@ -184,6 +196,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool topicSelectorDialog;
+
         public bool TopicSelectorDialog
         {
             get => topicSelectorDialog;
@@ -192,6 +205,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool validatorDialog;
+
         public bool ValidatorDialog
         {
             get => validatorDialog;
@@ -200,6 +214,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         private bool welcomeDialog;
+
         public bool WelcomeDialog
         {
             get => welcomeDialog;
@@ -209,6 +224,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
         public ConfigObject Config { get; set; } = ConfigStore.Config;
 
         ICommand closeWindowCommand;
+
         public ICommand CloseWindowCommand
         {
             get
@@ -243,16 +259,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return true;
-                    }
+                    (param) => { return true; }
                 );
             }
         }
 
 
         ICommand confirmCloseCommand;
+
         public ICommand ConfirmCloseCommand
         {
             get
@@ -268,16 +282,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         window.Close();
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return !ExitConfirmed && param as Window != null;
-                    }
+                    (param) => { return !ExitConfirmed && param as Window != null; }
                 );
             }
         }
 
 
         ICommand cancelCloseCommand;
+
         public ICommand CancelCloseCommand
         {
             get
@@ -290,16 +302,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         ExitConfirmed = false;
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return !ExitConfirmed;
-                    }
+                    (param) => { return !ExitConfirmed; }
                 );
             }
         }
 
 
         ICommand importFromExcelCommand;
+
         public ICommand ImportFromExcelCommand
         {
             get
@@ -317,20 +327,25 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             ExcelFileDataSource importer = new ExcelFileDataSource();
                             if (!await importer.ReadFile(path))
                             {
-                                return string.Format(EditorSnackMessages.EXCEL_OPEN_FAIL_FILE_IN_USE, Path.GetFileName(path));
+                                return string.Format(EditorSnackMessages.EXCEL_OPEN_FAIL_FILE_IN_USE,
+                                    Path.GetFileName(path));
                             }
+
                             LoadingState = EditorLoadingStates.EXCEL_ANALYZING;
                             if (!await importer.AnalyzeFile())
                             {
-                                return string.Format(EditorSnackMessages.EXCEL_ANALYSIS_FAIL, Path.GetFileName(path), importer.LastFailMessage);
+                                return string.Format(EditorSnackMessages.EXCEL_ANALYSIS_FAIL, Path.GetFileName(path),
+                                    importer.LastFailMessage);
                             }
+
                             LoadingState = EditorLoadingStates.EXCEL_IMPORTING_QUESTIONS;
                             await importer.ImportQuestions(DataSource);
                             LoadingState = EditorLoadingStates.EXCEL_IMPORTING_MEDIA;
                             await importer.ImportMedia(DataSource);
                             LoadingState = null;
                             EnsurePathExist(AppDataPath("Imports"));
-                            string log = AppDataPath(Path.Combine("Imports", $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss} {Path.GetFileName(path)}.txt"));
+                            string log = AppDataPath(Path.Combine("Imports",
+                                $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss} {Path.GetFileName(path)}.txt"));
                             File.WriteAllText(log, importer.GetImportReport());
                             Process.Start(log);
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
@@ -376,7 +391,8 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                     dialog.CheckPathExists = true;
                                     if (dialog.ShowDialog() == true)
                                     {
-                                        Process.Start(Assembly.GetEntryAssembly().Location, $"-i \"{dialog.FileName}\"");
+                                        Process.Start(Assembly.GetEntryAssembly().Location,
+                                            $"-i \"{dialog.FileName}\"");
                                     }
                                 }
                                 else
@@ -387,15 +403,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return true;
-                    }
+                    (param) => { return true; }
                 );
             }
         }
 
         ICommand newFileCommand;
+
         public ICommand NewFileCommand
         {
             get
@@ -417,15 +431,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    _ =>
-                    {
-                        return true;
-                    }
+                    _ => { return true; }
                 );
             }
         }
 
         ICommand openFileCommand;
+
         public ICommand OpenFileCommand
         {
             get
@@ -441,20 +453,26 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             LocalFileDataSource.LoadQuestionStatus status = await DataSource.LoadQuestionSet(path);
                             if (status == LocalFileDataSource.LoadQuestionStatus.FileLocked)
                             {
-                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_FILE_IN_USE, Path.GetFileName(path)));
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_FILE_IN_USE,
+                                    Path.GetFileName(path)));
                                 LoadingState = null;
                                 return;
                             }
                             else if (status == LocalFileDataSource.LoadQuestionStatus.QuestionSetJsonNotFound)
                             {
-                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_INVALID_FILE, Path.GetFileName(path)));
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_FAIL_INVALID_FILE,
+                                    Path.GetFileName(path)));
                                 LoadingState = null;
                                 return;
                             }
                             else if (status == LocalFileDataSource.LoadQuestionStatus.FolderStructureAutoFixed)
                             {
-                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.FILE_OPEN_SUCCESS_AUTO_FIXED, Path.GetFileName(path)), null, null, null, false, false, durationOverride: TimeSpan.FromSeconds(10));
+                                MainMessageQueue.Enqueue(
+                                    string.Format(EditorSnackMessages.FILE_OPEN_SUCCESS_AUTO_FIXED,
+                                        Path.GetFileName(path)), null, null, null, false, false,
+                                    durationOverride: TimeSpan.FromSeconds(10));
                             }
+
                             Validator = new QuestionSetValidator(DataSource.QuestionSet);
                             LoadingState = null;
                             QuestionListPanel = true;
@@ -508,15 +526,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    _ =>
-                    {
-                        return true;
-                    }
+                    _ => { return true; }
                 );
             }
         }
 
         ICommand saveFileCommand;
+
         public ICommand SaveFileCommand
         {
             get
@@ -549,15 +565,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    _ =>
-                    {
-                        return DataSource.QuestionSet != null;
-                    }
+                    _ => { return DataSource.QuestionSet != null; }
                 );
             }
         }
 
         ICommand saveAsCommand;
+
         public ICommand SaveAsCommand
         {
             get
@@ -579,15 +593,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    _ =>
-                    {
-                        return DataSource.QuestionSet != null;
-                    }
+                    _ => { return DataSource.QuestionSet != null; }
                 );
             }
         }
 
         ICommand addQuestionCommand;
+
         public ICommand AddQuestionCommand
         {
             get
@@ -606,16 +618,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         mainMessageQueue.Enqueue(EditorSnackMessages.QUESTION_NEW_SUCCESS);
                     },
                     // can execute
-                    _ =>
-                    {
-                        return DataSource?.QuestionSet?.Questions != null;
-                    }
+                    _ => { return DataSource?.QuestionSet?.Questions != null; }
                 );
             }
         }
 
 
         ICommand deleteQuestionCommand;
+
         public ICommand DeleteQuestionCommand
         {
             get
@@ -632,26 +642,21 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         MainMessageQueue.Enqueue(
                             string.Format(EditorSnackMessages.QUESTION_DELETE_SUCCESS, index + 1),
                             "UNDO",
-                            (param) =>
-                            {
-                                DataSource?.QuestionSet?.Questions?.Insert(param.index, param.question);
-                            },
+                            (param) => { DataSource?.QuestionSet?.Questions?.Insert(param.index, param.question); },
                             (index, question),
                             false,
                             true,
                             TimeSpan.FromSeconds(5));
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return (DataSource?.QuestionSet?.Questions?.Contains(param)).GetValueOrDefault();
-                    }
+                    (param) => { return (DataSource?.QuestionSet?.Questions?.Contains(param)).GetValueOrDefault(); }
                 );
             }
         }
 
 
         ICommand copyQuestionCommand;
+
         public ICommand CopyQuestionCommand
         {
             get
@@ -684,16 +689,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             TimeSpan.FromSeconds(5));
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return param != null && DataSource?.QuestionSet?.Questions != null;
-                    }
+                    (param) => { return param != null && DataSource?.QuestionSet?.Questions != null; }
                 );
             }
         }
 
 
         ICommand addMediaCommand;
+
         public ICommand AddMediaCommand
         {
             get
@@ -718,12 +721,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                 {
                                     for (int i = 0; i < dialog.FileNames.Length; i++)
                                     {
-                                        LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1, dialog.FileNames.Length);
+                                        LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1,
+                                            dialog.FileNames.Length);
                                         await DataSource.AddMedia(dialog.FileNames[i]);
                                     }
+
                                     MediaListPanel = true;
                                     MainMessageQueue.Clear();
-                                    MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS, dialog.FileNames.Length, "s"));
+                                    MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS,
+                                        dialog.FileNames.Length, "s"));
                                     LoadingState = null;
                                 }
                             }
@@ -731,12 +737,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             {
                                 for (int i = 0; i < paramPaths.Count(); i++)
                                 {
-                                    LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1, paramPaths.Count());
+                                    LoadingState = string.Format(EditorLoadingStates.MEDIA_ADDING, i + 1,
+                                        paramPaths.Count());
                                     await DataSource.AddMedia(paramPaths.ElementAt(i));
                                 }
+
                                 MediaListPanel = true;
                                 MainMessageQueue.Clear();
-                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS, paramPaths.Count(), "s"));
+                                MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_ADD_SUCCESS,
+                                    paramPaths.Count(), "s"));
                                 LoadingState = null;
                             }
                         }
@@ -751,16 +760,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return DataSource?.QuestionSet?.Media != null;
-                    }
+                    (param) => { return DataSource?.QuestionSet?.Media != null; }
                 );
             }
         }
 
 
         ICommand copyMediaCodeCommand;
+
         public ICommand CopyMediaCodeCommand
         {
             get
@@ -773,19 +780,18 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         if (media == null) throw new ArgumentNullException("Media is null when getting copy code");
                         Clipboard.SetDataObject($"![media]({media.FileName.Replace('\\', '/')})");
                         MainMessageQueue.Clear();
-                        MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_COPY_CODE_SUCCESS, media.Name));
+                        MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_COPY_CODE_SUCCESS,
+                            media.Name));
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return param as Media != null;
-                    }
+                    (param) => { return param as Media != null; }
                 );
             }
         }
 
 
         ICommand replaceMediaCommand;
+
         public ICommand ReplaceMediaCommand
         {
             get
@@ -817,27 +823,33 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                 {
                                     string replaceReferences(string text, string oldPath, string newPath)
                                     {
-                                        return Regex.Replace(text, $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\', '/'))}\)", $"![$1]({newPath.Replace('\\', '/')})");
+                                        return Regex.Replace(text,
+                                            $@"!\[(.*?)\]\({Regex.Escape(oldPath.Replace('\\', '/'))}\)",
+                                            $"![$1]({newPath.Replace('\\', '/')})");
                                     }
 
                                     if (DataSource?.QuestionSet?.Media == null) return;
                                     if (!DataSource.QuestionSet.Media.Contains(param.newMedia)) return;
                                     LoadingState = EditorLoadingStates.MEDIA_REPLACE_UNDOING;
                                     undo = true;
-                                    DataSource.QuestionSet.Media.Insert(DataSource.QuestionSet.Media.IndexOf(param.newMedia), param.oldMedia);
+                                    DataSource.QuestionSet.Media.Insert(
+                                        DataSource.QuestionSet.Media.IndexOf(param.newMedia), param.oldMedia);
                                     DataSource.QuestionSet.Media.Remove(param.newMedia);
                                     await DataSource.DeleteMedia(newMedia);
                                     foreach (Question question in DataSource.QuestionSet.Questions)
                                     {
-                                        question.Text = replaceReferences(question.Text, param.newMedia.FileName, param.oldMedia.FileName);
+                                        question.Text = replaceReferences(question.Text, param.newMedia.FileName,
+                                            param.oldMedia.FileName);
                                         if (question.Answers != null)
                                         {
                                             for (int i = 0; i < question.Answers.Count; i++)
                                             {
-                                                question.Answers[i] = replaceReferences(question.Answers[i], param.newMedia.FileName, param.oldMedia.FileName);
+                                                question.Answers[i] = replaceReferences(question.Answers[i],
+                                                    param.newMedia.FileName, param.oldMedia.FileName);
                                             }
                                         }
                                     }
+
                                     LoadingState = null;
                                 },
                                 (oldMedia, newMedia),
@@ -875,7 +887,8 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) =>
                     {
-                        return DataSource?.QuestionSet?.Media != null && SelectedMedia != null && DataSource.QuestionSet.Media.Contains(SelectedMedia);
+                        return DataSource?.QuestionSet?.Media != null && SelectedMedia != null &&
+                               DataSource.QuestionSet.Media.Contains(SelectedMedia);
                     }
                 );
             }
@@ -883,6 +896,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
 
         ICommand deleteMediaCommand;
+
         public ICommand DeleteMediaCommand
         {
             get
@@ -916,15 +930,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             await DataSource.DeleteMedia(media);
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return (DataSource?.QuestionSet?.Media?.Contains(param)).GetValueOrDefault();
-                    }
+                    (param) => { return (DataSource?.QuestionSet?.Media?.Contains(param)).GetValueOrDefault(); }
                 );
             }
         }
 
         ICommand validateQuestionSetCommand;
+
         public ICommand ValidateQuestionSetCommand
         {
             get
@@ -941,20 +953,19 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                 SaveFileCommand.Execute(null);
                             }
                         }
+
                         MainMessageQueue.Clear();
                         MainMessageQueue.Enqueue(EditorSnackMessages.VALIDATION_COMPLETE);
                     },
                     // can execute
-                    _ =>
-                    {
-                        return DataSource?.QuestionSet != null && Validator != null;
-                    }
+                    _ => { return DataSource?.QuestionSet != null && Validator != null; }
                 );
             }
         }
 
 
         ICommand openValidatorDialogCommand;
+
         public ICommand OpenValidatorDialogCommand
         {
             get
@@ -967,16 +978,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         ValidatorDialog = true;
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return DataSource?.QuestionSet != null && Validator != null;
-                    }
+                    (param) => { return DataSource?.QuestionSet != null && Validator != null; }
                 );
             }
         }
 
 
         ICommand validationProblemLocateObjectCommand;
+
         public ICommand ValidationProblemLocateObjectCommand
         {
             get
@@ -1003,16 +1012,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return true;
-                    }
+                    (param) => { return true; }
                 );
             }
         }
 
 
         ICommand showWelcomeDialogCommand;
+
         public ICommand ShowWelcomeDialogCommand
         {
             get
@@ -1025,16 +1032,14 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         WelcomeDialog = true;
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return !WelcomeDialog;
-                    }
+                    (param) => { return !WelcomeDialog; }
                 );
             }
         }
 
 
         ICommand openHelpCommand;
+
         public ICommand OpenHelpCommand
         {
             get
@@ -1046,10 +1051,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         Process.Start("https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/wiki");
                     },
                     // can execute
-                    (param) =>
-                    {
-                        return true;
-                    }
+                    (param) => { return true; }
                 );
             }
         }
@@ -1060,9 +1062,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-                       | SecurityProtocolType.Tls11
-                       | SecurityProtocolType.Tls12
-                       | SecurityProtocolType.Ssl3;
+                                                       | SecurityProtocolType.Tls11
+                                                       | SecurityProtocolType.Tls12
+                                                       | SecurityProtocolType.Ssl3;
 
                 FileAssociations.EnsureAssociationsSet();
                 DataSource = new LocalFileDataSource();
@@ -1095,10 +1097,12 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         else
                         {
                             Logger.Log($"File not found: {args[1]}", Severity.Warning);
-                            MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.INVALID_COMMANDLINE_ARGS, string.Join(" ", args.Skip(1))));
+                            MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.INVALID_COMMANDLINE_ARGS,
+                                string.Join(" ", args.Skip(1))));
                         }
                     }
                 }
+
                 if (!Config.HideWelcomeDialog)
                 {
                     WelcomeDialog = true;
@@ -1106,10 +1110,7 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
                 await Updater.PerformUpdate();
             };
-            AppClosed = _ =>
-            {
-                DataSource.Dispose();
-            };
+            AppClosed = _ => { DataSource.Dispose(); };
         }
     }
 }

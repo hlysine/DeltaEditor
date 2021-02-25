@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/README.txt" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/cef.pak" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/cef_100_percent.pak" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/cef_200_percent.pak" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/cef_extensions.pak" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/chrome_elf.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/d3dcompiler_47.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/devtools_resources.pak" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/icudtl.dat" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/libEGL.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/libGLESv2.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/libcef.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/locales" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/snapshot_blob.bin" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/swiftshader" />
+    <content url="file://$USER_HOME$/.nuget/packages/cef.redist.x64/86.0.24/CEF/v8_context_snapshot.bin" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.BrowserSubprocess.Core.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.BrowserSubprocess.Core.pdb" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.BrowserSubprocess.exe" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.BrowserSubprocess.pdb" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.Core.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.Core.pdb" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.Core.xml" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.XML" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.common/86.0.241/CefSharp/x64/CefSharp.pdb" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.wpf/86.0.241/CefSharp/x64/CefSharp.Wpf.XML" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.wpf/86.0.241/CefSharp/x64/CefSharp.Wpf.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/cefsharp.wpf/86.0.241/CefSharp/x64/CefSharp.Wpf.pdb" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScript.IInk.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScript2D.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptAnalyzer.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptDocument.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptEngine.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptGesture.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptInk.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptMath.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptPrediction.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptShape.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/MyScriptText.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/iink.dll" />
+    <content url="file://$USER_HOME$/.nuget/packages/myscript.interactiveink.wpf/1.4.1/build/x64/iink_d.dll" />
+    <content url="file://$MODULE_DIR$/../.." />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

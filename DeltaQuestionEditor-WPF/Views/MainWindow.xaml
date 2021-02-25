@@ -115,8 +115,9 @@
                         Margin="5"
                         Style="{DynamicResource MaterialDesignBody1TextBlock}"
                         TextWrapping="Wrap">
-                        You can format text (bold, italic, table, heading, etc) using the <Bold>Markdown</Bold> syntax. 
-                        For math expressions and symbols, you can choose to use <Bold>AsciiMath</Bold> or <Bold>LaTeX</Bold> by wrapping your math with `` or $$ respectively.
+                        You can format text (bold, italic, table, heading, etc) using the <Bold>Markdown</Bold> syntax.
+                        For math expressions and symbols, you can choose to use <Bold>AsciiMath</Bold> or
+                        <Bold>LaTeX</Bold> by wrapping your math with `` or $$ respectively.
                         Please remember to <Bold>format all math symbols and expressions</Bold>, including plain numbers and letters, to improve readability.
                         Use the preview panel to check if your formatting looks right.
                     </TextBlock>
@@ -125,7 +126,8 @@
                         Style="{DynamicResource MaterialDesignBody1TextBlock}"
                         TextWrapping="Wrap">
                         To make formatting easier, the editor includes <Bold>buttons for common formattings</Bold>, such as bold and italic.
-                        You can also open a <Bold>math sketchpad</Bold> from the toolbar to draw math formulae, which can be converted to format code by clicking <Bold>Convert</Bold>.
+                        You can also open a <Bold>math sketchpad</Bold> from the toolbar to draw math formulae, which can be converted to format code by clicking
+                        <Bold>Convert</Bold>.
                     </TextBlock>
                     <TextBlock
                         Margin="5"
@@ -140,7 +142,8 @@
                         TextWrapping="Wrap">
                         After you have finished editing the questions, use the <Bold>validator</Bold> to check for errors automatically.
                         You should <Bold>fix all errors before submitting the question set file</Bold>.
-                        Once you pass the validation without errors, your question set file will be <Bold>sealed</Bold> (shown as a checkmark in the validator).
+                        Once you pass the validation without errors, your question set file will be <Bold>sealed</Bold>
+                        (shown as a checkmark in the validator).
                         If you decide to edit the file after validation, you will have to validate again.
                     </TextBlock>
                     <TextBlock
@@ -155,7 +158,8 @@
                         Style="{DynamicResource MaterialDesignBody1TextBlock}"
                         TextWrapping="Wrap">
                         The editor handles image files for you so you don't have to submit them separately.
-                        Simply <Bold>drag and drop</Bold> an image to the <Bold>media panel</Bold>, or click the "<Bold>Add Media</Bold>" button.
+                        Simply <Bold>drag and drop</Bold> an image to the <Bold>media panel</Bold>, or click the "
+                        <Bold>Add Media</Bold>" button.
                         You can insert images in the media panel to any question in this question set.
                         Simply <Bold>copy the media code</Bold> and paste it at the place where you want the image to show.
                     </TextBlock>
@@ -216,7 +220,7 @@
                         Margin="5"
                         Style="{DynamicResource MaterialDesignHeadline5TextBlock}"
                         TextWrapping="Wrap">
-                    Select the topic of this question set
+                        Select the topic of this question set
                     </TextBlock>
                     <views:TopicSelector
                         HorizontalAlignment="Stretch" />
@@ -280,7 +284,7 @@
                                 Content="{Binding Validator.ErrorsCount, StringFormat='Errors: {0}'}">
                                 <materialDesign:Chip.Icon>
                                     <materialDesign:PackIcon
-                                        Kind="CloseCircle"></materialDesign:PackIcon>
+                                        Kind="CloseCircle" />
                                 </materialDesign:Chip.Icon>
                             </materialDesign:Chip>
                             <materialDesign:Chip
@@ -289,7 +293,7 @@
                                 Content="{Binding Validator.WarningsCount, StringFormat='Warnings: {0}'}">
                                 <materialDesign:Chip.Icon>
                                     <materialDesign:PackIcon
-                                        Kind="Alert"></materialDesign:PackIcon>
+                                        Kind="Alert" />
                                 </materialDesign:Chip.Icon>
                             </materialDesign:Chip>
                         </StackPanel>
@@ -328,7 +332,7 @@
                                                                     HorizontalAlignment="Center"
                                                                     VerticalAlignment="Center"
                                                                     Margin="10">
-                                                            No problems found
+                                                                    No problems found
                                                                 </TextBlock>
                                                             </StackPanel>
                                                         </ControlTemplate>
@@ -395,11 +399,11 @@
                             <TextBlock
                                 Margin="5"
                                 Style="{DynamicResource MaterialDesignHeadline5TextBlock}">
-                        Are you sure you want to quit?
+                                Are you sure you want to quit?
                             </TextBlock>
                             <TextBlock
                                 Margin="5">
-                        Press "No" and save changes if you haven't already done so.
+                                Press "No" and save changes if you haven't already done so.
                             </TextBlock>
                             <StackPanel
                                 Orientation="Horizontal"
@@ -576,8 +580,7 @@
                                 <MenuItem
                                     Header="_Validate"
                                     ToolTip="Open the question set validator dialog."
-                                    Command="{Binding OpenValidatorDialogCommand}">
-                                </MenuItem>
+                                    Command="{Binding OpenValidatorDialogCommand}" />
                                 <MenuItem
                                     Header="_Help"
                                     ToolTip="Actually useful quick help info">
@@ -622,7 +625,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Margin="10">
-                            You haven't loaded in a question set yet.
+                                        You haven't loaded in a question set yet.
                                     </TextBlock>
                                     <StackPanel
                                         HorizontalAlignment="Center"
@@ -703,7 +706,7 @@
                                                     VerticalAlignment="Center"
                                                     TextTrimming="CharacterEllipsis"
                                                     Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                                        Question Set Topic
+                                                    Question Set Topic
                                                 </TextBlock>
                                             </Expander.Header>
                                             <views:TopicSelector />
@@ -721,7 +724,7 @@
                                                 VerticalAlignment="Center"
                                                 TextTrimming="CharacterEllipsis"
                                                 Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                                        Question List
+                                                Question List
                                             </TextBlock>
                                             <ToggleButton
                                                 Grid.Column="1"
@@ -771,7 +774,7 @@
                                                                                 HorizontalAlignment="Center"
                                                                                 VerticalAlignment="Center"
                                                                                 Margin="10">
-                                                                        There are no questions in the set
+                                                                                There are no questions in the set
                                                                             </TextBlock>
                                                                             <Button
                                                                                 HorizontalAlignment="Center"
@@ -822,7 +825,7 @@
                                                     Kind="Plus" />
                                                 <TextBlock
                                                     VerticalAlignment="Center">
-                                NEW QUESTION
+                                                    NEW QUESTION
                                                 </TextBlock>
                                             </StackPanel>
                                         </Button>
@@ -855,7 +858,7 @@
                                         VerticalAlignment="Center"
                                         Margin="10"
                                         TextWrapping="Wrap">
-                        Select a question in the question list to start editing
+                                        Select a question in the question list to start editing
                                     </TextBlock>
                                 </StackPanel>
                                 <views:QuestionPreviewPanel
@@ -881,7 +884,7 @@
                                         VerticalAlignment="Center"
                                         Margin="10"
                                         TextWrapping="Wrap">
-                        Select a question in the question list to see preview
+                                        Select a question in the question list to see preview
                                     </TextBlock>
                                 </StackPanel>
                                 <Border
@@ -930,7 +933,7 @@
                                                 VerticalAlignment="Center"
                                                 TextTrimming="CharacterEllipsis"
                                                 Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                            Media List
+                                                Media List
                                             </TextBlock>
                                             <ToggleButton
                                                 Grid.Column="1"
@@ -981,7 +984,7 @@
                                                                                 HorizontalAlignment="Center"
                                                                                 VerticalAlignment="Center"
                                                                                 Margin="10">
-                                                                        There are no media files in the set
+                                                                                There are no media files in the set
                                                                             </TextBlock>
                                                                             <Button
                                                                                 HorizontalAlignment="Center"
@@ -1032,7 +1035,7 @@
                                                     Kind="Plus" />
                                                 <TextBlock
                                                     VerticalAlignment="Center">
-                                            ADD MEDIA
+                                                    ADD MEDIA
                                                 </TextBlock>
                                             </StackPanel>
                                         </Button>
@@ -1066,8 +1069,7 @@
                                                 IsIndeterminate="True" />
                                             <TextBlock
                                                 VerticalAlignment="Center"
-                                                Text="{Binding LoadingState}">
-                                            </TextBlock>
+                                                Text="{Binding LoadingState}" />
                                         </StackPanel>
                                         <Button
                                             Margin="10 0 0 0"
@@ -1139,8 +1141,7 @@
                                             <TextBlock
                                                 Margin="5 0 0 0"
                                                 VerticalAlignment="Center"
-                                                Text="{Binding DataSource.QuestionSet.Questions.Count}">
-                                            </TextBlock>
+                                                Text="{Binding DataSource.QuestionSet.Questions.Count}" />
                                         </StackPanel>
                                         <StackPanel
                                             Margin="10 0 0 0"
@@ -1153,28 +1154,25 @@
                                             <TextBlock
                                                 Margin="5 0 0 0"
                                                 VerticalAlignment="Center"
-                                                Text="{Binding DataSource.QuestionSet.Media.Count}">
-                                            </TextBlock>
+                                                Text="{Binding DataSource.QuestionSet.Media.Count}" />
                                         </StackPanel>
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Margin="10 0 0 0"
                                             Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource InverseNullToVisibilityConverter}, TargetNullValue=Visible, FallbackValue=Visible}">
-                                    No question set loaded
+                                            No question set loaded
                                         </TextBlock>
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Margin="10 0 0 0"
                                             Text="{Binding DataSource.LastSaved, StringFormat='Last saved: {0:h:mm tt}'}"
-                                            Visibility="{Binding DataSource.FilePath, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
-                                        </TextBlock>
+                                            Visibility="{Binding DataSource.FilePath, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}" />
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Margin="10 0 0 0"
                                             ToolTip="Path to the loaded .qdb file"
                                             Text="{Binding DataSource.FilePath, TargetNullValue='Not saved', FallbackValue='Not saved'}"
-                                            Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}">
-                                        </TextBlock>
+                                            Visibility="{Binding DataSource.QuestionSet, Converter={StaticResource NullToVisibilityConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}" />
                                     </StackPanel>
                                 </Grid>
                             </materialDesign:ColorZone>
@@ -1190,25 +1188,23 @@
                                     Margin="5"
                                     HorizontalAlignment="Left"
                                     Style="{StaticResource MaterialDesignHeadline5TextBlock}">
-                            Update in progress...
+                                    Update in progress...
                                 </TextBlock>
                                 <TextBlock
                                     Margin="5"
                                     HorizontalAlignment="Left">
-                            The app is still updating and will close automatically when it's done.
+                                    The app is still updating and will close automatically when it's done.
                                 </TextBlock>
                                 <ProgressBar
                                     Margin="5"
                                     HorizontalAlignment="Stretch"
                                     Minimum="0"
                                     Maximum="100"
-                                    Value="{Binding Updater.UpdateProgress}">
-                                </ProgressBar>
+                                    Value="{Binding Updater.UpdateProgress}" />
                                 <TextBlock
                                     Margin="5"
                                     HorizontalAlignment="Right"
-                                    Text="{Binding Updater.UpdateProgress, StringFormat={}{0}%}">
-                                </TextBlock>
+                                    Text="{Binding Updater.UpdateProgress, StringFormat={}{0}%}" />
                             </StackPanel>
                         </Grid>
                         <materialDesign:Snackbar

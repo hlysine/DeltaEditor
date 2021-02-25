@@ -43,6 +43,7 @@
                 SnapsToDevicePixels="True" />
         </StackPanel>
         <Grid
+            Panel.ZIndex="1000"
             Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition

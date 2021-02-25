@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.IO;
 using MyScript.IInk.UIReferenceImplementation;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -24,7 +25,17 @@ namespace DeltaQuestionEditor_WPF.Views
     public partial class ContentEditor : UserControl
     {
         EditorCodeProxy codeProxy;
-        bool suppressDPEvent;
+
+        private int _suppressDPEvent = 0;
+        public bool suppressDPEvent
+        {
+            get { return (Interlocked.CompareExchange(ref _suppressDPEvent, 1, 1) == 1); }
+            set
+            {
+                if (value) Interlocked.CompareExchange(ref _suppressDPEvent, 1, 0);
+                else Interlocked.CompareExchange(ref _suppressDPEvent, 0, 1);
+            }
+        }
 
         private const string PART_TYPE = "Math";
         private Engine _engine;
