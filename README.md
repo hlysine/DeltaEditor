@@ -3,6 +3,7 @@
 ![Release build](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/workflows/Release%20build/badge.svg)
 ![CodeQL](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/workflows/CodeQL/badge.svg)
 ![Build](https://github.com/Profound-Education-Centre/DeltaQuestionEditor-WPF/workflows/Build/badge.svg)
+[![CodeFactor](https://www.codefactor.io/repository/github/profound-education-centre/deltaquestioneditor-wpf/badge)](https://www.codefactor.io/repository/github/profound-education-centre/deltaquestioneditor-wpf)
 
 A native question editor for Windows
 
