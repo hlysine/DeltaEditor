@@ -1,4 +1,5 @@
 ﻿using DeltaQuestionEditor_WPF.Helpers;
+using DeltaQuestionEditor_WPF.Logging;
 using Squirrel;
 using System;
 using System.IO;

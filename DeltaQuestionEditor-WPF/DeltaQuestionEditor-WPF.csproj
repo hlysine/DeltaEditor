@@ -113,6 +113,7 @@
     <Compile Include="DataSources\LocalFileDataSource.cs" />
     <Compile Include="Helpers\BitmapFrameConverter.cs" />
     <Compile Include="Helpers\ExpanderRotateAngleConverter.cs" />
+    <Compile Include="Helpers\NotifyPropertyChanged.cs" />
     <Compile Include="Helpers\SeverityToPackIconConverter.cs" />
     <Compile Include="Helpers\BoolToStringNotConverter.cs" />
     <Compile Include="Helpers\BoolToPackIconConverter.cs" />
@@ -125,6 +126,9 @@
     <Compile Include="Helpers\SkillsListConverter.cs" />
     <Compile Include="Helpers\SkillsValidationRule.cs" />
     <Compile Include="Helpers\WindowTitleConverter.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\TextFileLogger.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionSet.cs" />
@@ -181,7 +185,7 @@
     <Compile Include="Helpers\BoolToHVisibilityConverter.cs" />
     <Compile Include="Helpers\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

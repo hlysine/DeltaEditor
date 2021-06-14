@@ -18,7 +18,7 @@ namespace MyScript.IInk.UIReferenceImplementation
                 Bound = bound;
                 Transform = transform;
             }
-        };
+        }
 
         private System.Windows.Media.DrawingContext _drawingContext = null;
         private IRenderTarget _target;

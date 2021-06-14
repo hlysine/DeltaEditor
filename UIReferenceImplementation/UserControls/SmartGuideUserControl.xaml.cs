@@ -20,7 +20,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             public string Label;
             public bool Updated;
             public List<string> Candidates;
-        };
+        }
 
         private const int SMART_GUIDE_SIZE = 32;
 
@@ -42,7 +42,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             Edit,       /**< An edit occurred (writing or editing gesture). */
             Selection,  /**< The selection changed. */
             View        /**< View parameters changed (scroll or zoom). */
-        };
+        }
 
         private enum TextBlockStyle
         {
@@ -50,7 +50,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             H2,
             H3,
             NORMAL
-        };
+        }
 
         public delegate void MoreClickedHandler(Point globalPos);
 

@@ -1,4 +1,5 @@
 ﻿using DeltaQuestionEditor_WPF.Helpers;
+using DeltaQuestionEditor_WPF.Logging;
 using DeltaQuestionEditor_WPF.ViewModels;
 using DeltaQuestionEditor_WPF.Views;
 using Squirrel;
@@ -39,10 +40,7 @@ namespace DeltaQuestionEditor_WPF
                       onFirstRun: () => { FileAssociations.EnsureAssociationsSet(); });
                 }
             }
-            catch (Exception)
-            {
-
-            }
+            catch (Exception) { }
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)

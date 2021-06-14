@@ -24,7 +24,6 @@ namespace DeltaQuestionEditor_WPF.Helpers
             if (!appVersion.IsNullOrWhiteSpace())
                 ret += " v" + appVersion;
             return ret;
-
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

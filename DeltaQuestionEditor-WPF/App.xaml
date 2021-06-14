@@ -4,70 +4,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="clr-namespace:DeltaQuestionEditor_WPF.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    StartupUri="Views/MainWindow.xaml"
-    Startup="Application_Startup">
+    Startup="Application_Startup"
+    StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- material design styles -->
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/Generic.xaml" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
+                <!--  material design styles  -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignLightTheme.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignExtensions;component/Themes/MaterialDesignDarkTheme.xaml" />-->
 
-                <!-- primary colors -->
+                <!--  primary colors  -->
                 <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary
-                            Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Purple.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Purple.xaml" />
                     </ResourceDictionary.MergedDictionaries>
-                    <SolidColorBrush
-                        x:Key="PrimaryHueLightBrush"
-                        Color="{StaticResource Primary100}" />
-                    <SolidColorBrush
-                        x:Key="PrimaryHueLightForegroundBrush"
-                        Color="{StaticResource Primary100Foreground}" />
-                    <SolidColorBrush
-                        x:Key="PrimaryHueMidBrush"
-                        Color="{StaticResource Primary500}" />
-                    <SolidColorBrush
-                        x:Key="PrimaryHueMidForegroundBrush"
-                        Color="{StaticResource Primary500Foreground}" />
-                    <SolidColorBrush
-                        x:Key="PrimaryHueDarkBrush"
-                        Color="{StaticResource Primary600}" />
-                    <SolidColorBrush
-                        x:Key="PrimaryHueDarkForegroundBrush"
-                        Color="{StaticResource Primary600Foreground}" />
+                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}" />
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary500}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary600}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary600Foreground}" />
                 </ResourceDictionary>
 
-                <!-- accent color -->
+                <!--  accent color  -->
                 <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary
-                            Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Lime.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Lime.xaml" />
                     </ResourceDictionary.MergedDictionaries>
-                    <SolidColorBrush
-                        x:Key="SecondaryHueMidBrush"
-                        Color="{StaticResource Accent400}" />
-                    <SolidColorBrush
-                        x:Key="SecondaryHueMidForegroundBrush"
-                        Color="{StaticResource Accent400Foreground}" />
+                    <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="{StaticResource Accent400}" />
+                    <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="{StaticResource Accent400Foreground}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
-            <Style
-                TargetType="FrameworkElement"
-                x:Key="VisibleAnimation">
+            <Style x:Key="VisibleAnimation" TargetType="FrameworkElement">
                 <Style.Triggers>
-                    <Trigger
-                        Property="Visibility"
-                        Value="Visible">
+                    <Trigger Property="Visibility" Value="Visible">
                         <Trigger.EnterActions>
                             <BeginStoryboard>
                                 <Storyboard>
@@ -83,77 +57,93 @@
                 </Style.Triggers>
             </Style>
 
-            <helpers:SeverityToPackIconConverter
-                x:Key="SeverityToPackIconConverter" />
+            <helpers:SeverityToPackIconConverter x:Key="SeverityToPackIconConverter" />
 
-            <helpers:BoolToPackIconConverter
-                x:Key="BoolToPackIconConverter" />
+            <helpers:BoolToPackIconConverter x:Key="BoolToPackIconConverter" />
 
-            <helpers:BoolToStringNotConverter
-                x:Key="BoolToStringNotConverter" />
+            <helpers:BoolToStringNotConverter x:Key="BoolToStringNotConverter" />
 
-            <helpers:BoolToVisibilityConverter
-                x:Key="BoolToVisibilityConverter" />
+            <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-            <helpers:BoolToHVisibilityConverter
-                x:Key="BoolToHVisibilityConverter" />
+            <helpers:BoolToHVisibilityConverter x:Key="BoolToHVisibilityConverter" />
 
-            <helpers:BoolInverseConverter
-                x:Key="BoolInverseConverter" />
+            <helpers:BoolInverseConverter x:Key="BoolInverseConverter" />
 
-            <helpers:NullToVisibilityConverter
-                x:Key="NullToVisibilityConverter" />
+            <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-            <helpers:InverseNullToVisibilityConverter
-                x:Key="InverseNullToVisibilityConverter" />
+            <helpers:InverseNullToVisibilityConverter x:Key="InverseNullToVisibilityConverter" />
 
-            <helpers:SkillsListConverter
-                x:Key="SkillsListConverter" />
+            <helpers:SkillsListConverter x:Key="SkillsListConverter" />
 
-            <helpers:BitmapFrameConverter
-                x:Key="BitmapFrameConverter" />
+            <helpers:BitmapFrameConverter x:Key="BitmapFrameConverter" />
 
-            <helpers:WindowTitleConverter
-                x:Key="WindowTitleConverter" />
+            <helpers:WindowTitleConverter x:Key="WindowTitleConverter" />
 
-            <Style
-                x:Key="NonAnimatedExpander"
-                TargetType="{x:Type Expander}">
-                <Setter
-                    Property="BorderThickness"
-                    Value="0" />
-                <Setter
-                    Property="Background"
-                    Value="{DynamicResource MaterialDesignPaper}" />
-                <Setter
-                    Property="Foreground"
-                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}" />
-                <Setter
-                    Property="HorizontalContentAlignment"
-                    Value="Stretch" />
-                <Setter
-                    Property="VerticalContentAlignment"
-                    Value="Top" />
+            <Style x:Key="NonAnimatedExpander" TargetType="{x:Type Expander}">
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
 
-                <Setter
-                    Property="Template">
+                <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate
-                            TargetType="{x:Type Expander}">
+                        <ControlTemplate TargetType="{x:Type Expander}">
                             <ControlTemplate.Resources>
-                                <helpers:ExpanderRotateAngleConverter
-                                    x:Key="ExpanderRotateAngleConverter" />
+                                <helpers:ExpanderRotateAngleConverter x:Key="ExpanderRotateAngleConverter" />
                             </ControlTemplate.Resources>
-                            <Border
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                <DockPanel Background="{TemplateBinding Background}">
+                                    <ToggleButton
+                                        Name="HeaderSite"
+                                        BorderThickness="0"
+                                        Content="{TemplateBinding Header}"
+                                        ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                        ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                        Cursor="Hand"
+                                        DockPanel.Dock="Top"
+                                        Focusable="False"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        IsTabStop="False"
+                                        Opacity="0.87"
+                                        Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
+                                        TextElement.FontSize="15" />
+
+                                    <Border Name="ContentSite">
+                                        <Border.LayoutTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform x:Name="ContentSiteScaleTransform" />
+                                                <RotateTransform Angle="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}, Converter={StaticResource ExpanderRotateAngleConverter}}" />
+                                            </TransformGroup>
+                                        </Border.LayoutTransform>
+
+                                        <Grid
+                                            Name="ContentPanel"
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                            <Grid.LayoutTransform>
+                                                <RotateTransform Angle="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}, Converter={StaticResource ExpanderRotateAngleConverter}, ConverterParameter=-1}" />
+                                            </Grid.LayoutTransform>
+
+                                            <ContentPresenter
+                                                Name="PART_Content"
+                                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                Focusable="False" />
+
+                                        </Grid>
+                                    </Border>
+
+                                </DockPanel>
                                 <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup
-                                        x:Name="ExpansionStates">
+                                    <VisualStateGroup x:Name="ExpansionStates">
 
                                         <VisualStateGroup.Transitions>
-                                            <VisualTransition
-                                                To="Expanded">
+                                            <VisualTransition To="Expanded">
                                                 <Storyboard>
                                                     <!--<DoubleAnimation
                                                         Storyboard.TargetProperty="Opacity"
@@ -175,8 +165,7 @@
                                                 </Storyboard>
                                             </VisualTransition>
 
-                                            <VisualTransition
-                                                To="Collapsed">
+                                            <VisualTransition To="Collapsed">
                                                 <Storyboard>
                                                     <!--<DoubleAnimation
                                                         Storyboard.TargetProperty="Opacity"
@@ -199,12 +188,11 @@
                                             </VisualTransition>
                                         </VisualStateGroup.Transitions>
 
-                                        <VisualState
-                                            x:Name="Expanded">
+                                        <VisualState x:Name="Expanded">
                                             <Storyboard>
                                                 <DoubleAnimation
-                                                    Storyboard.TargetProperty="Opacity"
                                                     Storyboard.TargetName="ContentPanel"
+                                                    Storyboard.TargetProperty="Opacity"
                                                     To="1"
                                                     Duration="0" />
                                                 <DoubleAnimation
@@ -215,12 +203,11 @@
                                             </Storyboard>
                                         </VisualState>
 
-                                        <VisualState
-                                            x:Name="Collapsed">
+                                        <VisualState x:Name="Collapsed">
                                             <Storyboard>
                                                 <DoubleAnimation
-                                                    Storyboard.TargetProperty="Opacity"
                                                     Storyboard.TargetName="ContentPanel"
+                                                    Storyboard.TargetProperty="Opacity"
                                                     To="0"
                                                     Duration="0" />
                                                 <DoubleAnimation
@@ -233,114 +220,30 @@
 
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-
-                                <DockPanel
-                                    Background="{TemplateBinding Background}">
-                                    <ToggleButton
-                                        Name="HeaderSite"
-                                        Focusable="False"
-                                        IsTabStop="False"
-                                        DockPanel.Dock="Top"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        Style="{StaticResource MaterialDesignHorizontalHeaderStyle}"
-                                        TextElement.FontSize="15"
-                                        Opacity="0.87"
-                                        Foreground="{TemplateBinding Foreground}"
-                                        Content="{TemplateBinding Header}"
-                                        ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                        ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                        ContentStringFormat="{TemplateBinding HeaderStringFormat}" />
-
-                                    <Border
-                                        Name="ContentSite">
-                                        <Border.LayoutTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform
-                                                    x:Name="ContentSiteScaleTransform" />
-                                                <RotateTransform
-                                                    Angle="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}, Converter={StaticResource ExpanderRotateAngleConverter}}" />
-                                            </TransformGroup>
-                                        </Border.LayoutTransform>
-
-                                        <Grid
-                                            Name="ContentPanel"
-                                            Margin="{TemplateBinding Padding}"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                            <Grid.LayoutTransform>
-                                                <RotateTransform
-                                                    Angle="{Binding Path=ExpandDirection, RelativeSource={RelativeSource AncestorType=Expander}, Converter={StaticResource ExpanderRotateAngleConverter}, ConverterParameter=-1}" />
-                                            </Grid.LayoutTransform>
-
-                                            <ContentPresenter
-                                                Name="PART_Content"
-                                                Focusable="False"
-                                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
-
-                                        </Grid>
-                                    </Border>
-
-                                </DockPanel>
                             </Border>
                             <ControlTemplate.Triggers>
-                                <Trigger
-                                    Property="ExpandDirection"
-                                    Value="Right">
-                                    <Setter
-                                        Property="DockPanel.Dock"
-                                        TargetName="HeaderSite"
-                                        Value="Left" />
-                                    <Setter
-                                        Property="Style"
-                                        TargetName="HeaderSite"
-                                        Value="{StaticResource MaterialDesignVerticalHeaderStyle}" />
+                                <Trigger Property="ExpandDirection" Value="Right">
+                                    <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" />
+                                    <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource MaterialDesignVerticalHeaderStyle}" />
                                     <!--<Setter Property="LayoutTransform.(TransformGroup.Children)[1].(RotateTransform.Angle)" TargetName="ContentSite" Value="90" />
                             <Setter Property="Angle" TargetName="ContentPanelRotateTransform" Value="-90" />-->
                                 </Trigger>
 
-                                <Trigger
-                                    Property="ExpandDirection"
-                                    Value="Left">
-                                    <Setter
-                                        Property="DockPanel.Dock"
-                                        TargetName="HeaderSite"
-                                        Value="Right" />
-                                    <Setter
-                                        Property="Style"
-                                        TargetName="HeaderSite"
-                                        Value="{StaticResource MaterialDesignVerticalHeaderStyle}" />
+                                <Trigger Property="ExpandDirection" Value="Left">
+                                    <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" />
+                                    <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource MaterialDesignVerticalHeaderStyle}" />
                                     <!--<Setter Property="Angle" TargetName="ContentSiteRotateTransform" Value="-90" />
                             <Setter Property="Angle" TargetName="ContentPanelRotateTransform" Value="90" />-->
                                 </Trigger>
 
-                                <Trigger
-                                    Property="ExpandDirection"
-                                    Value="Up">
-                                    <Setter
-                                        Property="DockPanel.Dock"
-                                        TargetName="HeaderSite"
-                                        Value="Bottom" />
-                                    <Setter
-                                        Property="Style"
-                                        TargetName="HeaderSite"
-                                        Value="{StaticResource MaterialDesignHorizontalHeaderStyle}" />
+                                <Trigger Property="ExpandDirection" Value="Up">
+                                    <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" />
+                                    <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource MaterialDesignHorizontalHeaderStyle}" />
                                 </Trigger>
 
-                                <Trigger
-                                    Property="ExpandDirection"
-                                    Value="Down">
-                                    <Setter
-                                        Property="DockPanel.Dock"
-                                        TargetName="HeaderSite"
-                                        Value="Top" />
-                                    <Setter
-                                        Property="Style"
-                                        TargetName="HeaderSite"
-                                        Value="{StaticResource MaterialDesignHorizontalHeaderStyle}" />
+                                <Trigger Property="ExpandDirection" Value="Down">
+                                    <Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Top" />
+                                    <Setter TargetName="HeaderSite" Property="Style" Value="{StaticResource MaterialDesignHorizontalHeaderStyle}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -348,39 +251,22 @@
                 </Setter>
             </Style>
 
-            <Storyboard
-                x:Key="shakeStoryboard">
+            <Storyboard x:Key="shakeStoryboard">
                 <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">-->
                 <DoubleAnimationUsingKeyFrames
+                    FillBehavior="Stop"
                     Storyboard.TargetName="mainWindow"
-                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                    FillBehavior="Stop">
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.0500000"
-                        Value="-10" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.1000000"
-                        Value="0" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.1500000"
-                        Value="10" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.2000000"
-                        Value="0" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.2500000"
-                        Value="-10" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.3000000"
-                        Value="0" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.3500000"
-                        Value="10" />
-                    <SplineDoubleKeyFrame
-                        KeyTime="00:00:00.4000000"
-                        Value="0" />
-                </DoubleAnimationUsingKeyFrames >
-            </Storyboard >
+                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0500000" Value="-10" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.1500000" Value="10" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="-10" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3500000" Value="10" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

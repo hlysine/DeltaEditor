@@ -3,12 +3,9 @@ using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -238,30 +235,6 @@ namespace DeltaQuestionEditor_WPF.Helpers
                 ret += "\r\n\r\nInner exception:\r\n" + ExceptionToString(ex.InnerException);
             }
             return ret;
-        }
-    }
-
-    public class NotifyPropertyChanged : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected void NotifyChanged(IEnumerable<string> propertyName)
-        {
-            propertyName.ForEach(x => NotifyChanged(x));
-        }
-
-        protected void SetAndNotify<T>(ref T variable, T value, IEnumerable<string> calculatedProperties = null, [CallerMemberName] string memberName = null)
-        {
-            Contract.Requires(memberName != null);
-            variable = value;
-            NotifyChanged(memberName);
-            if (calculatedProperties != null)
-                NotifyChanged(calculatedProperties);
         }
     }
 }

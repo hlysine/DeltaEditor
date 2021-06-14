@@ -71,7 +71,6 @@ namespace MyScript.IInk.UIReferenceImplementation
                 {
                     throw new Exception("No bitmap encoder available.");
                 }
-
             }
 
             _image = null;

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
-namespace DeltaQuestionEditor_WPF.Helpers
+namespace DeltaQuestionEditor_WPF.Logging
 {
-    using static Helper;
+    using static DeltaQuestionEditor_WPF.Helpers.Helper;
     static class Logger
     {
         public static List<ILogger> Loggers { get; private set; } = new List<ILogger>();
@@ -39,31 +38,5 @@ namespace DeltaQuestionEditor_WPF.Helpers
         Error,
         Warning,
         Info
-    }
-
-    interface ILogger
-    {
-        void Log(string text);
-    }
-
-    class ConsoleLogger : ILogger
-    {
-        public void Log(string text)
-        {
-            Console.WriteLine(text);
-        }
-    }
-
-    class TextFileLogger : ILogger
-    {
-        public TextFileLogger()
-        {
-            EnsurePathExist(AppDataPath());
-        }
-
-        public void Log(string text)
-        {
-            File.AppendAllText(AppDataPath("log.txt"), text);
-        }
     }
 }

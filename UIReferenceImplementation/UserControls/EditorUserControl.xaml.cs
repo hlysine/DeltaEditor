@@ -7,7 +7,6 @@ using System.Windows.Input;
 
 namespace MyScript.IInk.UIReferenceImplementation
 {
-
     public enum InputMode
     {
         AUTO = 0,

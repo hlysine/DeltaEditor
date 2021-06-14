@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
-using static DeltaQuestionEditor_WPF.Helpers.Helper;
 
 namespace DeltaQuestionEditor_WPF.Config
 {
+    using static DeltaQuestionEditor_WPF.Helpers.Helper;
     static class ConfigStore
     {
         public static ConfigObject Config { get; private set; }

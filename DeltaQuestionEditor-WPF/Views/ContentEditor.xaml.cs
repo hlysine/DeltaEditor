@@ -1,5 +1,6 @@
 ﻿using CefSharp;
 using DeltaQuestionEditor_WPF.Helpers;
+using DeltaQuestionEditor_WPF.Logging;
 using MyScript.IInk;
 using MyScript.IInk.UIReferenceImplementation;
 using System;
@@ -438,7 +439,7 @@ namespace DeltaQuestionEditor_WPF.Views
             }
         }
 
-        private async void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //if (toggleMath.IsSelected)
             //{

@@ -2,7 +2,6 @@
 
 namespace MyScript.Certificate
 {
-
     /// <summary>
     /// The <c>MyCertificate</c> class provides the bytes of the user
     /// certificate used to grant the access to the MyScript technologies.
@@ -620,5 +619,5 @@ namespace MyScript.Certificate
             83,   -43,  38,   90,   120,  55,   -8,   100,
             24,   -65,  -123, 55,   -89,  -111, 68
         };
-    };
+    }
 }

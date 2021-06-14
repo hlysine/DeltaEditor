@@ -3,7 +3,7 @@ name: Release build
 on:
   release:
     types: [created]
-    
+
 jobs:
   build:
 
@@ -28,13 +28,13 @@ jobs:
 
     - name: Build App
       run: msbuild DeltaQuestionEditor-WPF.sln /p:Configuration=Release /p:Platform=x64
-      
+
     - name: Get release
       id: get_release
       uses: bruceadams/get-release@v1.2.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: Upload release binary
       uses: dwenegar/upload-release-assets@v1
       env:
