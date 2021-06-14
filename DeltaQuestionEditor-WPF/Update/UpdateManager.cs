@@ -1,10 +1,8 @@
 ﻿using DeltaQuestionEditor_WPF.Helpers;
 using Squirrel;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,10 +11,7 @@ namespace DeltaQuestionEditor_WPF.Update
     using static DeltaQuestionEditor_WPF.Helpers.Helper;
     class UpdateManager : NotifyPropertyChanged
     {
-        public string AppVersion
-        {
-            get => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
+        public string AppVersion => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         int updateProgress = 0;
         public int UpdateProgress
@@ -34,12 +29,7 @@ namespace DeltaQuestionEditor_WPF.Update
 
         SemaphoreSlim updateFinished = new SemaphoreSlim(0, 1);
 
-        public bool UpdateFinished
-        {
-            get => updateFinished.CurrentCount > 0;
-        }
-
-
+        public bool UpdateFinished => updateFinished.CurrentCount > 0;
         private bool upToDate = false;
         public bool UpToDate
         {
@@ -110,7 +100,7 @@ namespace DeltaQuestionEditor_WPF.Update
             }
             catch (Exception ex)
             {
-                UpdateStatus = "Update error"; 
+                UpdateStatus = "Update error";
                 Logger.LogException(ex, ex.Source);
             }
             updateFinished.Release();

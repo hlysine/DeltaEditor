@@ -1,11 +1,6 @@
 ﻿using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Models
 {
@@ -21,16 +16,12 @@ namespace DeltaQuestionEditor_WPF.Models
             get => id;
             set => SetAndNotify(ref id, value);
         }
-
-
         private string fileName;
         public string FileName
         {
             get => fileName;
             set => SetAndNotify(ref fileName, value);
         }
-
-
         private string name;
         public string Name
         {
@@ -39,9 +30,6 @@ namespace DeltaQuestionEditor_WPF.Models
         }
 
         [JsonIgnore]
-        public string FullPath
-        {
-            get => DataSource?.TempToAbsolutePath(FileName);
-        }
+        public string FullPath => DataSource?.TempToAbsolutePath(FileName);
     }
 }

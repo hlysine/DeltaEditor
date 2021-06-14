@@ -1,9 +1,4 @@
 ﻿using DeltaQuestionEditor_WPF.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Models.Validation
 {
@@ -15,16 +10,12 @@ namespace DeltaQuestionEditor_WPF.Models.Validation
             get => description;
             set => SetAndNotify(ref description, value);
         }
-
-
         private ProblemSeverity severity;
         public ProblemSeverity Severity
         {
             get => severity;
             set => SetAndNotify(ref severity, value);
         }
-
-
         private object focusObject;
         public object FocusObject
         {
@@ -33,7 +24,9 @@ namespace DeltaQuestionEditor_WPF.Models.Validation
         }
 
         public ValidationProblem(ProblemSeverity severity, string description, object focusObject)
-            => (Severity, Description, FocusObject) = (severity, description, focusObject);
+        {
+            (Severity, Description, FocusObject) = (severity, description, focusObject);
+        }
     }
 
     public enum ProblemSeverity

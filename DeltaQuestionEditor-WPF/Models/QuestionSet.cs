@@ -1,12 +1,7 @@
 ﻿using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Models
 {
@@ -22,16 +17,12 @@ namespace DeltaQuestionEditor_WPF.Models
             get => form;
             set => SetAndNotify(ref form, value, new[] { nameof(TopicName) });
         }
-
-
         private int chapter = 1;
         public int Chapter
         {
             get => chapter;
             set => SetAndNotify(ref chapter, value, new[] { nameof(TopicName) });
         }
-
-
         private ValidationToken validation;
         public ValidationToken Validation
         {
@@ -40,10 +31,7 @@ namespace DeltaQuestionEditor_WPF.Models
         }
 
         [JsonIgnore]
-        public string TopicName
-        {
-            get => DataSource?.GetTopicName(Form, Chapter) ?? "Invalid topic";
-        }
+        public string TopicName => DataSource?.GetTopicName(Form, Chapter) ?? "Invalid topic";
 
         private ObservableCollection<Question> questions = new ObservableCollection<Question>();
         public ObservableCollection<Question> Questions
@@ -51,7 +39,7 @@ namespace DeltaQuestionEditor_WPF.Models
             get => questions;
             set
             {
-                if (questions != null) 
+                if (questions != null)
                     questions.CollectionChanged -= Questions_CollectionChanged;
                 SetAndNotify(ref questions, value);
                 if (questions != null)
@@ -81,11 +69,12 @@ namespace DeltaQuestionEditor_WPF.Models
 
         public string GetHash()
         {
-            return Helper.SHA1Hash(JsonConvert.SerializeObject(this, new JsonSerializerSettings() { 
-                Formatting = Formatting.None, 
-                ContractResolver = new DynamicContractResolver(new[] { 
-                    nameof(Validation) 
-                }) 
+            return Helper.SHA1Hash(JsonConvert.SerializeObject(this, new JsonSerializerSettings()
+            {
+                Formatting = Formatting.None,
+                ContractResolver = new DynamicContractResolver(new[] {
+                    nameof(Validation)
+                })
             }));
         }
     }

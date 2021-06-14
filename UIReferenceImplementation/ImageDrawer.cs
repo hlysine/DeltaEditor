@@ -36,7 +36,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             if ((_image != null) && !string.IsNullOrWhiteSpace(path))
             {
                 BitmapEncoder encoder = null;
-                
+
                 var pos = path.LastIndexOf('.');
 
                 if (pos >= 0)
@@ -49,11 +49,11 @@ namespace MyScript.IInk.UIReferenceImplementation
                         string[] pngExtensions = MimeTypeF.GetFileExtensions(MimeType.PNG)?.Split(',');
                         string[] gifExtensions = MimeTypeF.GetFileExtensions(MimeType.GIF)?.Split(',');
 
-                        if ( (pngExtensions != null) && pngExtensions.Contains(ext) )
+                        if ((pngExtensions != null) && pngExtensions.Contains(ext))
                             encoder = new PngBitmapEncoder();
-                        else if ( (jpgExtensions != null) && jpgExtensions.Contains(ext) )
+                        else if ((jpgExtensions != null) && jpgExtensions.Contains(ext))
                             encoder = new JpegBitmapEncoder();
-                        else if ( (gifExtensions != null) && gifExtensions.Contains(ext) )
+                        else if ((gifExtensions != null) && gifExtensions.Contains(ext))
                             encoder = new GifBitmapEncoder();
                     }
                 }

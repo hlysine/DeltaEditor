@@ -1,22 +1,9 @@
 ﻿using DeltaQuestionEditor_WPF.ViewModels;
-using Squirrel;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -67,7 +54,8 @@ namespace DeltaQuestionEditor_WPF.Views
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                if (files.Length == 0) return;
+                if (files.Length == 0)
+                    return;
 
                 var qdb = files.Where(x => Path.GetExtension(x) == ".qdb").ToArray();
 

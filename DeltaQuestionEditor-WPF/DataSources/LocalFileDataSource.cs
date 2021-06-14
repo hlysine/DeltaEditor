@@ -8,11 +8,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace DeltaQuestionEditor_WPF.DataSources
 {
@@ -25,38 +23,25 @@ namespace DeltaQuestionEditor_WPF.DataSources
             get => questionSet;
             private set => SetAndNotify(ref questionSet, value);
         }
-
-
         private string filePath = null;
         public string FilePath
         {
             get => filePath;
             private set => SetAndNotify(ref filePath, value, new[] { SafeFileName });
         }
-
-
-        public string SafeFileName
-        {
-            get => FilePath.IsNullOrEmpty() ? string.Empty : Path.GetFileName(FilePath);
-        }
-
-
+        public string SafeFileName => FilePath.IsNullOrEmpty() ? string.Empty : Path.GetFileName(FilePath);
         private DateTime lastSaved;
         public DateTime LastSaved
         {
             get => lastSaved;
             set => SetAndNotify(ref lastSaved, value);
         }
-
-
         private string tempPath;
         public string TempPath
         {
             get => tempPath;
             set => SetAndNotify(ref tempPath, value);
         }
-
-
         private FileStream fileStream;
 
         public LocalFileDataSource()
@@ -211,7 +196,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// <param name="path">Path to qdb file.</param>
         public async Task<LoadQuestionStatus> LoadQuestionSet(string path)
         {
-            if (IsFileLocked(path)) return LoadQuestionStatus.FileLocked;
+            if (IsFileLocked(path))
+                return LoadQuestionStatus.FileLocked;
             if (fileStream != null && FilePath != path)
             {
                 fileStream.Dispose();
@@ -309,14 +295,17 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// <exception cref="InvalidOperationException">Thrown if <code>QuestionSet</code> is null.</exception>
         public async Task SaveQuestionSet(string path = null)
         {
-            if (QuestionSet == null) throw new InvalidOperationException("QuestionSet is null");
+            if (QuestionSet == null)
+                throw new InvalidOperationException("QuestionSet is null");
             if (fileStream != null && FilePath != path)
             {
                 fileStream.Dispose();
                 fileStream = null;
             }
-            if (path != null) FilePath = path;
-            else if (FilePath == null) throw new ArgumentNullException("path is null and there is no saved file path");
+            if (path != null)
+                FilePath = path;
+            else if (FilePath == null)
+                throw new ArgumentNullException("path is null and there is no saved file path");
             if (fileStream == null)
                 fileStream = new FileStream(FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             await Task.Run(() =>
@@ -353,7 +342,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
         /// <exception cref="InvalidOperationException">Thrown if <code>QuestionSet</code> is null.</exception>
         public async Task<string> AddMedia(string path)
         {
-            if (QuestionSet == null) throw new InvalidOperationException("QuestionSet is null");
+            if (QuestionSet == null)
+                throw new InvalidOperationException("QuestionSet is null");
 
             Media media = new Media();
             await Task.Run(() =>
@@ -397,7 +387,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
             }
 
             string id = await AddMedia(newMediaPath);
-            if (id == oldMedia.Id) return null;
+            if (id == oldMedia.Id)
+                return null;
             Media newMedia = QuestionSet.Media.First(x => x.Id == id);
 
             Application.Current.Dispatcher.Invoke(() =>

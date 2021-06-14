@@ -1,15 +1,13 @@
 // Copyright @ MyScript. All rights reserved.
 
 using System;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Input;
 
 namespace MyScript.IInk.UIReferenceImplementation
 {
     public class LayerControl : Label
-    {      
+    {
         public Renderer Renderer { get; set; }
         public ImageLoader ImageLoader { get; set; }
 

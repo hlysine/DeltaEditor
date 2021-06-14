@@ -16,13 +16,7 @@ namespace MyScript.Certificate
         /// <value>
         /// The bytes of the user certificate.
         /// </value>
-        public static sbyte[] Bytes
-        {
-            get
-            {
-                return BYTES;
-            }
-        }
+        public static sbyte[] Bytes => BYTES;
 
         /// <summary>
         /// The bytes of the user certificate.

@@ -1,12 +1,9 @@
 // Copyright @ MyScript. All rights reserved.
 
-using MyScript.IInk.Graphics;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace MyScript.IInk.UIReferenceImplementation
 {
@@ -95,8 +92,6 @@ namespace MyScript.IInk.UIReferenceImplementation
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-
-
     /// <summary>
     /// Interaction logic for EditorControl.xaml
     /// </summary>
@@ -111,60 +106,24 @@ namespace MyScript.IInk.UIReferenceImplementation
 
         public Engine Engine
         {
-            get
-            {
-                return _engine;
-            }
+            get => _engine;
 
-            set
-            {
-                _engine = value;
-            }
+            set => _engine = value;
         }
 
-        public Editor Editor
-        {
-            get
-            {
-                return _editor;
-            }
-        }
+        public Editor Editor => _editor;
 
-        public Renderer Renderer
-        {
-            get
-            {
-                return _renderer;
-            }
-        }
+        public Renderer Renderer => _renderer;
 
-        public ImageLoader ImageLoader
-        {
-            get
-            {
-                return _loader;
-            }
-        }
+        public ImageLoader ImageLoader => _loader;
 
-        public SmartGuideUserControl SmartGuide
-        {
-            get
-            {
-                return smartGuide;
-            }
-        }
+        public SmartGuideUserControl SmartGuide => smartGuide;
 
         public bool SmartGuideEnabled
         {
-            get
-            {
-                return _smartGuideEnabled;
-            }
+            get => _smartGuideEnabled;
 
-            set
-            {
-                EnableSmartGuide(value);
-            }
+            set => EnableSmartGuide(value);
         }
 
         public InputMode InputMode { get; set; }

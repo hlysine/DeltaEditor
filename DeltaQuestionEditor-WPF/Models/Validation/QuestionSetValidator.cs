@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models.Validation.Rules;
-using DeltaQuestionEditor_WPF.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace DeltaQuestionEditor_WPF.Models.Validation
 {
@@ -41,29 +39,11 @@ namespace DeltaQuestionEditor_WPF.Models.Validation
             set => SetAndNotify(ref validationProgress, value);
         }
 
-        public bool IsValid
-        {
-            get
-            {
-                return questionSet != null && questionSet.Validation?.Hash == questionSet.GetHash();
-            }
-        }
+        public bool IsValid => questionSet != null && questionSet.Validation?.Hash == questionSet.GetHash();
 
-        public int ErrorsCount
-        {
-            get
-            {
-                return Problems.Count(x => x.Severity == ProblemSeverity.Error);
-            }
-        }
+        public int ErrorsCount => Problems.Count(x => x.Severity == ProblemSeverity.Error);
 
-        public int WarningsCount
-        {
-            get
-            {
-                return Problems.Count(x => x.Severity == ProblemSeverity.Warning);
-            }
-        }
+        public int WarningsCount => Problems.Count(x => x.Severity == ProblemSeverity.Warning);
 
         private ObservableCollection<ValidationProblem> problems = new ObservableCollection<ValidationProblem>();
         public ObservableCollection<ValidationProblem> Problems

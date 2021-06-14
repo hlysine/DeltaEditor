@@ -8,7 +8,6 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -175,7 +174,8 @@ namespace DeltaQuestionEditor_WPF.Helpers
         {
             var waitTask = Task.Run(async () =>
             {
-                while (condition()) await Task.Delay(frequency);
+                while (condition())
+                    await Task.Delay(frequency);
             });
 
             if (waitTask != await Task.WhenAny(waitTask, Task.Delay(timeout)))
@@ -193,7 +193,8 @@ namespace DeltaQuestionEditor_WPF.Helpers
         {
             var waitTask = Task.Run(async () =>
             {
-                while (!condition()) await Task.Delay(frequency);
+                while (!condition())
+                    await Task.Delay(frequency);
             });
 
             if (waitTask != await Task.WhenAny(waitTask,
@@ -220,9 +221,12 @@ namespace DeltaQuestionEditor_WPF.Helpers
 
         public static Exception GetInnermostException(this Exception ex)
         {
-            if (ex == null) return ex;
-            else if (ex.InnerException == null) return ex;
-            else return GetInnermostException(ex.InnerException);
+            if (ex == null)
+                return ex;
+            else if (ex.InnerException == null)
+                return ex;
+            else
+                return GetInnermostException(ex.InnerException);
         }
 
         public static string ExceptionToString(this Exception ex)
@@ -256,7 +260,8 @@ namespace DeltaQuestionEditor_WPF.Helpers
             Contract.Requires(memberName != null);
             variable = value;
             NotifyChanged(memberName);
-            if (calculatedProperties != null) NotifyChanged(calculatedProperties);
+            if (calculatedProperties != null)
+                NotifyChanged(calculatedProperties);
         }
     }
 }

@@ -1,7 +1,6 @@
 // Copyright @ MyScript. All rights reserved.
 
 using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -23,8 +22,6 @@ namespace MyScript.IInk.UIReferenceImplementation
 
             return new Vector(dpiX * dcuPx.X, dpiY * dcuPx.Y);
         }
-
-
         /// <summary>
         /// Returns the scaling of the given screen.
         /// </summary>

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using System.IO;
 using static DeltaQuestionEditor_WPF.Helpers.Helper;
-using Newtonsoft.Json;
 
 namespace DeltaQuestionEditor_WPF.Config
 {

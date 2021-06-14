@@ -4,7 +4,6 @@ using System.Json;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -25,17 +24,17 @@ namespace MyScript.IInk.UIReferenceImplementation
 
         private const int SMART_GUIDE_SIZE = 32;
 
-        private const int SMART_GUIDE_FADE_OUT_DELAY_WRITE_IN_DIAGRAM_DEFAULT   = 3000;
-        private const int SMART_GUIDE_FADE_OUT_DELAY_WRITE_OTHER_DEFAULT        = 0;
-        private const int SMART_GUIDE_FADE_OUT_DELAY_OTHER_DEFAULT              = 0;
-        private const int SMART_GUIDE_HIGHLIGHT_REMOVAL_DELAY_DEFAULT           = 2000;
+        private const int SMART_GUIDE_FADE_OUT_DELAY_WRITE_IN_DIAGRAM_DEFAULT = 3000;
+        private const int SMART_GUIDE_FADE_OUT_DELAY_WRITE_OTHER_DEFAULT = 0;
+        private const int SMART_GUIDE_FADE_OUT_DELAY_OTHER_DEFAULT = 0;
+        private const int SMART_GUIDE_HIGHLIGHT_REMOVAL_DELAY_DEFAULT = 2000;
 
-        private const int SMART_GUIDE_CLICK_TIMING  = 300;  // timing in ms
-        private const int SMART_GUIDE_CLICK_DXY     = 5;    // distance in px
+        private const int SMART_GUIDE_CLICK_TIMING = 300;  // timing in ms
+        private const int SMART_GUIDE_CLICK_DXY = 5;    // distance in px
 
-        private Color SMART_GUIDE_CONTROL_COLOR         = Color.FromArgb(0xFF, 0x95, 0x9D, 0xA6);
-        private Color SMART_GUIDE_TEXT_DEFAULT_COLOR    = Color.FromArgb(0xFF, 0xBF, 0xBF, 0xBF);
-        private Color SMART_GUIDE_TEXT_HIGHLIGHT_COLOR  = Colors.Black;
+        private Color SMART_GUIDE_CONTROL_COLOR = Color.FromArgb(0xFF, 0x95, 0x9D, 0xA6);
+        private Color SMART_GUIDE_TEXT_DEFAULT_COLOR = Color.FromArgb(0xFF, 0xBF, 0xBF, 0xBF);
+        private Color SMART_GUIDE_TEXT_HIGHLIGHT_COLOR = Colors.Black;
 
         private enum UpdateCause
         {
@@ -84,8 +83,8 @@ namespace MyScript.IInk.UIReferenceImplementation
 
         public Editor Editor
         {
-            get { return _editor; }
-            set { SetEditor(value); }
+            get => _editor;
+            set => SetEditor(value);
         }
 
         public event MoreClickedHandler MoreClicked
@@ -94,10 +93,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             remove { _moreClicked -= value; UpdateMoreItemVisibility(); }
         }
 
-        public ContentBlock ContentBlock
-        {
-            get { return _currentBlock; }
-        }
+        public ContentBlock ContentBlock => _currentBlock;
 
         public SmartGuideUserControl()
         {
@@ -136,11 +132,11 @@ namespace MyScript.IInk.UIReferenceImplementation
 
             // Input buttons events: use preview events because of tunneling/bubbling/swallowing behavior
             this.PreviewMouseDown += MousePressEvent;
-            this.PreviewMouseUp +=  MouseReleaseEvent;
+            this.PreviewMouseUp += MouseReleaseEvent;
             this.PreviewStylusDown += StylusPressEvent;
-            this.PreviewStylusUp +=  StylusReleaseEvent;
+            this.PreviewStylusUp += StylusReleaseEvent;
             this.PreviewTouchDown += TouchPressEvent;
-            this.PreviewTouchUp +=  TouchReleaseEvent;
+            this.PreviewTouchUp += TouchReleaseEvent;
             this.MouseMove += MouseMoveEvent_;
             this.StylusMove += StylusMoveEvent_;
             this.TouchMove += TouchMoveEvent_;
@@ -393,7 +389,7 @@ namespace MyScript.IInk.UIReferenceImplementation
                 Margin = new Thickness(Math.Floor(x), Math.Floor(y - ActualHeight), 0, 0);
 
                 Label lastUpdatedItem = null;
-                if ( (cause == UpdateCause.Edit) || (cause == UpdateCause.Selection) )
+                if ((cause == UpdateCause.Edit) || (cause == UpdateCause.Selection))
                 {
                     // Update text
                     textItem.Children.Clear();
@@ -403,17 +399,18 @@ namespace MyScript.IInk.UIReferenceImplementation
                         var label = word.Label;
                         label = label.Replace('\n', ' ');
 
-                        var item = new Label{
-                                                Content = label,
-                                                HorizontalAlignment = HorizontalAlignment.Left,
-                                                VerticalAlignment = VerticalAlignment.Stretch,
-                                                HorizontalContentAlignment = HorizontalAlignment.Left,
-                                                VerticalContentAlignment = VerticalAlignment.Center,
-                                                Padding = new Thickness(0),
-                                                BorderThickness = new Thickness(0),
-                                                Margin = new Thickness(0),
-                                                Background = Brushes.Transparent
-                                             };
+                        var item = new Label
+                        {
+                            Content = label,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            HorizontalContentAlignment = HorizontalAlignment.Left,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Padding = new Thickness(0),
+                            BorderThickness = new Thickness(0),
+                            Margin = new Thickness(0),
+                            Background = Brushes.Transparent
+                        };
 
                         if (word.Updated)
                             item.Foreground = new SolidColorBrush(SMART_GUIDE_TEXT_HIGHLIGHT_COLOR);
@@ -500,7 +497,7 @@ namespace MyScript.IInk.UIReferenceImplementation
 
             // The active block may have been removed then added again in which case
             // the old instance is invalid but can be restored by remapping the identifier
-            if ( (_activeBlock != null) && !_activeBlock.IsValid())
+            if ((_activeBlock != null) && !_activeBlock.IsValid())
             {
                 var activeBlockId = _activeBlock.Id;
                 _activeBlock?.Dispose();
@@ -533,7 +530,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             {
                 using (var block = _editor.GetBlockById(blockId))
                 {
-                    if ( (block != null) && (block.Type == "Text") )
+                    if ((block != null) && (block.Type == "Text"))
                     {
                         _selectedBlock = block?.ShallowCopy();
                         break;
@@ -572,7 +569,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             _activeBlock?.Dispose();
             _activeBlock = _editor.GetBlockById(blockId);
 
-            if ( (_currentBlock != null) && (_activeBlock != null) && (_currentBlock.Id == _activeBlock.Id) )
+            if ((_currentBlock != null) && (_activeBlock != null) && (_currentBlock.Id == _activeBlock.Id))
                 return; // selectionChanged already changed the active block
 
             BackupData();
@@ -601,18 +598,18 @@ namespace MyScript.IInk.UIReferenceImplementation
             int j;
 
             // Levenshtein distance algorithm at word level
-            d[0,0] = 0;
-            for(i = 1; i <= len1; ++i)
-                d[i,0] = (uint)i;
-            for(i = 1; i <= len2; ++i)
-                d[0,i] = (uint)i;
+            d[0, 0] = 0;
+            for (i = 1; i <= len1; ++i)
+                d[i, 0] = (uint)i;
+            for (i = 1; i <= len2; ++i)
+                d[0, i] = (uint)i;
 
-            for(i = 1; i <= len1; ++i)
+            for (i = 1; i <= len1; ++i)
             {
-                for(j = 1; j <= len2; ++j)
+                for (j = 1; j <= len2; ++j)
                 {
-                    var d_ = Math.Min(d[i - 1,j] + 1, d[i,j - 1] + 1);
-                    d[i,j] = (uint)(Math.Min(d_ , d[i - 1,j - 1] + (s1[i - 1].Label == s2[j - 1].Label ? 0 : 1) ));
+                    var d_ = Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1);
+                    d[i, j] = (uint)(Math.Min(d_, d[i - 1, j - 1] + (s1[i - 1].Label == s2[j - 1].Label ? 0 : 1)));
                 }
             }
 
@@ -624,23 +621,23 @@ namespace MyScript.IInk.UIReferenceImplementation
                 s2[j] = word;
             }
 
-            if ( (len1 > 0) && (len2 > 0) )
+            if ((len1 > 0) && (len2 > 0))
             {
                 i = len1;
                 j = len2;
 
                 while (j > 0)
                 {
-                    int d01 = (int)d[i,j-1];
-                    int d11 = (i > 0) ? (int)d[i-1,j-1] : -1;
-                    int d10 = (i > 0) ? (int)d[i-1,j] : -1;
+                    int d01 = (int)d[i, j - 1];
+                    int d11 = (i > 0) ? (int)d[i - 1, j - 1] : -1;
+                    int d10 = (i > 0) ? (int)d[i - 1, j] : -1;
 
-                    if ( (d11 >= 0) && (d11 <= d10) && (d11 <= d01) )
+                    if ((d11 >= 0) && (d11 <= d10) && (d11 <= d01))
                     {
                         --i;
                         --j;
                     }
-                    else if ( (d10 >= 0) && (d10 <= d11) && (d10 <= d01) )
+                    else if ((d10 >= 0) && (d10 <= d11) && (d10 <= d01))
                     {
                         --i;
                     }
@@ -649,7 +646,7 @@ namespace MyScript.IInk.UIReferenceImplementation
                         --j;
                     }
 
-                    if ( (i < len1) && (j < len2) )
+                    if ((i < len1) && (j < len2))
                     {
                         var word = s2[j];
                         word.Updated = s1[i].Label != s2[j].Label;
@@ -823,8 +820,8 @@ namespace MyScript.IInk.UIReferenceImplementation
                         var item = item_ as Label;
                         var xy_ = GetInputPosition(e, item);
 
-                        if ( (xy_.X >= 0) && (xy_.X < item.ActualWidth)
-                            && (xy_.Y >= 0) && (xy_.Y < item.ActualHeight) )
+                        if ((xy_.X >= 0) && (xy_.X < item.ActualWidth)
+                            && (xy_.Y >= 0) && (xy_.Y < item.ActualHeight))
                         {
                             OnWordClicked(item, idx, GetInputPosition(e, null));
                             break;
@@ -843,7 +840,7 @@ namespace MyScript.IInk.UIReferenceImplementation
 
         private void MouseReleaseEvent(object sender, MouseButtonEventArgs e)
         {
-            if ( (e.ChangedButton == MouseButton.Left) && _pointerDown)
+            if ((e.ChangedButton == MouseButton.Left) && _pointerDown)
             {
                 OnReleaseEvent(sender, e);
                 e.Handled = true;
@@ -887,7 +884,7 @@ namespace MyScript.IInk.UIReferenceImplementation
 
                 var contextMenu = new ContextMenu();
                 contextMenu.Tag = (object)wordIndex;
- 
+
                 foreach (var candidate in word.Candidates)
                 {
                     MenuItem item = new MenuItem();

@@ -1,13 +1,7 @@
 ﻿using CefSharp;
 using DeltaQuestionEditor_WPF.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -39,8 +33,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         public string Question
         {
-            get { return (string)GetValue(QuestionProperty); }
-            set { SetValue(QuestionProperty, value); }
+            get => (string)GetValue(QuestionProperty);
+            set => SetValue(QuestionProperty, value);
         }
 
         private static void QuestionChanged(DependencyObject d,
@@ -52,8 +46,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void QuestionChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (!browserPreview.IsBrowserInitialized) return;
-            if (!browserPreview.CanExecuteJavascriptInMainFrame) return;
+            if (!browserPreview.IsBrowserInitialized)
+                return;
+            if (!browserPreview.CanExecuteJavascriptInMainFrame)
+                return;
             if (toggleAutoRefresh.IsChecked.GetValueOrDefault())
                 setPreviewQuestionAsync(Question);
         }
@@ -64,8 +60,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         public ObservableCollection<string> Answers
         {
-            get { return (ObservableCollection<string>)GetValue(AnswersProperty); }
-            set { SetValue(AnswersProperty, value); }
+            get => (ObservableCollection<string>)GetValue(AnswersProperty);
+            set => SetValue(AnswersProperty, value);
         }
 
         private static void AnswersChanged(DependencyObject d,
@@ -77,8 +73,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void AnswersChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (!browserPreview.IsBrowserInitialized) return;
-            if (!browserPreview.CanExecuteJavascriptInMainFrame) return;
+            if (!browserPreview.IsBrowserInitialized)
+                return;
+            if (!browserPreview.CanExecuteJavascriptInMainFrame)
+                return;
             if (e.NewValue != e.OldValue)
             {
                 var oldList = e.OldValue as ObservableCollection<string>;
@@ -98,8 +96,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         public string TempPath
         {
-            get { return (string)GetValue(TempPathProperty); }
-            set { SetValue(TempPathProperty, value); }
+            get => (string)GetValue(TempPathProperty);
+            set => SetValue(TempPathProperty, value);
         }
 
         private static void TempPathChanged(DependencyObject d,
@@ -111,8 +109,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void TempPathChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (!browserPreview.IsBrowserInitialized) return;
-            if (!browserPreview.CanExecuteJavascriptInMainFrame) return;
+            if (!browserPreview.IsBrowserInitialized)
+                return;
+            if (!browserPreview.CanExecuteJavascriptInMainFrame)
+                return;
             setPreviewAnswersAsync(Answers);
             setPreviewQuestionAsync(Question);
         }
@@ -137,7 +137,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void browserPreview_FrameLoadEnd(object sender, CefSharp.FrameLoadEndEventArgs e)
         {
-            if (!e.Frame.IsMain) return;
+            if (!e.Frame.IsMain)
+                return;
             Dispatcher.Invoke(() =>
             {
                 setPreviewQuestionAsync(Question);
@@ -178,7 +179,7 @@ namespace DeltaQuestionEditor_WPF.Views
         {
             if (browserPreview.IsBrowserInitialized)
             {
-                browserPreview.LoadHtml(Properties.Resources.preview, $"file:///{TempPath.Replace('\\','/')}/");
+                browserPreview.LoadHtml(Properties.Resources.preview, $"file:///{TempPath.Replace('\\', '/')}/");
             }
         }
 

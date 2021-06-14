@@ -1,20 +1,15 @@
 ﻿using CefSharp;
 using DeltaQuestionEditor_WPF.Helpers;
 using MyScript.IInk;
+using MyScript.IInk.UIReferenceImplementation;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
-using System.IO;
-using MyScript.IInk.UIReferenceImplementation;
-using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace DeltaQuestionEditor_WPF.Views
 {
@@ -29,11 +24,13 @@ namespace DeltaQuestionEditor_WPF.Views
         private int _suppressDPEvent = 0;
         public bool suppressDPEvent
         {
-            get { return (Interlocked.CompareExchange(ref _suppressDPEvent, 1, 1) == 1); }
+            get => (Interlocked.CompareExchange(ref _suppressDPEvent, 1, 1) == 1);
             set
             {
-                if (value) Interlocked.CompareExchange(ref _suppressDPEvent, 1, 0);
-                else Interlocked.CompareExchange(ref _suppressDPEvent, 0, 1);
+                if (value)
+                    Interlocked.CompareExchange(ref _suppressDPEvent, 1, 0);
+                else
+                    Interlocked.CompareExchange(ref _suppressDPEvent, 0, 1);
             }
         }
 
@@ -60,7 +57,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void BrowserEditor_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
         {
-            if (!e.Frame.IsMain) return;
+            if (!e.Frame.IsMain)
+                return;
             Dispatcher.Invoke(() => setEditorTextAsync(Text));
         }
 
@@ -77,8 +75,8 @@ namespace DeltaQuestionEditor_WPF.Views
 
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         private static void TextChanged(DependencyObject d,
@@ -90,15 +88,19 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void TextChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (suppressDPEvent) return;
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (suppressDPEvent)
+                return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             setEditorTextAsync(Text);
         }
 
         private void setEditorTextAsync(string text)
         {
-            if (text == null) text = "";
+            if (text == null)
+                text = "";
             browserEditor.ExecuteScriptAsync($@"edit.getModel().setValue({text.ToJSLiteral()});");
         }
 
@@ -110,8 +112,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void btnBold_Click(object sender, RoutedEventArgs e)
         {
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             browserEditor.ExecuteScriptAsync(@"
                 var selections = edit.getSelections();
                 var edits = selections.map(selection => {
@@ -135,8 +139,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void btnItalic_Click(object sender, RoutedEventArgs e)
         {
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             browserEditor.ExecuteScriptAsync(@"
                 var selections = edit.getSelections();
                 var edits = selections.map(selection => {
@@ -160,8 +166,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void btnHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             browserEditor.ExecuteScriptAsync(@"
                 var selections = edit.getSelections();
                 var edits = selections.map(selection => {
@@ -178,8 +186,10 @@ namespace DeltaQuestionEditor_WPF.Views
 
         private void btnHeader_Click(object sender, RoutedEventArgs e)
         {
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             browserEditor.ExecuteScriptAsync(@"
                 var selections = edit.getSelections();
                 var edits = selections.map(selection => {
@@ -205,13 +215,15 @@ namespace DeltaQuestionEditor_WPF.Views
                         return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
                 );
-            "); 
+            ");
         }
 
         private void btnBullets_Click(object sender, RoutedEventArgs e)
         {
-            if (!browserEditor.IsBrowserInitialized) return;
-            if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+            if (!browserEditor.IsBrowserInitialized)
+                return;
+            if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                return;
             browserEditor.ExecuteScriptAsync(@"
                 var selections = edit.getSelections();
                 var edits = selections.map(selection => {
@@ -308,8 +320,6 @@ namespace DeltaQuestionEditor_WPF.Views
 
             NewFile();
         }
-
-
         private void ClosePackage()
         {
             var part = _editor.Part;
@@ -403,9 +413,12 @@ namespace DeltaQuestionEditor_WPF.Views
                 {
                     _editor.Convert(null, supportedStates[0]);
                     string latex = $"${_editor.Export_(null, MimeType.LATEX)}$";
-                    if (latex == "$$") latex = "";
-                    if (!browserEditor.IsBrowserInitialized) return;
-                    if (!browserEditor.CanExecuteJavascriptInMainFrame) return;
+                    if (latex == "$$")
+                        latex = "";
+                    if (!browserEditor.IsBrowserInitialized)
+                        return;
+                    if (!browserEditor.CanExecuteJavascriptInMainFrame)
+                        return;
                     browserEditor.ExecuteScriptAsync(@"
                         var selections = edit.getSelections();
                         var edits = selections.map(selection => {

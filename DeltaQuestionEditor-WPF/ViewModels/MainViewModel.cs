@@ -1,4 +1,5 @@
 ﻿using DeltaQuestionEditor_WPF.Config;
+using DeltaQuestionEditor_WPF.Consts;
 using DeltaQuestionEditor_WPF.DataSources;
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Models;
@@ -22,7 +23,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DeltaQuestionEditor_WPF.Consts;
 
 namespace DeltaQuestionEditor_WPF.ViewModels
 {
@@ -76,8 +76,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
         public Action<object> AppInitialize { get; private set; }
         public Action<object> AppClosed { get; private set; }
-
-
         private UpdateManager updater = new UpdateManager();
 
         public UpdateManager Updater
@@ -85,8 +83,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => updater;
             set => SetAndNotify(ref updater, value);
         }
-
-
         private LocalFileDataSource dataSource;
 
         public LocalFileDataSource DataSource
@@ -94,8 +90,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => dataSource;
             set => SetAndNotify(ref dataSource, value);
         }
-
-
         private QuestionSetValidator validator;
 
         public QuestionSetValidator Validator
@@ -103,8 +97,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => validator;
             set => SetAndNotify(ref validator, value);
         }
-
-
         private string loadingState;
 
         public string LoadingState
@@ -112,8 +104,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => loadingState;
             set => SetAndNotify(ref loadingState, value);
         }
-
-
         private bool questionListPanel = true;
 
         public bool QuestionListPanel
@@ -121,8 +111,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => questionListPanel;
             set => SetAndNotify(ref questionListPanel, value);
         }
-
-
         private bool mediaListPanel = true;
 
         public bool MediaListPanel
@@ -130,8 +118,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => mediaListPanel;
             set => SetAndNotify(ref mediaListPanel, value);
         }
-
-
         private Question selectedQuestion;
 
         public Question SelectedQuestion
@@ -139,8 +125,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => selectedQuestion;
             set => SetAndNotify(ref selectedQuestion, value);
         }
-
-
         private bool questionListEditMode;
 
         public bool QuestionListEditMode
@@ -148,8 +132,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => questionListEditMode;
             set => SetAndNotify(ref questionListEditMode, value);
         }
-
-
         private Media selectedMedia;
 
         public Media SelectedMedia
@@ -157,8 +139,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => selectedMedia;
             set => SetAndNotify(ref selectedMedia, value);
         }
-
-
         private bool mediaListEditMode;
 
         public bool MediaListEditMode
@@ -166,8 +146,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => mediaListEditMode;
             set => SetAndNotify(ref mediaListEditMode, value);
         }
-
-
         private SnackbarMessageQueue mainMessageQueue = new SnackbarMessageQueue();
 
         public SnackbarMessageQueue MainMessageQueue
@@ -175,8 +153,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => mainMessageQueue;
             set => SetAndNotify(ref mainMessageQueue, value);
         }
-
-
         private bool exitConfirmed;
 
         public bool ExitConfirmed
@@ -184,8 +160,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => exitConfirmed;
             set => SetAndNotify(ref exitConfirmed, value);
         }
-
-
         private bool confirmExitDialog = false;
 
         public bool ConfirmExitDialog
@@ -193,8 +167,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => confirmExitDialog;
             set => SetAndNotify(ref confirmExitDialog, value);
         }
-
-
         private bool topicSelectorDialog;
 
         public bool TopicSelectorDialog
@@ -202,8 +174,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => topicSelectorDialog;
             set => SetAndNotify(ref topicSelectorDialog, value);
         }
-
-
         private bool validatorDialog;
 
         public bool ValidatorDialog
@@ -211,8 +181,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
             get => validatorDialog;
             set => SetAndNotify(ref validatorDialog, value);
         }
-
-
         private bool welcomeDialog;
 
         public bool WelcomeDialog
@@ -225,16 +193,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
 
         ICommand closeWindowCommand;
 
-        public ICommand CloseWindowCommand
-        {
-            get
-            {
-                return closeWindowCommand ??= new RelayCommand(
+        public ICommand CloseWindowCommand => closeWindowCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
                         (CancelEventArgs, MainWindow) args = ((CancelEventArgs, MainWindow))param;
-                        if (args.Item1 == null || args.Item2 == null) return;
+                        if (args.Item1 == null || args.Item2 == null)
+                            return;
                         if (DataSource?.QuestionSet == null)
                             ExitConfirmed = true;
                         if (ExitConfirmed)
@@ -261,40 +226,25 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return true; }
                 );
-            }
-        }
-
-
         ICommand confirmCloseCommand;
 
-        public ICommand ConfirmCloseCommand
-        {
-            get
-            {
-                return confirmCloseCommand ??= new RelayCommand(
+        public ICommand ConfirmCloseCommand => confirmCloseCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
                         ConfirmExitDialog = false;
                         ExitConfirmed = true;
                         Window window = param as Window;
-                        if (window == null) return;
+                        if (window == null)
+                            return;
                         window.Close();
                     },
                     // can execute
                     (param) => { return !ExitConfirmed && param as Window != null; }
                 );
-            }
-        }
-
-
         ICommand cancelCloseCommand;
 
-        public ICommand CancelCloseCommand
-        {
-            get
-            {
-                return cancelCloseCommand ??= new RelayCommand(
+        public ICommand CancelCloseCommand => cancelCloseCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
@@ -304,17 +254,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return !ExitConfirmed; }
                 );
-            }
-        }
-
-
         ICommand importFromExcelCommand;
 
-        public ICommand ImportFromExcelCommand
-        {
-            get
-            {
-                return importFromExcelCommand ??= new RelayCommand(
+        public ICommand ImportFromExcelCommand => importFromExcelCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
@@ -355,10 +297,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
 
                         List<string> paths = (param as IEnumerable<string>)?.ToList();
-                        if (paths == null) paths = new List<string>();
+                        if (paths == null)
+                            paths = new List<string>();
                         string paramPath = param as string;
-                        if (paramPath != null) paths.Add(paramPath);
-                        if (paths.Count == 0) paths.Add(null);
+                        if (paramPath != null)
+                            paths.Add(paramPath);
+                        if (paths.Count == 0)
+                            paths.Add(null);
                         foreach (string path in paths)
                         {
                             if (DataSource.QuestionSet == null)
@@ -405,16 +350,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return true; }
                 );
-            }
-        }
 
         ICommand newFileCommand;
 
-        public ICommand NewFileCommand
-        {
-            get
-            {
-                return newFileCommand ??= new RelayCommand(
+        public ICommand NewFileCommand => newFileCommand ??= new RelayCommand(
                     // execute
                     _ =>
                     {
@@ -433,16 +372,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return true; }
                 );
-            }
-        }
 
         ICommand openFileCommand;
 
-        public ICommand OpenFileCommand
-        {
-            get
-            {
-                return openFileCommand ??= new RelayCommand(
+        public ICommand OpenFileCommand => openFileCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
@@ -479,10 +412,13 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                         }
 
                         List<string> paths = (param as IEnumerable<string>)?.ToList();
-                        if (paths == null) paths = new List<string>();
+                        if (paths == null)
+                            paths = new List<string>();
                         string paramPath = param as string;
-                        if (paramPath != null) paths.Add(paramPath);
-                        if (paths.Count == 0) paths.Add(null);
+                        if (paramPath != null)
+                            paths.Add(paramPath);
+                        if (paths.Count == 0)
+                            paths.Add(null);
                         foreach (string path in paths)
                         {
                             if (DataSource.QuestionSet == null)
@@ -528,16 +464,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return true; }
                 );
-            }
-        }
 
         ICommand saveFileCommand;
 
-        public ICommand SaveFileCommand
-        {
-            get
-            {
-                return saveFileCommand ??= new RelayCommand(
+        public ICommand SaveFileCommand => saveFileCommand ??= new RelayCommand(
                     // execute
                     async _ =>
                     {
@@ -567,16 +497,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return DataSource.QuestionSet != null; }
                 );
-            }
-        }
 
         ICommand saveAsCommand;
 
-        public ICommand SaveAsCommand
-        {
-            get
-            {
-                return saveAsCommand ??= new RelayCommand(
+        public ICommand SaveAsCommand => saveAsCommand ??= new RelayCommand(
                     // execute
                     async _ =>
                     {
@@ -595,16 +519,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return DataSource.QuestionSet != null; }
                 );
-            }
-        }
 
         ICommand addQuestionCommand;
 
-        public ICommand AddQuestionCommand
-        {
-            get
-            {
-                return addQuestionCommand ??= new RelayCommand(
+        public ICommand AddQuestionCommand => addQuestionCommand ??= new RelayCommand(
                     // execute
                     _ =>
                     {
@@ -620,22 +538,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return DataSource?.QuestionSet?.Questions != null; }
                 );
-            }
-        }
-
-
         ICommand deleteQuestionCommand;
 
-        public ICommand DeleteQuestionCommand
-        {
-            get
-            {
-                return deleteQuestionCommand ??= new RelayCommand(
+        public ICommand DeleteQuestionCommand => deleteQuestionCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
                         Question question = param as Question;
-                        if (question == null) throw new ArgumentNullException("Question to be deleted is null");
+                        if (question == null)
+                            throw new ArgumentNullException("Question to be deleted is null");
                         int index = DataSource.QuestionSet.Questions.IndexOf(question);
                         DataSource.QuestionSet.Questions.Remove(question);
                         MainMessageQueue.Clear();
@@ -651,22 +562,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return (DataSource?.QuestionSet?.Questions?.Contains(param)).GetValueOrDefault(); }
                 );
-            }
-        }
-
-
         ICommand copyQuestionCommand;
 
-        public ICommand CopyQuestionCommand
-        {
-            get
-            {
-                return copyQuestionCommand ??= new RelayCommand(
+        public ICommand CopyQuestionCommand => copyQuestionCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
                         Question question = param as Question;
-                        if (question == null) throw new ArgumentNullException("Question to be copied is null");
+                        if (question == null)
+                            throw new ArgumentNullException("Question to be copied is null");
                         int index = DataSource.QuestionSet.Questions.IndexOf(question);
                         Question clone = (Question)question.Clone();
                         if (index >= 0)
@@ -679,7 +583,8 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                             "UNDO",
                             (param) =>
                             {
-                                if (DataSource?.QuestionSet?.Questions == null) return;
+                                if (DataSource?.QuestionSet?.Questions == null)
+                                    return;
                                 if (DataSource.QuestionSet.Questions.Contains(clone))
                                     DataSource.QuestionSet.Questions.Remove(clone);
                             },
@@ -691,17 +596,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return param != null && DataSource?.QuestionSet?.Questions != null; }
                 );
-            }
-        }
-
-
         ICommand addMediaCommand;
 
-        public ICommand AddMediaCommand
-        {
-            get
-            {
-                return addMediaCommand ??= new RelayCommand(
+        public ICommand AddMediaCommand => addMediaCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
@@ -762,22 +659,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return DataSource?.QuestionSet?.Media != null; }
                 );
-            }
-        }
-
-
         ICommand copyMediaCodeCommand;
 
-        public ICommand CopyMediaCodeCommand
-        {
-            get
-            {
-                return copyMediaCodeCommand ??= new RelayCommand(
+        public ICommand CopyMediaCodeCommand => copyMediaCodeCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
                         Media media = param as Media;
-                        if (media == null) throw new ArgumentNullException("Media is null when getting copy code");
+                        if (media == null)
+                            throw new ArgumentNullException("Media is null when getting copy code");
                         Clipboard.SetDataObject($"![media]({media.FileName.Replace('\\', '/')})");
                         MainMessageQueue.Clear();
                         MainMessageQueue.Enqueue(string.Format(EditorSnackMessages.MEDIA_COPY_CODE_SUCCESS,
@@ -786,17 +676,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return param as Media != null; }
                 );
-            }
-        }
-
-
         ICommand replaceMediaCommand;
 
-        public ICommand ReplaceMediaCommand
-        {
-            get
-            {
-                return replaceMediaCommand ??= new RelayCommand(
+        public ICommand ReplaceMediaCommand => replaceMediaCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
@@ -828,8 +710,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                             $"![$1]({newPath.Replace('\\', '/')})");
                                     }
 
-                                    if (DataSource?.QuestionSet?.Media == null) return;
-                                    if (!DataSource.QuestionSet.Media.Contains(param.newMedia)) return;
+                                    if (DataSource?.QuestionSet?.Media == null)
+                                        return;
+                                    if (!DataSource.QuestionSet.Media.Contains(param.newMedia))
+                                        return;
                                     LoadingState = EditorLoadingStates.MEDIA_REPLACE_UNDOING;
                                     undo = true;
                                     DataSource.QuestionSet.Media.Insert(
@@ -891,22 +775,15 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                                DataSource.QuestionSet.Media.Contains(SelectedMedia);
                     }
                 );
-            }
-        }
-
-
         ICommand deleteMediaCommand;
 
-        public ICommand DeleteMediaCommand
-        {
-            get
-            {
-                return deleteMediaCommand ??= new RelayCommand(
+        public ICommand DeleteMediaCommand => deleteMediaCommand ??= new RelayCommand(
                     // execute
                     async (param) =>
                     {
                         Media media = param as Media;
-                        if (media == null) throw new ArgumentNullException("Media to be deleted is null");
+                        if (media == null)
+                            throw new ArgumentNullException("Media to be deleted is null");
                         LoadingState = EditorLoadingStates.MEDIA_DELETING;
                         int index = DataSource.QuestionSet.Media.IndexOf(media);
                         DataSource.QuestionSet.Media.Remove(media);
@@ -932,16 +809,10 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return (DataSource?.QuestionSet?.Media?.Contains(param)).GetValueOrDefault(); }
                 );
-            }
-        }
 
         ICommand validateQuestionSetCommand;
 
-        public ICommand ValidateQuestionSetCommand
-        {
-            get
-            {
-                return validateQuestionSetCommand ??= new RelayCommand(
+        public ICommand ValidateQuestionSetCommand => validateQuestionSetCommand ??= new RelayCommand(
                     // execute
                     _ =>
                     {
@@ -960,17 +831,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     _ => { return DataSource?.QuestionSet != null && Validator != null; }
                 );
-            }
-        }
-
-
         ICommand openValidatorDialogCommand;
 
-        public ICommand OpenValidatorDialogCommand
-        {
-            get
-            {
-                return openValidatorDialogCommand ??= new RelayCommand(
+        public ICommand OpenValidatorDialogCommand => openValidatorDialogCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
@@ -980,17 +843,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return DataSource?.QuestionSet != null && Validator != null; }
                 );
-            }
-        }
-
-
         ICommand validationProblemLocateObjectCommand;
 
-        public ICommand ValidationProblemLocateObjectCommand
-        {
-            get
-            {
-                return validationProblemLocateObjectCommand ??= new RelayCommand(
+        public ICommand ValidationProblemLocateObjectCommand => validationProblemLocateObjectCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
@@ -1014,17 +869,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return true; }
                 );
-            }
-        }
-
-
         ICommand showWelcomeDialogCommand;
 
-        public ICommand ShowWelcomeDialogCommand
-        {
-            get
-            {
-                return showWelcomeDialogCommand ??= new RelayCommand(
+        public ICommand ShowWelcomeDialogCommand => showWelcomeDialogCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
@@ -1034,17 +881,9 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return !WelcomeDialog; }
                 );
-            }
-        }
-
-
         ICommand openHelpCommand;
 
-        public ICommand OpenHelpCommand
-        {
-            get
-            {
-                return openHelpCommand ??= new RelayCommand(
+        public ICommand OpenHelpCommand => openHelpCommand ??= new RelayCommand(
                     // execute
                     (param) =>
                     {
@@ -1053,8 +892,6 @@ namespace DeltaQuestionEditor_WPF.ViewModels
                     // can execute
                     (param) => { return true; }
                 );
-            }
-        }
 
         public MainViewModel()
         {

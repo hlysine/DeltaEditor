@@ -1,9 +1,9 @@
 // Copyright @ MyScript. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Collections.Generic;
 
 namespace MyScript.IInk.UIReferenceImplementation
 {
@@ -124,13 +124,7 @@ namespace MyScript.IInk.UIReferenceImplementation
         private LruImgCache _cache;
         private const int CACHE_MAX_BYTES = 200 * 1000000;  // 200M (in Bytes)
 
-        public Editor Editor
-        {
-            get
-            {
-                return _editor;
-            }
-        }
+        public Editor Editor => _editor;
 
         public ImageLoader(Editor editor, string cacheDirectory)
         {

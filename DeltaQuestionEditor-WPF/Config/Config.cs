@@ -1,9 +1,4 @@
 ﻿using DeltaQuestionEditor_WPF.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Config
 {

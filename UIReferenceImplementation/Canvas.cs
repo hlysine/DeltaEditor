@@ -4,8 +4,6 @@ using MyScript.IInk.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-
-
 namespace MyScript.IInk.UIReferenceImplementation
 {
     public class Canvas : ICanvas
@@ -21,7 +19,7 @@ namespace MyScript.IInk.UIReferenceImplementation
                 Transform = transform;
             }
         };
-        
+
         private System.Windows.Media.DrawingContext _drawingContext = null;
         private IRenderTarget _target;
         private ImageLoader _imageLoader;
@@ -63,14 +61,8 @@ namespace MyScript.IInk.UIReferenceImplementation
 
         public Transform Transform
         {
-            get
-            {
-                return _transform;
-            }
-            set
-            {
-                _transform = value;
-            }
+            get => _transform;
+            set => _transform = value;
         }
 
         public void SetStrokeColor(Color color)
@@ -198,9 +190,9 @@ namespace MyScript.IInk.UIReferenceImplementation
 
                 // Apply transform to clipping rect
                 var rect = new Rect(x, y, width, height);
-                var transform = new System.Windows.Media.Matrix(    _transform.XX, _transform.XY,
+                var transform = new System.Windows.Media.Matrix(_transform.XX, _transform.XY,
                                                                     _transform.YX, _transform.YY,
-                                                                    _transform.TX, _transform.TY );
+                                                                    _transform.TX, _transform.TY);
                 rect = Rect.Transform(rect, transform);
 
                 // Push clipping rect
@@ -217,7 +209,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             {
                 _activeGroup = _groups[id];
                 _groups.Remove(id);
-                
+
                 // Pop clipping rect
                 _drawingContext.Pop();
             }
@@ -234,9 +226,9 @@ namespace MyScript.IInk.UIReferenceImplementation
         private void PushRenderStates()
         {
             // Push current transform
-            var transform = new System.Windows.Media.MatrixTransform(   _transform.XX, _transform.XY,
+            var transform = new System.Windows.Media.MatrixTransform(_transform.XX, _transform.XY,
                                                                         _transform.YX, _transform.YY,
-                                                                        _transform.TX, _transform.TY );
+                                                                        _transform.TX, _transform.TY);
             _drawingContext.PushTransform(transform);
         }
 

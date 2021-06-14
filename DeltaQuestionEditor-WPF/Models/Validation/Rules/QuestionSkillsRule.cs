@@ -1,16 +1,9 @@
 ﻿using DeltaQuestionEditor_WPF.Consts;
-using DeltaQuestionEditor_WPF.Helpers;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
 {
-    using static DeltaQuestionEditor_WPF.Helpers.Helper;
     public class QuestionSkillsRule : QuestionSetValidationRule
     {
         public override List<ValidationProblem> Validate(QuestionSet questionSet)

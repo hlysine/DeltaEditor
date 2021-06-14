@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DeltaQuestionEditor_WPF.Consts
+﻿namespace DeltaQuestionEditor_WPF.Consts
 {
     /// <summary>
     /// String literals for import failures. The import process will be aborted in these cases.

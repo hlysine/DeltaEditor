@@ -26,10 +26,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             return _path;
         }
 
-        public uint UnsupportedOperations
-        {
-            get { return (uint)MyScript.IInk.Graphics.PathOperation.ARC_OPS; }
-        }
+        public uint UnsupportedOperations => (uint)MyScript.IInk.Graphics.PathOperation.ARC_OPS;
 
         public void MoveTo(float x, float y)
         {

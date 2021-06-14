@@ -1,16 +1,9 @@
-﻿using CefSharp.Wpf;
-using DeltaQuestionEditor_WPF.Helpers;
+﻿using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.ViewModels;
 using DeltaQuestionEditor_WPF.Views;
 using Squirrel;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -68,7 +61,8 @@ namespace DeltaQuestionEditor_WPF
             {
                 ShowExceptionDialog(e.Exception, "Application.Current.DispatcherUnhandledException");
 #if DEBUG
-                if (e.Exception is NullReferenceException && e.Exception.Source == "MaterialDesignExtensions") e.Handled = true;
+                if (e.Exception is NullReferenceException && e.Exception.Source == "MaterialDesignExtensions")
+                    e.Handled = true;
 #else
                 e.Handled = true;
 #endif
@@ -93,7 +87,8 @@ namespace DeltaQuestionEditor_WPF
         {
             Logger.LogException(ex, source);
             // TODO: what is this exception?
-            if (ex is NullReferenceException && ex.Source == "MaterialDesignExtensions") return;
+            if (ex is NullReferenceException && ex.Source == "MaterialDesignExtensions")
+                return;
             ExceptionWindow window = new ExceptionWindow();
             ExceptionViewModel viewModel = new ExceptionViewModel();
             viewModel.Exception = ex;

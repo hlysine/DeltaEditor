@@ -1,15 +1,12 @@
 // Copyright @ MyScript. All rights reserved.
 
-using MyScript.IInk.Text;
 using MyScript.IInk.Graphics;
+using MyScript.IInk.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
-using System;
-using System.Threading;
 
 namespace MyScript.IInk.UIReferenceImplementation
 {
@@ -49,7 +46,7 @@ namespace MyScript.IInk.UIReferenceImplementation
             public FontFamily FontFamily { get; }
             public float FontSize { get; }
             public FontWeight FontWeight { get; }
-            public FontStretch FontStretch{ get; }
+            public FontStretch FontStretch { get; }
             public FontStyle FontStyle { get; }
 
             public FontKey(FontFamily fontFamily, float fontSize, FontWeight fontWeight, FontStretch fontStretch, FontStyle fontStyle)
@@ -67,11 +64,11 @@ namespace MyScript.IInk.UIReferenceImplementation
                     return false;
 
                 FontKey other = (FontKey)obj;
-                return  (   (this.FontFamily.Equals(other.FontFamily))
-                        &&  (this.FontSize == other.FontSize)
-                        &&  (this.FontWeight == other.FontWeight)
-                        &&  (this.FontStretch == other.FontStretch)
-                        &&  (this.FontStyle == other.FontStyle) );
+                return ((this.FontFamily.Equals(other.FontFamily))
+                        && (this.FontSize == other.FontSize)
+                        && (this.FontWeight == other.FontWeight)
+                        && (this.FontStretch == other.FontStretch)
+                        && (this.FontStyle == other.FontStyle));
             }
 
             public override int GetHashCode()
@@ -90,9 +87,9 @@ namespace MyScript.IInk.UIReferenceImplementation
             var fontStyle = FontStyles.Normal;
 
             if (style.FontStyle.Equals("italic"))
-                fontStyle =  FontStyles.Italic;
+                fontStyle = FontStyles.Italic;
             else if (style.FontStyle.Equals("oblique"))
-                fontStyle =  FontStyles.Oblique;
+                fontStyle = FontStyles.Oblique;
 
             if (style.FontWeight >= 700)
                 fontWeight = FontWeights.Bold;
@@ -235,8 +232,8 @@ namespace MyScript.IInk.UIReferenceImplementation
             {
                 var glyphRun = glyphs.GlyphRun;
 
-                if (    (glyphRun.Characters != null) && (glyphRun.ClusterMap != null)
-                    &&  (glyphRun.Characters.Count == glyphRun.ClusterMap.Count) )
+                if ((glyphRun.Characters != null) && (glyphRun.ClusterMap != null)
+                    && (glyphRun.Characters.Count == glyphRun.ClusterMap.Count))
                 {
                     var text = new String(glyphRun.Characters.ToArray());
                     var tee = System.Globalization.StringInfo.GetTextElementEnumerator(text);
@@ -248,12 +245,12 @@ namespace MyScript.IInk.UIReferenceImplementation
 
                         var g = tee.ElementIndex;
 
-                        if ( (g > 0) && (idx > 0) && (glyphRun.ClusterMap[g] == glyphRun.ClusterMap[g-1]) )
+                        if ((g > 0) && (idx > 0) && (glyphRun.ClusterMap[g] == glyphRun.ClusterMap[g - 1]))
                         {
                             // Ligature with the previous glyph
                             // The position is not accurate because of glyphs substitution at rendering
                             // but it makes the illusion.
-                            var prevGlyphMetrics = glyphMetrics[idx-1];
+                            var prevGlyphMetrics = glyphMetrics[idx - 1];
                             glyphMetrics[idx].BoundingBox.Y -= px2mm(baseline, dpiY);
                             glyphMetrics[idx].BoundingBox.X = prevGlyphMetrics.BoundingBox.X
                                                             + prevGlyphMetrics.BoundingBox.Width

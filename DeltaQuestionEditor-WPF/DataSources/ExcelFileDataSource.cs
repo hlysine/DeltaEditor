@@ -1,21 +1,16 @@
 ﻿using DeltaQuestionEditor_WPF.Consts;
 using DeltaQuestionEditor_WPF.Models;
 using ExcelDataReader;
-using MaterialDesignColors.Recommended;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Navigation;
-using System.Windows.Threading;
 
 namespace DeltaQuestionEditor_WPF.DataSources
 {
@@ -35,7 +30,10 @@ namespace DeltaQuestionEditor_WPF.DataSources
         private bool hasHeader;
         private List<(Field, int)> columnMapping = new List<(Field, int)>();
 
-        private void failed(string reason) => LastFailMessage = $"{Path.GetFileName(FilePath)} import failed: {reason}";
+        private void failed(string reason)
+        {
+            LastFailMessage = $"{Path.GetFileName(FilePath)} import failed: {reason}";
+        }
 
         private int headerScore(object[] itemsArray)
         {
@@ -84,7 +82,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
 
         public async Task<bool> AnalyzeFile()
         {
-            if (dataSet == null) throw new InvalidOperationException("Read the file before analyzing");
+            if (dataSet == null)
+                throw new InvalidOperationException("Read the file before analyzing");
             return await Task.Run(() =>
             {
                 if (dataSet.Tables.Count < 1)
@@ -125,7 +124,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
                     return (x, fitScore, 7 * (2 * x.Rows.Count - 1));
                 }).ToList();
                 var tableScoreSet = tableScores.MaxBy(x => x.Item2 / (double)x.Item3).FirstOrDefault();
-                if (tableScoreSet != default) table = tableScoreSet.Item1;
+                if (tableScoreSet != default)
+                    table = tableScoreSet.Item1;
                 if (table == null)
                 {
                     failed(ExcelImportFailures.NO_VALID_WORKSHEET);
@@ -231,7 +231,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
         {
             return await Task.Run(() =>
              {
-                 if (hasHeader) rows.RemoveAt(0);
+                 if (hasHeader)
+                     rows.RemoveAt(0);
                  foreach (string[] row in rows)
                  {
                      Question question = new Question();
@@ -384,7 +385,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
                 else
                 {
                     string filename = Path.GetFileName(path);
-                    if (filename.IndexOf('.') == -1) filename += ".*";
+                    if (filename.IndexOf('.') == -1)
+                        filename += ".*";
                     var allFiles = Directory.GetFiles(Path.GetDirectoryName(FilePath), filename, SearchOption.AllDirectories);
                     if (allFiles.Length > 0)
                     {
@@ -413,7 +415,8 @@ namespace DeltaQuestionEditor_WPF.DataSources
             List<(string, string)> replacements = new List<(string, string)>();
             foreach (Match match in matches)
             {
-                if (dataSource.QuestionSet.Media.Any(x => x.FileName.Replace('\\', '/') == match.Groups[2].Value.Replace('\\', '/'))) continue;
+                if (dataSource.QuestionSet.Media.Any(x => x.FileName.Replace('\\', '/') == match.Groups[2].Value.Replace('\\', '/')))
+                    continue;
                 Media media = await locateAndImportMedia(match.Groups[2].Value, dataSource);
                 if (media != null)
                 {
