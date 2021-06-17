@@ -8,81 +8,87 @@ namespace DeltaQuestionEditor_WPF.Models.Validation.Rules
     using static DeltaQuestionEditor_WPF.Helpers.Helper;
     public class QuestionTextMarkdownRule : QuestionSetValidationRule
     {
+        private bool checkAsciiMath(string text)
+        {
+            var matches = Regex.Matches(text, @"(?<!\\)\\*`");
+            foreach (Match match in matches)
+            {
+                if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
+                {
+                    text = Regex.Replace(text, @"(?<!\\)" + match.Value.Replace("\\", "\\\\"), "");
+                }
+            }
+            matches = Regex.Matches(text, @"`.*?`");
+            return matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}"));
+        }
+
+        private bool checkLaTeX(string text)
+        {
+            var matches = Regex.Matches(text, @"(?<!\\)\\*\$");
+            foreach (Match match in matches)
+            {
+                if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
+                {
+                    text = Regex.Replace(text, @"(?<!\\)" + match.Value.Replace("\\", "\\\\").Replace("$", @"\$"), "");
+                }
+            }
+            matches = Regex.Matches(text, @"\$.*?\$");
+            return matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}"));
+        }
+
+        private bool checkUnformattedMath(string text)
+        {
+            var matches = Regex.Matches(text, @"(?<!\\)\\*`");
+            foreach (Match match in matches)
+            {
+                if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
+                {
+                    text = Regex.Replace(text, @"(?<!\\)" + match.Value.Replace("\\", "\\\\"), "");
+                }
+            }
+            matches = Regex.Matches(text, @"`.*?`");
+            foreach (Match match in matches)
+            {
+                text = text.Replace(match.Value, "");
+            }
+            matches = Regex.Matches(text, @"(?<!\\)\\*\$");
+            foreach (Match match in matches)
+            {
+                if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
+                {
+                    text = Regex.Replace(text, @"(?<!\\)" + match.Value.Replace("\\", "\\\\").Replace("$", @"\$"), "");
+                }
+            }
+            matches = Regex.Matches(text, @"\$.*?\$");
+            foreach (Match match in matches)
+            {
+                text = text.Replace(match.Value, "");
+            }
+            matches = Regex.Matches(text, @"(?<=\w{2,}\s*)[-/](?=\s*\w{2,})");
+            for (int j = matches.Count - 1; j >= 0; j--)
+            {
+                Match match = matches[j];
+                text = text.Substring(0, match.Index) + text.Substring(match.Index + match.Length);
+            }
+            return Regex.IsMatch(text, @"[+\-*/0-9]");
+        }
+
         private List<ValidationProblem> validateText(Question question, int i, string text, string textName)
         {
             List<ValidationProblem> problems = new List<ValidationProblem>();
             if (!text.IsNullOrWhiteSpace())
             {
                 // Check for misinterpreted AsciiMath
-                string tmp = text;
-                MatchCollection matches = Regex.Matches(tmp, @"(?<!\\)\\*`");
-                foreach (Match match in matches)
-                {
-                    if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
-                    {
-                        tmp = Regex.Replace(tmp, @"(?<!\\)" + match.Value.Replace("\\", "\\\\"), "");
-                    }
-                }
-                matches = Regex.Matches(tmp, @"`.*?`");
-                if (matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}")))
-                {
+                if (checkAsciiMath(text))
                     problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_ASCIIMATH_MISINTERPRETATION, textName, i + 1), question));
-                }
 
                 // Check for misinterpreted LaTeX
-                tmp = text;
-                matches = Regex.Matches(tmp, @"(?<!\\)\\*\$");
-                foreach (Match match in matches)
-                {
-                    if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
-                    {
-                        tmp = Regex.Replace(tmp, @"(?<!\\)" + match.Value.Replace("\\", "\\\\").Replace("$", @"\$"), "");
-                    }
-                }
-                matches = Regex.Matches(tmp, @"\$.*?\$");
-                if (matches.Cast<Match>().Any(x => Regex.IsMatch(x.Value, @"[a-zA-Z]{2}\s[a-zA-Z]{2}")))
-                {
+                if (checkLaTeX(text))
                     problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_LATEX_MISINTERPRETATION, textName, i + 1), question));
-                }
 
                 // Check for unformatted math
-                tmp = text;
-                matches = Regex.Matches(tmp, @"(?<!\\)\\*`");
-                foreach (Match match in matches)
-                {
-                    if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
-                    {
-                        tmp = Regex.Replace(tmp, @"(?<!\\)" + match.Value.Replace("\\", "\\\\"), "");
-                    }
-                }
-                matches = Regex.Matches(tmp, @"`.*?`");
-                foreach (Match match in matches)
-                {
-                    tmp = tmp.Replace(match.Value, "");
-                }
-                matches = Regex.Matches(tmp, @"(?<!\\)\\*\$");
-                foreach (Match match in matches)
-                {
-                    if ((match.Value.Count(x => x == '\\') / 2) % 2 == 1)
-                    {
-                        tmp = Regex.Replace(tmp, @"(?<!\\)" + match.Value.Replace("\\", "\\\\").Replace("$", @"\$"), "");
-                    }
-                }
-                matches = Regex.Matches(tmp, @"\$.*?\$");
-                foreach (Match match in matches)
-                {
-                    tmp = tmp.Replace(match.Value, "");
-                }
-                matches = Regex.Matches(tmp, @"(?<=\w{2,}\s*)[-/](?=\s*\w{2,})");
-                for (int j = matches.Count - 1; j >= 0; j--)
-                {
-                    Match match = matches[j];
-                    tmp = tmp.Substring(0, match.Index) + tmp.Substring(match.Index + match.Length);
-                }
-                if (Regex.IsMatch(tmp, @"[+\-*/0-9]"))
-                {
+                if (checkUnformattedMath(text))
                     problems.Add(new ValidationProblem(ProblemSeverity.Warning, string.Format(ValidationProblems.TEXT_UNFORMATTED_MATH, textName, i + 1), question));
-                }
             }
             return problems;
         }
