@@ -6,39 +6,38 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-      name: Checkout Code
+      - uses: actions/checkout@v3
+        name: Checkout Code
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.0
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.6
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.6
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-    - name: Restore NuGet Packages
-      run: nuget restore DeltaQuestionEditor-WPF.sln
+      - name: Restore NuGet Packages
+        run: nuget restore DeltaEditor.sln
 
-    - name: Build App
-      run: msbuild DeltaQuestionEditor-WPF.sln /p:Configuration=Release /p:Platform=x64
+      - name: Build App
+        run: msbuild DeltaEditor.sln /p:Configuration=Release /p:Platform=x64
 
-    - name: Get release
-      id: get_release
-      uses: bruceadams/get-release@v1.2.3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload release binary
-      uses: dwenegar/upload-release-assets@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_id: ${{ steps.get_release.outputs.id }}
-        assets_path: DeltaQuestionEditor-WPF\Releases
+      - name: Upload release binary
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.get_release.outputs.id }}
+          assets_path: DeltaEditor\Releases

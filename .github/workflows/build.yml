@@ -1,10 +1,10 @@
-name: "Build"
+name: 'Build'
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -12,21 +12,21 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.0
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.6
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.6
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-    - name: Restore NuGet Packages
-      run: nuget restore DeltaQuestionEditor-WPF.sln
+      - name: Restore NuGet Packages
+        run: nuget restore DeltaEditor.sln
 
-    - name: Build App
-      run: msbuild DeltaQuestionEditor-WPF.sln /p:Configuration=Debug /p:Platform=x64
+      - name: Build App
+        run: msbuild DeltaEditor.sln /p:Configuration=Debug /p:Platform=x64

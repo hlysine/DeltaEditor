@@ -1,0 +1,108 @@
+﻿<Window
+    x:Class="DeltaEditor.Views.ExceptionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:DeltaEditor"
+    xmlns:views="clr-namespace:DeltaEditor.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+    xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+    xmlns:cmd="clr-namespace:AttachedCommandBehavior;assembly=AttachedCommandBehavior"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+    xmlns:helpers="clr-namespace:DeltaEditor.Helpers"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextElement.FontWeight="Regular"
+    TextElement.FontSize="13"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    mc:Ignorable="d"
+    Height="500"
+    Width="400"
+    MinWidth="400"
+    MinHeight="500"
+    Title="Exception - Delta Editor"
+    Name="exceptionWindow">
+    <Grid
+        Name="root">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Margin="5"
+            Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+            Something went wrong...
+        </TextBlock>
+        <TextBlock
+            Margin="5"
+            Grid.Row="1"
+            TextWrapping="Wrap">
+            An error occurred and the app cannot handle it. Do you want to send a bug report to the developer? This will open a GitHub link in your browser.
+        </TextBlock>
+        <materialDesign:Card
+            Grid.Row="2"
+            Margin="5"
+            Padding="5"
+            HorizontalAlignment="Stretch"
+            Visibility="{Binding MissingDependencyLink, Converter={StaticResource NullToVisibilityConverter}}">
+            <StackPanel
+                HorizontalAlignment="Stretch">
+                <TextBlock
+                    Margin="5"
+                    TextWrapping="Wrap">
+                    It seems like this problem is caused by a missing package in your system.<LineBreak />
+                    Please click this link to install the package and solve the problem.
+                </TextBlock>
+                <Button
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    Command="{Binding DownloadDependencyCommand}">
+                    Open
+                </Button>
+            </StackPanel>
+        </materialDesign:Card>
+        <TextBox
+            Margin="15"
+            Grid.Row="3"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            IsReadOnly="True"
+            TextWrapping="Wrap"
+            TextAlignment="Left"
+            FontFamily="Consolas"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto"
+            Text="{Binding ExceptionBody, Mode=OneWay}">
+        </TextBox>
+        <StackPanel
+            Grid.Row="4"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <Button
+                Margin="5"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Foreground="{DynamicResource MaterialDesignBody}"
+                Command="{Binding CloseWindowCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                Content="NO" />
+            <Button
+                Margin="5"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Command="{Binding GithubIssueCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                Content="YES" />
+        </StackPanel>
+    </Grid>
+</Window>
