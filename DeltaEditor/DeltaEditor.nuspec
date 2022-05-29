@@ -5,15 +5,15 @@
     <!-- version will be replaced by MSBuild -->
     <version>0.0.0.0</version>
     <title>Delta Editor</title>
-    <authors>Profound IT</authors>
-    <description>Question editor for the Delta system</description>
+    <authors>hlysine</authors>
+    <description>A native question editor for Windows</description>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <copyright>Copyright 2021</copyright>
+    <copyright>Copyright 2022</copyright>
     <dependencies>
-      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETFramework4.8" />
     </dependencies>
   </metadata>
   <files>
-    <file src="**.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*;log.txt"/>
+    <file src="**.*" target="lib\net48\" exclude="*.pdb;*.nupkg;*.vshost.*;log.txt"/>
   </files>
 </package>
