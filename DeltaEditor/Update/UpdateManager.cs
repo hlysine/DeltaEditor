@@ -49,7 +49,7 @@ namespace DeltaEditor.Update
             try
             {
                 UpdateStatus = "Checking for updates";
-                using (var mgr = await Squirrel.UpdateManager.GitHubUpdateManager("https://github.com/Profound-Education-Centre/DeltaEditor"))
+                using (var mgr = await Squirrel.UpdateManager.GitHubUpdateManager("https://github.com/hlysine/DeltaEditor"))
                 {
                     var updateInfo = await mgr.CheckForUpdate(false, (progress) =>
                     {
