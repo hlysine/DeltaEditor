@@ -2,7 +2,7 @@
 using DeltaQuestionEditor_WPF.Helpers;
 using DeltaQuestionEditor_WPF.Logging;
 using MyScript.IInk;
-using MyScript.IInk.UIReferenceImplementation;
+using MyScript.IInk.UI;
 using System;
 using System.IO;
 using System.Linq;
@@ -130,7 +130,7 @@ namespace DeltaQuestionEditor_WPF.Views
                     }
                     return { range: selection, text: text, forceMoveMarkers: true };
                 });
-                edit.executeEdits('C# Toolbar', edits, 
+                edit.executeEdits('C# Toolbar', edits,
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
@@ -157,7 +157,7 @@ namespace DeltaQuestionEditor_WPF.Views
                     }
                     return { range: selection, text: text, forceMoveMarkers: true };
                 });
-                edit.executeEdits('C# Toolbar', edits, 
+                edit.executeEdits('C# Toolbar', edits,
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
@@ -177,7 +177,7 @@ namespace DeltaQuestionEditor_WPF.Views
                     var text = `[${edit.getModel().getValueInRange(selection)}](<link address here...>)`;
                     return { range: selection, text: text, forceMoveMarkers: true };
                 });
-                edit.executeEdits('C# Toolbar', edits, 
+                edit.executeEdits('C# Toolbar', edits,
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.endLineNumber, operation.range.endColumn - 23, operation.range.endLineNumber, operation.range.endColumn - 1);
                     })
@@ -211,7 +211,7 @@ namespace DeltaQuestionEditor_WPF.Views
                         return { range: new monaco.Selection(selection.startLineNumber + idx, 0, selection.startLineNumber + idx, Number.MAX_SAFE_INTEGER), text: newText, forceMoveMarkers: true };
                     });
                 }).flat().filter((item, i, arr) => arr.findIndex(x => x.range.startLineNumber == item.range.startLineNumber) == i);
-                edit.executeEdits('C# Toolbar', edits, 
+                edit.executeEdits('C# Toolbar', edits,
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
@@ -245,7 +245,7 @@ namespace DeltaQuestionEditor_WPF.Views
                         return { range: new monaco.Selection(selection.startLineNumber + idx, 0, selection.startLineNumber + idx, Number.MAX_SAFE_INTEGER), text: newText, forceMoveMarkers: true };
                     });
                 }).flat().filter((item, i, arr) => arr.findIndex(x => x.range.startLineNumber == item.range.startLineNumber) == i);
-                edit.executeEdits('C# Toolbar', edits, 
+                edit.executeEdits('C# Toolbar', edits,
                     inverseEditOperations => inverseEditOperations.map(operation => {
                         return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                     })
@@ -425,7 +425,7 @@ namespace DeltaQuestionEditor_WPF.Views
                         var edits = selections.map(selection => {
                             return { range: selection, text: " + latex.ToJSLiteral() + @", forceMoveMarkers: true };
                         });
-                        edit.executeEdits('C# Toolbar', edits, 
+                        edit.executeEdits('C# Toolbar', edits,
                             inverseEditOperations => inverseEditOperations.map(operation => {
                                 return new monaco.Selection(operation.range.startLineNumber, operation.range.startColumn, operation.range.endLineNumber, operation.range.endColumn);
                             })

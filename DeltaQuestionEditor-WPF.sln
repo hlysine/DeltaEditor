@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaQuestionEditor-WPF", "DeltaQuestionEditor-WPF\DeltaQuestionEditor-WPF.csproj", "{0210F151-DF48-4E8F-8F9A-86B1E6D03E54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScript.InteractiveInk.UIReferenceImplementation.Wpf-VS2017", "UIReferenceImplementation\MyScript.InteractiveInk.UIReferenceImplementation.Wpf-VS2017.csproj", "{8ED3CB31-D4B5-4B82-8C15-F6C31BBE520D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScript.IInk.UI", "MyScript.IInk.UI\MyScript.IInk.UI.csproj", "{8ED3CB31-D4B5-4B82-8C15-F6C31BBE520D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

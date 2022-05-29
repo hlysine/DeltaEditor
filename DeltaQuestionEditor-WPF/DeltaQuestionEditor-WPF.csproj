@@ -329,9 +329,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UIReferenceImplementation\MyScript.InteractiveInk.UIReferenceImplementation.Wpf-VS2017.csproj">
+    <ProjectReference Include="..\MyScript.IInk.UI\MyScript.IInk.UI.csproj">
       <Project>{8ed3cb31-d4b5-4b82-8c15-f6c31bbe520d}</Project>
-      <Name>MyScript.InteractiveInk.UIReferenceImplementation.Wpf-VS2017</Name>
+      <Name>MyScript.IInk.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

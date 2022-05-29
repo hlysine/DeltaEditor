@@ -10,7 +10,7 @@
     xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
     xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
     xmlns:cmd="clr-namespace:AttachedCommandBehavior;assembly=AttachedCommandBehavior"
-    xmlns:Uc="clr-namespace:MyScript.IInk.UIReferenceImplementation;assembly=MyScript.InteractiveInk.UIReferenceImplementation.Wpf"
+    xmlns:Uc="clr-namespace:MyScript.IInk.UI;assembly=MyScript.IInk.UI"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
     TextElement.FontSize="13"
@@ -25,7 +25,7 @@
     Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary
-            Source="/MyScript.InteractiveInk.UIReferenceImplementation.Wpf;component/ResourceDictionary.xaml" />
+            Source="/MyScript.IInk.UI;component/ResourceDictionary.xaml" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
